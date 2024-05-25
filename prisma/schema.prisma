@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model smashmateCurrentRatePage {
+  id               BigInt   @id @default(autoincrement())
+  created_at       DateTime @default(now()) @db.Timestamptz(6)
+  currentMaxRoomId Int
+  prevMaxRoomId    Int
+  nextFetchPage    Int
+}
+
+model smashmateCurrentSeason {
+  id         BigInt   @id @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  season     String   @db.VarChar
+}
+
+model smashmateCurrentUserPage {
+  id         BigInt   @id @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  nextUserId Int?
+}
+
+model smashmateDeletedPlayers {
+  id         BigInt   @id @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  playerId   Int      @unique
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model smashmateMatchRoomResults {
+  id          BigInt   @id(map: "smashmateMatchRooms_pkey") @default(autoincrement())
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  season      String   @db.VarChar
+  matchRoomId Int
+  player1Id   Int
+  player2Id   Int
+  winnerId    Int?
+  loserId     Int?
+  rateChange  Int      @default(0) @db.SmallInt
+
+  @@unique([season, matchRoomId], map: "unique_season_matchRoomId")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model smashmateMatchRoomsOnlyPlayerIds {
+  id          BigInt   @id(map: "smashmateMatchRoomsMeta_pkey") @default(autoincrement())
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  season      String   @db.VarChar
+  matchRoomId Int
+  player1Id   Int
+  player2Id   Int
+  timeText    String?
+}
+
+model smashmatePlayerDataBySeason {
+  id                   BigInt   @id @default(autoincrement())
+  created_at           DateTime @default(now()) @db.Timestamptz(6)
+  season               String
+  playerId             Int
+  playerName           String
+  twitterScreenName    String
+  isSubAccount         Boolean
+  currentRate          Int?
+  maxRate              Int?
+  win                  Int?
+  loss                 Int?
+  currentCharactersCsv String?
+  mainAccountId        Int?
+
+  @@unique([season, playerId], map: "unique_season_playerId")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model smashmatePlayerPageFetchState {
+  id               BigInt   @id @default(autoincrement())
+  created_at       DateTime @default(now()) @db.Timestamptz(6)
+  season           String   @db.VarChar
+  playerId         Int
+  nextFetchPage    Int      @default(1) @db.SmallInt
+  isCompleted      Boolean  @default(false)
+  currentMaxRoomId Int      @default(-1)
+  prevMaxRoomId    Int      @default(-1)
+
+  @@unique([season, playerId], map: "unique_season_playerid")
+}
+
+model smashmateRealtimeUserCount {
+  id         BigInt   @id @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  userCount  BigInt
+}
