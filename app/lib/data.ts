@@ -10,6 +10,9 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
+import { cache } from 'react'
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 export async function fetchRevenue() {
   // Add noStore() here to prevent the response from being cached.
@@ -239,4 +242,56 @@ export async function getUser(email: string) {
     throw new Error('Failed to fetch user.');
   }
 }
+export const getPlayerBySeason = cache(async (playerId: number, season: string) => {
+  return await prisma.smashmatePlayerDataBySeason.findFirst({
+    where: {
+      playerId,
+      season,
+    },
+  });;
+})
+
+export const getSeasonsDesc = cache(async () => {
+  return await prisma.smashmateSeasons.findMany({ orderBy: { "started_at": "desc" } });
+})
+
+export const getSmashmateAccount = cache(async (playerId: number) => {
+  return await prisma.smashmateAccountInfo.findFirst({
+    where: { playerId },
+  });
+})
+
+export const getPlayerIdsToRateMap = cache(async (opponentPlayerIds: number[], season: string) => {
+  const opponentRows = await prisma.smashmateCurrentPlayerRates.findMany({
+    where: {
+      playerId: { in: Array.from(opponentPlayerIds) },
+      season,
+    },
+    select: {
+      playerId: true,
+      currentRate: true,
+    },
+  });
+  const playerIdToRate = opponentRows.reduce(
+    (prev, current) => prev.set(current.playerId, current.currentRate || 0),
+    new Map<number, number>(),
+  );
+  return playerIdToRate;
+})
+
+export const getHeatmap = cache(async (playerId: number) => {
+  const data = await prisma.smashmateMatchRoomsOnlyPlayerIds.findMany({
+    select: { created_at: true }, // TODO use smashmate_created_at
+    where: { 
+      OR: [{ player1Id: playerId }, { player2Id: playerId }], }
+  })
+  return data.reduce(
+    (prev, current) => {
+      const dateStr = current.created_at.toISOString().substring(0, 10);
+      return prev.set(dateStr, (prev.get(dateStr) ?? 0) + 1);
+    },
+    new Map<string, number>(),
+  );
+})
+
 
