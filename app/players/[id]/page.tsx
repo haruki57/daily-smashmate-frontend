@@ -1,12 +1,9 @@
 import ChangeSeason from '@/app/ui/change-season';
 import { PrismaClient } from '@prisma/client';
 import PlayerBySeason from './playerBySeason';
-import {
-  getHeatmap,
-  getSeasonsDesc,
-  getSmashmateAccount,
-} from '@/app/lib/data';
+import { getHeatmap, getSeasonsDesc } from '@/app/lib/data';
 import Heatmap from './heatmap';
+import { getSmashmateAccount } from '@/app/_lib/services/getAccount';
 const prisma = new PrismaClient();
 
 export default async function Page({
@@ -19,7 +16,12 @@ export default async function Page({
   };
 }) {
   const playerId = Number(params.id);
-  const account = await getSmashmateAccount(playerId);
+  //const account = await getSmashmateAccount(playerId);
+  const account = await getSmashmateAccount({
+    playerId,
+    revalidate: 3600 * 24,
+  });
+  console.log(account);
   if (!account) {
     return <div>Player not found</div>;
   }

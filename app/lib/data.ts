@@ -255,12 +255,6 @@ export const getSeasonsDesc = cache(async () => {
   return await prisma.smashmateSeasons.findMany({ orderBy: { "started_at": "desc" } });
 })
 
-export const getSmashmateAccount = cache(async (playerId: number) => {
-  return await prisma.smashmateAccountInfo.findFirst({
-    where: { playerId },
-  });
-})
-
 export const getPlayerIdsToRateMap = cache(async (opponentPlayerIds: number[], season: string) => {
   const opponentRows = await prisma.smashmateCurrentPlayerRates.findMany({
     where: {
