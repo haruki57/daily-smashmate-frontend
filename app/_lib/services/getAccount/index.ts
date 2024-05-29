@@ -10,7 +10,6 @@ export async function getSmashmateAccount({
   playerId,
   revalidate,
 }: Props): Promise<Account> {
-  console.log(path(`/api/accounts/${playerId}`));
   return fetch(path(`/api/accounts/${playerId}`), {
     next: {
       ...(revalidate !== undefined && { revalidate }),

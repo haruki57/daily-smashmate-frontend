@@ -3,6 +3,16 @@ export type Account = {
   playerId: number;
 };
 
+export type PlayerDataBySeason = {
+  season: string;
+  playerId: number;
+  currentRate: number | null;
+  maxRate: number | null;
+  win: number | null;
+  loss: number | null;
+  currentCharactersCsv: string | null; 
+}
+
 export type Photo = {
   id: string;
   createdAt: string;

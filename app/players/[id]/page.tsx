@@ -4,6 +4,7 @@ import PlayerBySeason from './playerBySeason';
 import { getHeatmap, getSeasonsDesc } from '@/app/lib/data';
 import Heatmap from './heatmap';
 import { getSmashmateAccount } from '@/app/_lib/services/getAccount';
+import { getPlayerSeasonData as getPlayerDataBySeason } from '@/app/_lib/services/getPlayerSeasonData';
 const prisma = new PrismaClient();
 
 export default async function Page({
@@ -16,15 +17,17 @@ export default async function Page({
   };
 }) {
   const playerId = Number(params.id);
-  //const account = await getSmashmateAccount(playerId);
   const account = await getSmashmateAccount({
     playerId,
     revalidate: 3600 * 24,
   });
-  console.log(account);
+
+  // TODO
   if (!account) {
     return <div>Player not found</div>;
   }
+
+  const playerDataBySeason = await getPlayerDataBySeason({ playerId });
 
   const seasonRows = await getSeasonsDesc();
   const seasons = seasonRows.map((row) => row.season);
@@ -46,6 +49,15 @@ export default async function Page({
           スマメイト(本家)のページへ
         </a>
       </div>
+      {seasons.map((season) => {
+        if (playerDataBySeason[season]) {
+          return (
+            <div key={season}>{JSON.stringify(playerDataBySeason[season])}</div>
+          );
+        } else {
+          return <div key={season}>{`Not found for シーズン:${season}`}</div>;
+        }
+      })}
       <ChangeSeason seasons={seasons} initialValue={season} />
       <PlayerBySeason
         playerId={playerId}
