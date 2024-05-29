@@ -44,7 +44,7 @@ export default async function Page({
           スマメイト(本家)のページへ
         </a>
       </div>
-      <ChangeSeason seasons={seasons} />
+      <ChangeSeason seasons={seasons} initialValue={season} />
       <PlayerBySeason
         playerId={playerId}
         season={season}

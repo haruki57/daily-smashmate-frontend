@@ -1,22 +1,22 @@
 'use client';
 
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { useDebouncedCallback } from 'use-debounce';
 import { Select } from '@headlessui/react';
 
-export default function ChangeSeason({ seasons }: { seasons: string[] }) {
+export default function ChangeSeason({
+  seasons,
+  initialValue,
+}: {
+  seasons: string[];
+  initialValue: string;
+}) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
   const handleChange = (season: string) => {
-    console.log(`Searching... ${season}`);
-
     const params = new URLSearchParams(searchParams);
     params.set('season', season);
-    console.log(params.toString);
-    console.log(`${pathname}?${params.toString()}`);
     replace(`${pathname}?${params.toString()}`);
   };
   return (
@@ -24,6 +24,7 @@ export default function ChangeSeason({ seasons }: { seasons: string[] }) {
       name="status"
       aria-label="Project status"
       onChange={(e) => handleChange(e.target.value)}
+      defaultValue={initialValue}
     >
       {seasons.map((season) => {
         return (
