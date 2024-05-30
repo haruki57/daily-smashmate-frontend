@@ -12,7 +12,7 @@ export async function getSmashmateAccount({
 }: Props): Promise<Account> {
   return fetch(path(`/api/accounts/${playerId}`), {
     next: {
-      ...(revalidate !== undefined && { revalidate }),
+      //...(revalidate !== undefined && { revalidate }),
     },
   })
     .then(handleSucceed)
