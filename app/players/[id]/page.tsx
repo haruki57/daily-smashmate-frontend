@@ -1,11 +1,13 @@
 import ChangeSeason from '@/app/ui/change-season';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client/edge';
 import PlayerBySeason from './playerBySeason';
 import { getHeatmap, getSeasonsDesc } from '@/app/lib/data';
 import Heatmap from './heatmap';
 import { getSmashmateAccount } from '@/app/_lib/services/getAccount';
 import { getPlayerSeasonData as getPlayerDataBySeason } from '@/app/_lib/services/getPlayerSeasonData';
 const prisma = new PrismaClient();
+
+export const runtime = 'edge';
 
 export default async function Page({
   params,
