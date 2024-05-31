@@ -1,8 +1,12 @@
 import { getCurrentTime } from '@/app/_lib/services/getCurrentTime';
-import { PrismaClient } from '@prisma/client/edge';
-const prisma = new PrismaClient();
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams?: {
+    season?: string;
+  };
+}) {
   const hoge = await getCurrentTime();
-  return <div>{hoge.timestamp}</div>;
+  return <div>{`${hoge.timestamp} ${searchParams?.season}`}</div>;
 }
