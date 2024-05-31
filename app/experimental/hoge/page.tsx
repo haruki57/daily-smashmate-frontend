@@ -1,4 +1,4 @@
-//import { getCurrentTime } from '@/app/_lib/services/getCurrentTime';
+import { getCurrentTime } from '@/app/_lib/services/getCurrentTime';
 
 export default async function Page({
   searchParams,
@@ -7,7 +7,6 @@ export default async function Page({
     season?: string;
   };
 }) {
-  //const hoge = await getCurrentTime();
-  //return <div>{`${hoge.timestamp} ${searchParams?.season}`}</div>;
-  return <div>hoge</div>;
+  const hoge = await getCurrentTime();
+  return <div>{`${hoge.timestamp} ${searchParams?.season}`}</div>;
 }
