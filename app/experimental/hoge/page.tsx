@@ -7,6 +7,6 @@ export default async function Page({
     season?: string;
   };
 }) {
-  const hoge = await getCurrentTime();
-  return <div>{`${hoge.timestamp} ${searchParams?.season}`}</div>;
+  const hoge = await getCurrentTime(searchParams?.season ?? 'default');
+  return <div>{`${JSON.stringify(hoge)} ${searchParams?.season}`}</div>;
 }
