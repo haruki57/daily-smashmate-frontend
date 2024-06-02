@@ -4,6 +4,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { Select } from '@headlessui/react';
 import { PrismaClient } from '@prisma/client/edge';
 import { getPlayerIdsToRateMap } from '@/app/lib/data';
+import RatingHistogram from '@/app/_components/RatingHistogram';
 const prisma = new PrismaClient();
 
 export default async function PlayerBySeason({
@@ -22,7 +23,13 @@ export default async function PlayerBySeason({
     },
   });
   if (!player) {
-    return <div>このシーズンでは情報なし。</div>;
+    // TODO
+    return (
+      <div>
+        このシーズンでは情報なし。
+        <RatingHistogram season={season} currentRate={1500} />
+      </div>
+    );
   }
 
   const results = await prisma.smashmateMatchRoomResults.findMany({

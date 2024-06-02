@@ -5,6 +5,7 @@ import { getHeatmap, getSeasonsDesc } from '@/app/lib/data';
 import Heatmap from './heatmap';
 import { getSmashmateAccount } from '@/app/_lib/services/getAccount';
 import { getPlayerSeasonData as getPlayerDataBySeason } from '@/app/_lib/services/getPlayerSeasonData';
+import RatingHistogram from '@/app/_components/RatingHistogram';
 const prisma = new PrismaClient();
 
 export const runtime = 'edge';
