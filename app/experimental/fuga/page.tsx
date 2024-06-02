@@ -20,7 +20,7 @@ export default async function Page() {
       },
     },
   );
-  const fetchTime2 = Date.now() - startTime;
+  const fetchTime2 = Date.now() - startTime2;
   const blog = await _static.json();
 
   return (
