@@ -3,6 +3,16 @@ export type Account = {
   playerId: number;
 };
 
+export type Season = {
+  season: string;
+  started_at: Date;
+  ended_at: Date | null;
+};
+export type PlayerRate = {
+  playerId: number;
+  currentRate: number;
+};
+
 export type PlayerDataBySeason = {
   season: string;
   playerId: number;
