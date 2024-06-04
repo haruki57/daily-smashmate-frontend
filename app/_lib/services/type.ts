@@ -23,6 +23,26 @@ export type PlayerDataBySeason = {
   currentCharactersCsv: string | null; 
 }
 
+export type RateCumulativeCounts = {
+  season: string;
+  rate: number;
+  cumulativeCount: number;
+  created_at: Date;
+}
+
+export type Top200 = {
+  rank: number;
+  rate: number;
+  playerId: number;
+  currentCharactersCsv: string;
+}
+
+export type SeasonResult = {
+  season: string;
+  totalPlayers: number;
+  totalRooms: number;
+}
+
 export type Photo = {
   id: string;
   createdAt: string;

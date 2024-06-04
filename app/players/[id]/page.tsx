@@ -6,6 +6,8 @@ import Heatmap from './heatmap';
 import { getSmashmateAccount } from '@/app/_lib/services/getAccount';
 import { getPlayerSeasonData as getPlayerDataBySeason } from '@/app/_lib/services/getPlayerSeasonData';
 import RatingHistogram from '@/app/_components/RatingHistogram';
+import { Suspense } from 'react';
+import { getSeasons } from '@/app/_lib/services/getSeasons';
 const prisma = new PrismaClient();
 
 export const runtime = 'edge';
@@ -30,10 +32,9 @@ export default async function Page({
   if (!account) {
     return <div>Player not found</div>;
   }
+  const playerDataBySeasons = await getPlayerDataBySeason({ playerId });
 
-  const playerDataBySeason = await getPlayerDataBySeason({ playerId });
-
-  const seasonRows = await getSeasonsDesc();
+  const seasonRows = await getSeasons();
   const seasons = seasonRows.map((row) => row.season);
   const season = searchParams?.season ? searchParams?.season : seasons[0];
   const currentSeasonRow = seasonRows
@@ -41,6 +42,7 @@ export default async function Page({
     .at(0);
   const isSeasonFinished = currentSeasonRow?.ended_at == null ? true : false;
 
+  const playerDataBySeason = playerDataBySeasons[season];
   return (
     <>
       <div>{account.playerName}</div>
@@ -54,20 +56,26 @@ export default async function Page({
         </a>
       </div>
       {seasons.map((season) => {
-        if (playerDataBySeason[season]) {
+        if (playerDataBySeasons[season]) {
           return (
-            <div key={season}>{JSON.stringify(playerDataBySeason[season])}</div>
+            <div key={season}>
+              {JSON.stringify(playerDataBySeasons[season])}
+            </div>
           );
         } else {
           return <div key={season}>{`Not found for シーズン:${season}`}</div>;
         }
       })}
       <ChangeSeason seasons={seasons} initialValue={season} />
-      <PlayerBySeason
-        playerId={playerId}
-        season={season}
-        isSeasonFinished={!!isSeasonFinished}
-      />
+      {playerDataBySeason && (
+        <Suspense fallback={<div>Player Season取得中…</div>}>
+          <PlayerBySeason
+            playerDataBySeason={playerDataBySeason}
+            season={season}
+            isSeasonFinished={!!isSeasonFinished}
+          />
+        </Suspense>
+      )}
     </>
   );
 }

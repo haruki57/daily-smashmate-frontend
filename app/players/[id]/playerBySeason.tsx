@@ -5,111 +5,45 @@ import { Select } from '@headlessui/react';
 import { PrismaClient } from '@prisma/client/edge';
 import { getPlayerIdsToRateMap } from '@/app/lib/data';
 import RatingHistogram from '@/app/_components/RatingHistogram';
+import { PlayerDataBySeason } from '@/app/_lib/services/type';
+import { getWinLoss } from '@/app/_lib/services/getWinLoss';
+import { getPlayerRates } from '@/app/_lib/services/getPlayerRates';
+import WinRateChart from '@/app/_components/WinRateChart';
+import { getRank } from '@/app/_lib/services/getRank';
+import { getSeasonResult } from '@/app/_lib/services/getCurrentSeasonResult/[season]';
+import { getTop200 } from '@/app/_lib/services/getTop200';
 const prisma = new PrismaClient();
 
 export default async function PlayerBySeason({
-  playerId,
+  playerDataBySeason,
   season,
   isSeasonFinished,
 }: {
-  playerId: number;
+  playerDataBySeason: PlayerDataBySeason;
   season: string;
   isSeasonFinished: boolean;
 }) {
-  const player = await prisma.smashmatePlayerDataBySeason.findFirst({
-    where: {
-      playerId,
-      season,
-    },
-  });
-  if (!player) {
-    // TODO
-    return (
-      <div>
-        このシーズンでは情報なし。
-        <RatingHistogram season={season} currentRate={1500} />
-      </div>
-    );
+  const { playerId, currentRate } = playerDataBySeason;
+  let rank = undefined;
+  let isRankEstimated = false;
+
+  const top200 = await getTop200();
+  const foundTop200 = top200.find((t) => t.playerId === playerId);
+  if (foundTop200) {
+    rank = foundTop200.rank;
+    isRankEstimated = false;
+  } else if (currentRate != null) {
+    const rankRet = await getRank({ currentRate, season });
+    rank = rankRet?.rank;
+    isRankEstimated = true;
   }
-
-  const results = await prisma.smashmateMatchRoomResults.findMany({
-    where: {
-      season,
-      OR: [{ winnerId: player.playerId }, { loserId: player.playerId }],
-    },
-  });
-  const opponentPlayerIdSet = new Set<number>();
-  results
-    .map((r) => r.winnerId)
-    .filter((id) => id != player.playerId)
-    .forEach((id) => {
-      if (id != null) {
-        opponentPlayerIdSet.add(id);
-      }
-    });
-  results
-    .map((r) => r.loserId)
-    .filter((id) => id != player.playerId)
-    .forEach((id) => {
-      if (id != null) {
-        opponentPlayerIdSet.add(id);
-      }
-    });
-  const playerIdToRateMap = await getPlayerIdsToRateMap(
-    Array.from(opponentPlayerIdSet),
-    season,
-  );
-  const winPerRate = new Map<number, number>();
-  const lossPerRate = new Map<number, number>();
-  results.forEach((result) => {
-    if (result.winnerId == null || result.loserId == null) {
-      // never happen
-      return;
-    }
-    let opponentId: number;
-    let map: Map<number, number>;
-    if (result.winnerId == player.playerId) {
-      opponentId = result.loserId;
-      map = winPerRate;
-    } else {
-      opponentId = result.winnerId;
-      map = lossPerRate;
-    }
-    const opponentRate = playerIdToRateMap.get(opponentId);
-    if (opponentRate == null) {
-      // most likely the opponent deleted the account.
-      return;
-    }
-    const roundedRate = opponentRate - (opponentRate % 100);
-    map.set(roundedRate, (map.get(roundedRate) ?? 0) + 1);
-  });
-
-  let max = -1;
-  let min = 9999;
-  playerIdToRateMap.forEach((rate) => {
-    max = Math.max(max, rate);
-    min = Math.min(min, rate);
-  });
-  const rateRanges = [];
-  for (let i = min - (min % 100); i <= max - (max % 100); i += 100) {
-    rateRanges.push(i);
-  }
-
+  const seasonResult = await getSeasonResult({ season });
+  const total = seasonResult?.totalPlayers ?? 0;
   return (
     <>
-      <div>{JSON.stringify({ ...player, id: player?.id.toString() })}</div>
-      <div></div>
-      <div>
-        {rateRanges.map((rate) => {
-          return (
-            <div key={rate} className="flex">
-              <div>{`${rate} ~ ${rate + 99} `}</div>
-              <div>{(winPerRate.get(rate) ?? 0) + '勝'}</div>
-              <div>{(lossPerRate.get(rate) ?? 0) + '敗'}</div>
-            </div>
-          );
-        })}
-      </div>
+      <div>{JSON.stringify({ ...playerDataBySeason })}</div>
+      <div>{JSON.stringify({ rank, total, isRankEstimated })}</div>
+      <WinRateChart playerId={playerId} season={season} />
     </>
   );
 }

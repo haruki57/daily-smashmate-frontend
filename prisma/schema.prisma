@@ -1,15 +1,16 @@
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
   engineType = "binary"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
 }
 
 model smashmateCurrentRatePage {
-  id               BigInt   @id
+  id               BigInt   @id @default(autoincrement())
   created_at       DateTime @default(now()) @db.Timestamptz(6)
   currentMaxRoomId Int
   prevMaxRoomId    Int
@@ -17,26 +18,26 @@ model smashmateCurrentRatePage {
 }
 
 model smashmateCurrentSeason {
-  id         BigInt   @id
+  id         BigInt   @id @default(autoincrement())
   created_at DateTime @default(now()) @db.Timestamptz(6)
   season     String   @db.VarChar
 }
 
 model smashmateCurrentUserPage {
-  id         BigInt   @id
+  id         BigInt   @id @default(autoincrement())
   created_at DateTime @default(now()) @db.Timestamptz(6)
   nextUserId Int?
 }
 
 model smashmateDeletedPlayers {
-  id         BigInt   @id
+  id         BigInt   @id @default(autoincrement())
   created_at DateTime @default(now()) @db.Timestamptz(6)
-  playerId   Int
+  playerId   Int      @unique
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model smashmateMatchRoomResults {
-  id          BigInt   @id
+  id          BigInt   @id(map: "smashmateMatchRooms_pkey") @default(autoincrement())
   created_at  DateTime @default(now()) @db.Timestamptz(6)
   season      String   @db.VarChar
   matchRoomId Int
@@ -45,21 +46,29 @@ model smashmateMatchRoomResults {
   winnerId    Int?
   loserId     Int?
   rateChange  Int      @default(0) @db.SmallInt
+
+  @@unique([season, matchRoomId], map: "unique_season_matchRoomId")
+  @@index([loserId], map: "loserId_index")
+  @@index([winnerId], map: "winnerId_index")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model smashmateMatchRoomsOnlyPlayerIds {
-  id          BigInt   @id
+  id          BigInt   @id(map: "smashmateMatchRoomsMeta_pkey") @default(autoincrement())
   created_at  DateTime @default(now()) @db.Timestamptz(6)
   season      String   @db.VarChar
   matchRoomId Int
   player1Id   Int
   player2Id   Int
   timeText    String?
+
+  @@unique([season, matchRoomId], map: "unique_season_matchroomid")
+  @@index([player1Id], map: "player1Id_index")
+  @@index([player2Id], map: "player2Id_index")
 }
 
 model smashmatePlayerDataBySeason {
-  id                   BigInt   @id
+  id                   BigInt   @id @default(autoincrement())
   created_at           DateTime @default(now()) @db.Timestamptz(6)
   season               String
   playerId             Int
@@ -72,11 +81,13 @@ model smashmatePlayerDataBySeason {
   loss                 Int?
   currentCharactersCsv String?
   mainAccountId        Int?
+
+  @@unique([season, playerId], map: "unique_season_playerId")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model smashmatePlayerPageFetchState {
-  id               BigInt   @id
+  id               BigInt   @id @default(autoincrement())
   created_at       DateTime @default(now()) @db.Timestamptz(6)
   season           String   @db.VarChar
   playerId         Int
@@ -84,18 +95,20 @@ model smashmatePlayerPageFetchState {
   isCompleted      Boolean  @default(false)
   currentMaxRoomId Int      @default(-1)
   prevMaxRoomId    Int      @default(-1)
+
+  @@unique([season, playerId], map: "unique_season_playerid")
 }
 
 model smashmateRealtimeUserCount {
-  id         BigInt   @id
+  id         BigInt   @id @default(autoincrement())
   created_at DateTime @default(now()) @db.Timestamptz(6)
   userCount  BigInt
 }
 
 model smashmateAccountInfo {
-  id                BigInt   @id
+  id                BigInt   @id @default(autoincrement())
   created_at        DateTime @default(now()) @db.Timestamptz(6)
-  playerId          Int
+  playerId          Int      @unique
   playerName        String
   twitterScreenName String
   mainAccountId     Int?
@@ -103,46 +116,66 @@ model smashmateAccountInfo {
 }
 
 model smashmateCharacters {
-  id               Int      @id @db.SmallInt
+  id               Int      @id @default(autoincrement()) @db.SmallInt
   created_at       DateTime @default(now()) @db.Timestamptz(6)
-  characterId      String
-  characterNameJpn String
+  characterId      String   @unique
+  characterNameJpn String   @unique
 }
 
 model smashmateCurrentPlayerRates {
-  id          BigInt   @id
+  id          BigInt   @id @default(autoincrement())
   created_at  DateTime @default(now()) @db.Timestamptz(6)
   playerId    Int
   currentRate Int      @db.SmallInt
   season      String
+
+  @@unique([season, playerId], map: "unique_season_playerId2")
 }
 
 model smashmateCurrentTop200 {
-  id                   BigInt   @id
+  id                   BigInt   @id @default(autoincrement())
   created_at           DateTime @default(now()) @db.Timestamptz(6)
   rank                 Int      @db.SmallInt
-  playerId             Int
+  playerId             Int      @unique
   currentCharactersCsv String?
   rate                 Int      @db.SmallInt
 }
 
 model smashmatePlayerNames {
-  id         BigInt   @id
+  id         BigInt   @id @default(autoincrement())
   created_at DateTime @default(now()) @db.Timestamptz(6)
   playerName String
   playerId   Int
+
+  @@unique([playerId, playerName], map: "unique_playerid_playername")
 }
 
 model smashmateRateCumulativeCounts {
-  id              BigInt   @id
+  id              BigInt   @id @default(autoincrement())
   created_at      DateTime @default(now()) @db.Timestamptz(6)
   season          String
   rate            Int      @db.SmallInt
   cumulativeCount Int      @db.SmallInt
+
+  @@unique([season, rate], map: "unique_season_rate")
 }
 
 model smashmateSeasons {
-  season     String    @id
+  season     String    @id @unique
   started_at DateTime  @db.Timestamptz(6)
   ended_at   DateTime? @db.Timestamptz(6)
+}
+
+model smashmateDateBoundaryByMatchRoomId {
+  season           String
+  matchRoomIdUpper Int
+  date             DateTime @unique @db.Date
+
+  @@unique([season, matchRoomIdUpper], map: "unique_season_matchroomidupper")
+}
+
+model smashmateSeasonResults {
+  season       String @id @unique
+  totalPlayers Int
+  totalRooms   Int
 }
