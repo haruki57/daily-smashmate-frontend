@@ -12,6 +12,7 @@ import WinRateChart from '@/app/_components/WinRateChart';
 import { getRank } from '@/app/_lib/services/getRank';
 import { getSeasonResult } from '@/app/_lib/services/getCurrentSeasonResult/[season]';
 import { getTop200 } from '@/app/_lib/services/getTop200';
+import { getTotalPlayers } from '@/app/_lib/services/getTotalPlayers/[season]';
 const prisma = new PrismaClient();
 
 export default async function PlayerBySeason({
@@ -37,12 +38,11 @@ export default async function PlayerBySeason({
     rank = rankRet?.rank;
     isRankEstimated = true;
   }
-  const seasonResult = await getSeasonResult({ season });
-  const total = seasonResult?.totalPlayers ?? 0;
+  const totalPlayers = (await getTotalPlayers({ season })).totalPlayers;
   return (
     <>
       <div>{JSON.stringify({ ...playerDataBySeason })}</div>
-      <div>{JSON.stringify({ rank, total, isRankEstimated })}</div>
+      <div>{JSON.stringify({ rank, totalPlayers, isRankEstimated })}</div>
       <WinRateChart playerId={playerId} season={season} />
     </>
   );
