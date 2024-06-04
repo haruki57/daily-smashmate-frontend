@@ -10,7 +10,6 @@ import { getWinLoss } from '@/app/_lib/services/getWinLoss';
 import { getPlayerRates } from '@/app/_lib/services/getPlayerRates';
 import WinRateChart from '@/app/_components/WinRateChart';
 import { getRank } from '@/app/_lib/services/getRank';
-import { getSeasonResult } from '@/app/_lib/services/getCurrentSeasonResult/[season]';
 import { getTop200 } from '@/app/_lib/services/getTop200';
 import { getTotalPlayers } from '@/app/_lib/services/getTotalPlayers/[season]';
 const prisma = new PrismaClient();
