@@ -46,6 +46,9 @@ export type SeasonResult = {
 export type PlayerRatesJson = {
   [key in string]: number;
 }
+export type PlayerDataJson = {
+  id: number; name: string; alias: string; fighters?: string; mId?: number;
+}[]
 
 export type Photo = {
   id: string;
