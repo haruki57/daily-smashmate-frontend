@@ -24,7 +24,6 @@ export default async function Page({
   const playerId = Number(params.id);
   const account = await getSmashmateAccount({
     playerId,
-    // revalidate: 3600 * 24,
     revalidate: 60,
   });
 

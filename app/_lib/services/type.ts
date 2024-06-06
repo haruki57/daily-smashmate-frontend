@@ -43,6 +43,10 @@ export type SeasonResult = {
   totalRooms: number;
 }
 
+export type PlayerRatesJson = {
+  [key in string]: number;
+}
+
 export type Photo = {
   id: string;
   createdAt: string;

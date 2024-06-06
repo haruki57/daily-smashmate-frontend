@@ -1,6 +1,7 @@
 'use client';
 
 import { PlayerRate } from '@/app/_lib/services/type';
+import { usePlayerRates } from '@/app/lib/hooks/usePlayerRates';
 import { PrismaClient } from '@prisma/client/edge';
 import { useMemo } from 'react';
 import {
@@ -17,13 +18,13 @@ const prisma = new PrismaClient();
 
 type Props = {
   playerId: number;
-  winLoss: {
+  results: {
     matchRoomId: number;
     winnerId: number;
     loserId: number;
     season: string;
   }[];
-  playerRates: PlayerRate[];
+  seasonForOpponentRates: string;
 };
 
 const sampleData = [
@@ -100,17 +101,23 @@ const sampleData = [
 
 export default function WinRateChartWrapper({
   playerId,
-  winLoss,
-  playerRates,
+  results,
+  seasonForOpponentRates,
 }: Props) {
+  const playerRates = usePlayerRates(seasonForOpponentRates);
   const [rateRangeToWInLoss, data] = useMemo(() => {
-    const playerIdToRate = playerRates.reduce(
-      (prev, current) => prev.set(current.playerId, current.currentRate),
-      new Map<number, number>(),
-    );
+    if (!playerRates) {
+      return [undefined, undefined];
+    }
+    const playerIdToRate = new Map<number, number>();
+    Object.entries(playerRates).forEach(([playerIdStr, currentRate]) => {
+      const playerId = Number(playerIdStr);
+      playerIdToRate.set(playerId, currentRate);
+    });
+
     let min = 99999,
       max = -1;
-    winLoss.forEach((w) => {
+    results.forEach((w) => {
       const { winnerId, loserId } = w;
       if (playerId === winnerId) {
         min = Math.min(min, playerIdToRate.get(loserId) ?? 99999);
@@ -124,7 +131,7 @@ export default function WinRateChartWrapper({
     for (let i = min - (min % 100); i <= max; i += 100) {
       rateRangeToWinLoss.set(i, [0, 0]);
     }
-    winLoss.forEach((w) => {
+    results.forEach((w) => {
       const { winnerId, loserId } = w;
       if (playerId === winnerId && playerIdToRate.get(loserId) !== undefined) {
         const rateRange =
@@ -149,7 +156,10 @@ export default function WinRateChartWrapper({
         });
     });
     return [rateRangeToWinLoss, ret];
-  }, [playerId, winLoss, playerRates]);
+  }, [playerId, results, playerRates]);
+  if (rateRangeToWInLoss == undefined || data == undefined) {
+    return <div>読込中...</div>;
+  }
   return (
     <div style={{ fontFamily: 'monospace' }}>
       <BarChart
