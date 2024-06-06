@@ -6,11 +6,11 @@ type Props = {
   season: string;
 };
 
-export async function getWinLoss({
+export async function getResults({
   playerId,
   season,
 }: Props): Promise<{ matchRoomId: number; winnerId: number; loserId: number;  season: string}[]> {
-  return fetch(path(`/api/winLoss/${playerId}/${season}`), {
+  return fetch(path(`/api/results/${playerId}/${season}`), {
     next: { revalidate: 3600 }
   })
     .then(handleSucceed)

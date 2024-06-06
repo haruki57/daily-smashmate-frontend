@@ -6,7 +6,7 @@ import { PrismaClient } from '@prisma/client/edge';
 import { getPlayerIdsToRateMap } from '@/app/lib/data';
 import RatingHistogram from '@/app/_components/RatingHistogram';
 import { PlayerDataBySeason } from '@/app/_lib/services/type';
-import { getWinLoss } from '@/app/_lib/services/getWinLoss';
+import { getResults } from '@/app/_lib/services/getResults';
 import { getPlayerRates } from '@/app/_lib/services/getPlayerRates';
 import WinRateChart from '@/app/_components/WinRateChart';
 import { getRank } from '@/app/_lib/services/getRank';

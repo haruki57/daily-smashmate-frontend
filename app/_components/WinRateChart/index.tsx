@@ -1,8 +1,6 @@
-import { getRateCumulativeCounts } from '@/app/_lib/services/getRateCumulativeCounts';
 import WinRateChartWrapper from './winrate-chart-wrapper';
-import { getWinLoss } from '@/app/_lib/services/getWinLoss';
+import { getResults } from '@/app/_lib/services/getResults';
 import { getPlayerRates } from '@/app/_lib/services/getPlayerRates';
-import { getSeasonsDesc } from '@/app/lib/data';
 import { getSeasons } from '@/app/_lib/services/getSeasons';
 
 type Props = {
@@ -11,7 +9,7 @@ type Props = {
 };
 
 export default async function WinRateChart({ playerId, season }: Props) {
-  const winLoss = await getWinLoss({ playerId, season });
+  const winLoss = await getResults({ playerId, season });
   const seasons = await getSeasons();
   const isLatestSeason = season === seasons.at(-1)?.season;
   const currentPlayerRates = isLatestSeason
