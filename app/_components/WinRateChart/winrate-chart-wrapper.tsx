@@ -3,8 +3,15 @@
 import { PlayerDataElem, PlayerDataJson } from '@/app/_lib/services/type';
 import { usePlayerData } from '@/app/lib/hooks/usePlayerData';
 import { usePlayerRates } from '@/app/lib/hooks/usePlayerRates';
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react';
 import { PrismaClient } from '@prisma/client/edge';
-import { useMemo } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -12,7 +19,6 @@ import {
   YAxis,
   CartesianGrid,
   ReferenceLine,
-  Tooltip,
 } from 'recharts';
 const prisma = new PrismaClient();
 
@@ -29,77 +35,12 @@ type Props = {
   seasonForOpponentRates: string;
 };
 
-const sampleData = [
-  {
-    name: '1000',
-    winRate: 3.5,
-  },
-  {
-    name: '1100',
-    winRate: 34.5,
-  },
-  {
-    name: '1200',
-    winRate: 74.5,
-  },
-  {
-    name: '1300',
-    winRate: 3.5,
-  },
-  {
-    name: '1400',
-    winRate: 34.5,
-  },
-  {
-    name: '1500',
-    winRate: 74.5,
-  },
-  {
-    name: '1600',
-    winRate: 3.5,
-  },
-  {
-    name: '1700',
-    winRate: 34.5,
-  },
-  {
-    name: '1800',
-    winRate: 74.5,
-  },
-  {
-    name: '1900',
-    winRate: 3.5,
-  },
-  {
-    name: '2000',
-    winRate: 34.5,
-  },
-  {
-    name: '2100',
-    winRate: 74.5,
-  },
-  {
-    name: '2200',
-    winRate: 74.5,
-  },
-  {
-    name: '2300',
-    winRate: 74.5,
-  },
-  {
-    name: '2400',
-    winRate: 74.5,
-  },
-  {
-    name: '2500',
-    winRate: 74.5,
-  },
-  {
-    name: '2600',
-    winRate: 74.5,
-    lossRate: 100 - 74.5,
-  },
-];
+type Opponent = {
+  playerId: number;
+  playerName: string;
+  count: number;
+  fighters: string[];
+};
 
 export default function WinRateChartWrapper({
   playerId,
@@ -108,6 +49,8 @@ export default function WinRateChartWrapper({
 }: Props) {
   const playerRates = usePlayerRates(seasonForOpponentRates);
   const playerData = usePlayerData();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rateRange, setRateRange] = useState(1500);
 
   const playerIdToData = useMemo(() => {
     if (!playerData) {
@@ -167,12 +110,6 @@ export default function WinRateChartWrapper({
         }
       });
 
-      type Opponent = {
-        playerId: number;
-        playerName: string;
-        count: number;
-        fighters: string[];
-      };
       const rateRangeToWinnersAndLosers = new Map<
         number,
         { winners: Opponent[]; losers: Opponent[] }
@@ -218,10 +155,15 @@ export default function WinRateChartWrapper({
             count: 1,
             fighters: playerIdToData[opponentId].fighters?.split(',') || [],
           });
-        } else {
-          console.log('Not found ', opponentId);
         }
       });
+
+      Array.from(rateRangeToWinnersAndLosers.entries()).forEach(
+        ([, winnerLosers]) => {
+          winnerLosers.winners.sort((a, b) => b.count - a.count);
+          winnerLosers.losers.sort((a, b) => b.count - a.count);
+        },
+      );
 
       const ret: { name: string; winRate: number; lossRate: number }[] = [];
       rateRangeToWinLoss.forEach((value, key) => {
@@ -242,47 +184,50 @@ export default function WinRateChartWrapper({
   ) {
     return <div>読込中...</div>;
   }
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      const rateRangeStr = label;
-      const rateRange = Number(rateRangeStr);
-      const winnersAndLosers = rateRangeToWinnersAndLosers.get(rateRange);
-      if (!winnersAndLosers) {
-        return;
-      }
-      const { winners, losers } = winnersAndLosers;
-      return (
-        <div>
-          <p>{`レート ${rateRange} ~ ${rateRange + 99}`}</p>
-          <div className="flex">
-            <p>
-              <div>勝ち</div>
-              {winners.map((player) => {
-                return (
-                  <div key={player.playerId}>
-                    {player.playerName + '×' + player.count}
-                  </div>
-                );
-              })}
-            </p>
-            <p>
-              <div>負け</div>
-              {losers.map((player) => {
-                return (
-                  <div key={player.playerId}>
-                    {player.playerName + '×' + player.count}
-                  </div>
-                );
-              })}
-            </p>
-          </div>
-        </div>
-      );
-    }
-    return null;
+
+  const handleBarClick = (data: any) => {
+    const rateRange = Number(data.name);
+    setRateRange(rateRange);
+    setIsModalOpen(true);
   };
 
-  console.log(rateRangeToWinnersAndLosers);
+  const WinLossPlayers = () => {
+    const winnersAndLosers = rateRangeToWinnersAndLosers.get(rateRange);
+    if (!winnersAndLosers) {
+      return;
+    }
+    const { winners, losers } = winnersAndLosers;
+
+    const playerElem = (player: Opponent) => {
+      return (
+        <div key={player.playerId} className="text-sm text-gray-600">
+          {player.playerName + '×' + player.count}
+        </div>
+      );
+    };
+
+    return (
+      <div>
+        <DialogTitle
+          as="h3"
+          className="text-lg font-medium leading-6 text-gray-900"
+        >
+          {`レート ${rateRange} ~ ${rateRange + 99}`}
+        </DialogTitle>
+        <div className="flex">
+          <p>
+            <div>勝ち</div>
+            {winners.map(playerElem)}
+          </p>
+          <p>
+            <div>負け</div>
+            {losers.map(playerElem)}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div style={{ fontFamily: 'monospace' }}>
       <BarChart
@@ -318,11 +263,78 @@ export default function WinRateChartWrapper({
           }}
         />
 
-        <Tooltip content={<CustomTooltip />} />
-        <Bar dataKey="winRate" fill="#82ca9d" stackId="a" />
-        <Bar dataKey="lossRate" fill="#FF6969" stackId="a" />
+        <Bar
+          className="cursor-pointer"
+          dataKey="winRate"
+          fill="#82ca9d"
+          stackId="a"
+          onClick={handleBarClick}
+        />
+
+        <Bar
+          className="cursor-pointer"
+          dataKey="lossRate"
+          fill="#FF6969"
+          stackId="a"
+          onClick={handleBarClick}
+        />
         <ReferenceLine x={50} stroke="#AAAAAA" isFront={false} />
       </BarChart>
+
+      <Transition appear show={isModalOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          onClose={() => setIsModalOpen(false)}
+        >
+          <TransitionChild
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/25" />
+          </TransitionChild>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <TransitionChild
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <DialogPanel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <WinLossPlayers />
+
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      Your payment has been successfully submitted. We’ve sent
+                      you an email with all of the details of your order.
+                    </p>
+                  </div>
+
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={() => setIsModalOpen(false)}
+                    >
+                      閉じる
+                    </button>
+                  </div>
+                </DialogPanel>
+              </TransitionChild>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </div>
   );
 }
