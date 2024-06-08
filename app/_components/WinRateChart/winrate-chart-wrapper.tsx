@@ -4,6 +4,7 @@ import { PlayerDataElem, PlayerDataJson } from '@/app/_lib/services/type';
 import { usePlayerData } from '@/app/lib/hooks/usePlayerData';
 import { usePlayerRates } from '@/app/lib/hooks/usePlayerRates';
 import {
+  Checkbox,
   Dialog,
   DialogPanel,
   DialogTitle,
@@ -52,6 +53,7 @@ export default function WinRateChartWrapper({
   const playerData = usePlayerData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rateRange, setRateRange] = useState(1500);
+  const [showCharactersOnly, setShowCharactersOnly] = useState<boolean>(true);
 
   const playerIdToData = useMemo(() => {
     if (!playerData) {
@@ -227,6 +229,47 @@ export default function WinRateChartWrapper({
       );
     };
 
+    const CharactersElem = ({ players }: { players: Opponent[] }) => {
+      const charaCnt: { [key in string]: number } = {};
+      players.forEach((player) => {
+        if (player.fighters.length >= 2) {
+          return;
+        }
+        player.fighters.forEach((fighter) => {
+          if (fighter.trim() === '') {
+            return;
+          }
+          if (fighter.startsWith('!')) {
+            return;
+          }
+          charaCnt[fighter] = (charaCnt[fighter] ?? 0) + player.count;
+        });
+      });
+      const charaSorted = Object.entries(charaCnt).sort((a, b) => b[1] - a[1]);
+      return (
+        <div>
+          {charaSorted.map(([charaId, count]) => {
+            const charaIdList: string[] = [];
+            for (let i = 0; i < count; i++) {
+              charaIdList.push(charaId);
+            }
+            return charaIdList.map((charaId, index) => {
+              return (
+                <Image
+                  key={`${charaId}-${index}`}
+                  src={`/characters/${charaId}.png`}
+                  alt={charaId}
+                  width={24}
+                  height={24}
+                  style={{ display: 'inline' }}
+                />
+              );
+            });
+          })}
+        </div>
+      );
+    };
+
     return (
       <div>
         <DialogTitle
@@ -235,14 +278,46 @@ export default function WinRateChartWrapper({
         >
           {`レート ${rateRange} ~ ${rateRange + 99}`}
         </DialogTitle>
+        <div
+          onClick={() => setShowCharactersOnly((prev) => !prev)}
+          className="flex cursor-pointer items-center"
+        >
+          <Checkbox
+            checked={showCharactersOnly}
+            className="size-4 group block h-4 w-4 rounded border bg-white data-[checked]:bg-blue-500"
+          >
+            {/* Checkmark icon */}
+            <svg
+              className="stroke-white opacity-0 group-data-[checked]:opacity-100"
+              viewBox="0 0 14 14"
+              fill="none"
+            >
+              <path
+                d="M3 8L6 11L11 3.5"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Checkbox>
+          <div>キャラクターのみ表示</div>
+        </div>
         <div className="flex">
           <p>
             <div>勝ち</div>
-            {winners.map(playerElem)}
+            {showCharactersOnly ? (
+              <CharactersElem players={winners} />
+            ) : (
+              winners.map(playerElem)
+            )}
           </p>
           <p>
             <div>負け</div>
-            {losers.map(playerElem)}
+            {showCharactersOnly ? (
+              <CharactersElem players={losers} />
+            ) : (
+              losers.map(playerElem)
+            )}
           </p>
         </div>
       </div>
