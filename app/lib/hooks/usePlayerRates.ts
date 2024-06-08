@@ -6,6 +6,9 @@ export const usePlayerRates = (season: string) => {
   const [playerRates, setPlayerRates] = useState<PlayerRatesJson | undefined>(undefined);
 
   useEffect(() => {
+    if (playerRates) {
+      return;
+    }
     const fetchData = async () => {
       const path = staticPath(`/player-rates/${season}.json`);
       const response = await fetch(path, {mode: "cors" });
@@ -16,6 +19,6 @@ export const usePlayerRates = (season: string) => {
       setPlayerRates(jsonData);
     };
     fetchData();
-  }, [season])
+  }, [season, playerRates])
   return playerRates;
 };

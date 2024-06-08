@@ -11,6 +11,7 @@ import {
   TransitionChild,
 } from '@headlessui/react';
 import { PrismaClient } from '@prisma/client/edge';
+import Image from 'next/image';
 import { Fragment, useMemo, useState } from 'react';
 import {
   BarChart,
@@ -201,7 +202,27 @@ export default function WinRateChartWrapper({
     const playerElem = (player: Opponent) => {
       return (
         <div key={player.playerId} className="text-sm text-gray-600">
-          {player.playerName + '×' + player.count}
+          <div>{player.playerName + '×' + player.count}</div>
+
+          {player.fighters.map((fighter) => {
+            if (fighter.trim() === '') {
+              return;
+            }
+            if (fighter.startsWith('!')) {
+              return;
+            }
+            console.log(fighter);
+            return (
+              <div key={fighter}>
+                <Image
+                  src={`/characters/${fighter}.png`}
+                  alt={fighter}
+                  width={24}
+                  height={24}
+                />
+              </div>
+            );
+          })}
         </div>
       );
     };
@@ -312,14 +333,6 @@ export default function WinRateChartWrapper({
               >
                 <DialogPanel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <WinLossPlayers />
-
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Your payment has been successfully submitted. We’ve sent
-                      you an email with all of the details of your order.
-                    </p>
-                  </div>
-
                   <div className="mt-4">
                     <button
                       type="button"
