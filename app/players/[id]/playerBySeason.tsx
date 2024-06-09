@@ -42,6 +42,7 @@ export default async function PlayerBySeason({
     <>
       <div>{JSON.stringify({ ...playerDataBySeason })}</div>
       <div>{JSON.stringify({ rank, totalPlayers, isRankEstimated })}</div>
+      <RatingHistogram season={season} currentRate={currentRate ?? undefined} />
       <WinRateChart playerId={playerId} season={season} />
     </>
   );

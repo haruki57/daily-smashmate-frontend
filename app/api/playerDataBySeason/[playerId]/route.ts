@@ -10,10 +10,15 @@ export async function GET(
 ) {
   const ret = await getPlayerDataBySeason(Number(params.playerId));
   return Response.json(
-    ret.reduce((prev, current) => {
-      prev[current.season] = current;
+    ret.reduce((prev, current) => { 
+      if (current.lastPlayerPageVisitedAt.getFullYear() === 1000) {
+        prev[current.season] = { ...current, lastPlayerPageVisitedAt: undefined} as any;
+      } else {
+        prev[current.season] = current;
+      }
+      
       return prev;
-    }, {} as { [key in string]: PlayerDataBySeason })
+    }, {} as { [key in string]: Omit<PlayerDataBySeason, "lastPlayerPageVisitedAt"> })
   );
 }
 
@@ -28,6 +33,7 @@ const getPlayerDataBySeason = async (playerId: number) => {
       win: true,
       loss: true,
       currentCharactersCsv: true,
+      lastPlayerPageVisitedAt: true,
     }
   });
 }

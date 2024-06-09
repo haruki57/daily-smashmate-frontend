@@ -21,6 +21,12 @@ export type PlayerDataBySeason = {
   win: number | null;
   loss: number | null;
   currentCharactersCsv: string | null; 
+
+  // on DB this is nonnull. But because some data are incorrect, 
+  // I set "1000-04-01 14:00:00+00" for some rows.
+  // For the rows, I set undefined on API layer
+  lastPlayerPageVisitedAt: string | undefined;
+  
 }
 
 export type RateCumulativeCounts = {
