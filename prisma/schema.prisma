@@ -81,6 +81,7 @@ model smashmatePlayerDataBySeason {
   loss                 Int?
   currentCharactersCsv String?
   mainAccountId        Int?
+  updated_at           DateTime @default(now()) @db.Timestamptz(6)
 
   @@unique([season, playerId], map: "unique_season_playerId")
 }
@@ -128,6 +129,7 @@ model smashmateCurrentPlayerRates {
   playerId    Int
   currentRate Int      @db.SmallInt
   season      String
+  updated_at  DateTime @default(now()) @db.Timestamptz(6)
 
   @@unique([season, playerId], map: "unique_season_playerId2")
 }
@@ -178,4 +180,10 @@ model smashmateSeasonResults {
   season       String @id @unique
   totalPlayers Int
   totalRooms   Int
+}
+
+model smashmateUnfetchedMatchRoomCountsByPlayer {
+  playerId       Int      @id
+  unfetchedCount Int
+  updated_at     DateTime @default(now()) @db.Timestamptz(6)
 }
