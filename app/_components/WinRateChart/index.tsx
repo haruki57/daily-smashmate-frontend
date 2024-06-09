@@ -17,6 +17,7 @@ export default async function WinRateChart({ playerId, season }: Props) {
     <WinRateChartWrapper
       playerId={playerId}
       results={results}
+      season={season}
       seasonForOpponentRates={isLatestSeason ? seasons.at(-2)!.season : season}
     />
   );

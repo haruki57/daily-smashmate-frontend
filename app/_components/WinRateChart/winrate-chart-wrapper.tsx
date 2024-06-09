@@ -34,6 +34,7 @@ type Props = {
     loserId: number;
     season: string;
   }[];
+  season: string;
   seasonForOpponentRates: string;
 };
 
@@ -47,13 +48,14 @@ type Opponent = {
 export default function WinRateChartWrapper({
   playerId,
   results,
+  season,
   seasonForOpponentRates,
 }: Props) {
   const playerRates = usePlayerRates(seasonForOpponentRates);
   const playerData = usePlayerData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rateRange, setRateRange] = useState(1500);
-  const [showCharactersOnly, setShowCharactersOnly] = useState<boolean>(true);
+  const [showCharactersOnly, setShowCharactersOnly] = useState<boolean>(false);
 
   const playerIdToData = useMemo(() => {
     if (!playerData) {
@@ -213,7 +215,6 @@ export default function WinRateChartWrapper({
             if (fighter.startsWith('!')) {
               return;
             }
-            console.log(fighter);
             return (
               <div key={fighter}>
                 <Image
@@ -278,30 +279,33 @@ export default function WinRateChartWrapper({
         >
           {`レート ${rateRange} ~ ${rateRange + 99}`}
         </DialogTitle>
-        <div
-          onClick={() => setShowCharactersOnly((prev) => !prev)}
-          className="flex cursor-pointer items-center"
-        >
-          <Checkbox
-            checked={showCharactersOnly}
-            className="size-4 group block h-4 w-4 rounded border bg-white data-[checked]:bg-blue-500"
+        {/* Fighters data are not correct on Season 27 */}
+        {season !== '27' && (
+          <div
+            onClick={() => setShowCharactersOnly((prev) => !prev)}
+            className="flex cursor-pointer items-center"
           >
-            {/* Checkmark icon */}
-            <svg
-              className="stroke-white opacity-0 group-data-[checked]:opacity-100"
-              viewBox="0 0 14 14"
-              fill="none"
+            <Checkbox
+              checked={showCharactersOnly}
+              className="size-4 group block h-4 w-4 rounded border bg-white data-[checked]:bg-blue-500"
             >
-              <path
-                d="M3 8L6 11L11 3.5"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Checkbox>
-          <div>キャラクターのみ表示</div>
-        </div>
+              {/* Checkmark icon */}
+              <svg
+                className="stroke-white opacity-0 group-data-[checked]:opacity-100"
+                viewBox="0 0 14 14"
+                fill="none"
+              >
+                <path
+                  d="M3 8L6 11L11 3.5"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Checkbox>
+            <div>キャラクターのみ表示</div>
+          </div>
+        )}
         <div className="flex">
           <p>
             <div>勝ち</div>
