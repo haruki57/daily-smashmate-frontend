@@ -63,7 +63,6 @@ export default function ChartWrapper({
   }
   return (
     <div>
-      <div>chart</div>
       <BarChart
         width={350}
         height={400}

@@ -115,6 +115,7 @@ model smashmateAccountInfo {
   twitterScreenName String
   mainAccountId     Int?
   isDeleted         Boolean  @default(false)
+  top200Players smashmateCurrentTop200[]
 }
 
 model smashmateCharacters {
@@ -142,6 +143,7 @@ model smashmateCurrentTop200 {
   playerId             Int      @unique
   currentCharactersCsv String?
   rate                 Int      @db.SmallInt
+  accountInfo smashmateAccountInfo? @relation(fields: [playerId], references: [playerId])
 }
 
 model smashmatePlayerNames {
