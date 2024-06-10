@@ -99,7 +99,7 @@ export default function ChartWrapper({
           <ReferenceLine
             x={currentRate}
             stroke="#8884d8"
-            label={currentRate}
+            ifOverflow="visible"
             isFront={true}
             strokeWidth={2}
           />
