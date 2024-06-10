@@ -8,20 +8,22 @@ import RatingHistogram from './_components/RatingHistogram';
 import { getSeasons } from './_lib/services/getSeasons';
 import { getTop200 } from './_lib/services/getTop200';
 import Top200 from './_components/Top200';
+import { getVisitedPlayers } from './lib/localStorage';
+import VisitedPlayers from './_components/VisitedPlayers';
 
 export const runtime = 'edge';
 
 export default async function Page() {
   const seasons = await getSeasons();
   const season = seasons.at(-1)!.season;
-  //const top200 = await getTop200();
   return (
     <main className="flex min-h-screen flex-col p-6">
-      <RatingHistogram season={season} />
+      {/* <RatingHistogram season={season} /> */}
       <div className="flex">
         <Top200 />
         <Top200 />
       </div>
+      <VisitedPlayers />
 
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">

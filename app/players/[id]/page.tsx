@@ -9,6 +9,8 @@ import RatingHistogram from '@/app/_components/RatingHistogram';
 import { Suspense } from 'react';
 import { getSeasons } from '@/app/_lib/services/getSeasons';
 import SeasonDataCard from './seasonDataCard';
+import { addVisitedPlayer } from '@/app/lib/localStorage';
+import VisitPlayer from '@/app/_components/VisitPlayer';
 const prisma = new PrismaClient();
 
 export const runtime = 'edge';
@@ -90,6 +92,7 @@ export default async function Page({
             return;
           }
         })}
+      <VisitPlayer playerName={account.playerName} playerId={playerId} />
     </>
   );
 }
