@@ -4,7 +4,7 @@ const KEY = "visitedPlayers"
 
 export function addVisitedPlayer(visitedPlayer: VisitedPlayer) {
   const { playerId } = visitedPlayer;
-  const visited = getVisitedPlayers().slice(-3);
+  const visited = getVisitedPlayers().slice(-30);
   const existing = visited.find((v) => v.playerId === playerId);
   if (existing) {
     const filtered = visited.filter((v) => v.playerId !== playerId);
