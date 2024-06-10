@@ -21,6 +21,16 @@ import clsx from 'clsx';
 import { Button } from '@/app/ui/button';
 const prisma = new PrismaClient();
 
+function normalize(str: string) {
+  return str
+    .trim()
+    .toLowerCase()
+    .replace(/[\u30a1-\u30f6]/g, function (match) {
+      var chr = match.charCodeAt(0) - 0x60;
+      return String.fromCharCode(chr);
+    });
+}
+
 export default function SearchBox() {
   const playerData = usePlayerData();
   const [text, setText] = useState('');
@@ -33,7 +43,8 @@ export default function SearchBox() {
     return playerData
       .filter((d) => {
         return (
-          d.name.indexOf(text.trim()) >= 0 || d.alias.indexOf(text.trim()) >= 0
+          normalize(d.name).indexOf(normalize(text)) >= 0 ||
+          normalize(d.alias).indexOf(normalize(text)) >= 0
         );
       })
       .slice(0, 30);
