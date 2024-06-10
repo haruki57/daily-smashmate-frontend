@@ -1,6 +1,8 @@
 import '@/app/ui/global.css';
 import { inter } from '@/app/ui/fonts';
 import { Metadata } from 'next';
+import { RootHeader } from './_components/RootHeader';
+import { RootFooter } from './_components/RootFooter';
 
 export const metadata: Metadata = {
   title: {
@@ -18,7 +20,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body
+        className={`${inter.className} flex min-h-screen flex-col antialiased`}
+      >
+        <RootHeader />
+        {children}
+        <RootFooter />
+      </body>
     </html>
   );
 }
