@@ -1,6 +1,6 @@
 import { getTop200 } from '../_lib/services/getTop200';
-import Image from 'next/image';
 import Link from 'next/link';
+import CharacterImages from './Characters';
 
 export default async function Top200() {
   const top200 = await getTop200();
@@ -23,21 +23,7 @@ export default async function Top200() {
               </div>
 
               <div className="flex basis-3/12">
-                {player.currentCharactersCsv.split(',').map((characterId) => {
-                  if (characterId.indexOf('!') >= 0) {
-                    return undefined;
-                  }
-                  return (
-                    <Image
-                      key={`${characterId}`}
-                      src={`/characters/${characterId}.png`}
-                      alt={characterId}
-                      width={24}
-                      height={24}
-                      style={{ height: '24px' }}
-                    />
-                  );
-                })}
+                <CharacterImages charactersCsv={player.currentCharactersCsv} />
               </div>
               <div className="basis-2/12">{player.rate}</div>
             </div>

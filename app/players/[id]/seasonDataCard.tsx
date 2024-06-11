@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { PlayerDataBySeason } from '@/app/_lib/services/type';
 import Image from 'next/image';
 import clsx from 'clsx';
+import CharacterImages from '@/app/_components/Characters';
 
 export default function SeasonDataCard({
   playerDataBySeason,
@@ -37,19 +38,9 @@ export default function SeasonDataCard({
       </div>
       <div>
         <div className="mt-2 flex flex-wrap items-center">
-          {playerDataBySeason.currentCharactersCsv
-            ?.split(',')
-            .map((characterId) => {
-              return (
-                <Image
-                  key={characterId}
-                  src={`/characters/${characterId}.png`}
-                  height={24}
-                  width={24}
-                  alt={characterId}
-                />
-              );
-            })}
+          <CharacterImages
+            charactersCsv={playerDataBySeason.currentCharactersCsv}
+          />
         </div>
         <div className="mt-2 flex flex-wrap items-center text-lg">
           <div className="flex-auto ">

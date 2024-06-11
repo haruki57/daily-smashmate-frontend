@@ -22,6 +22,7 @@ import {
   CartesianGrid,
   ReferenceLine,
 } from 'recharts';
+import CharacterImages from '../Characters';
 const prisma = new PrismaClient();
 
 // Note: https://blog.mmmcorp.co.jp/2023/08/29/react-recharts/
@@ -205,27 +206,11 @@ export default function WinRateChartWrapper({
 
     const playerElem = (player: Opponent) => {
       return (
-        <div key={player.playerId} className="text-sm text-gray-600">
+        <div key={player.playerId} className="flex text-sm text-gray-600">
           <div>{player.playerName + '×' + player.count}</div>
-
-          {player.fighters.map((fighter) => {
-            if (fighter.trim() === '') {
-              return;
-            }
-            if (fighter.startsWith('!')) {
-              return;
-            }
-            return (
-              <div key={fighter}>
-                <Image
-                  src={`/characters/${fighter}.png`}
-                  alt={fighter}
-                  width={24}
-                  height={24}
-                />
-              </div>
-            );
-          })}
+          <div>
+            <CharacterImages charactersCsv={player.fighters.join(',')} />
+          </div>
         </div>
       );
     };

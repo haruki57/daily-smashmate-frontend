@@ -1,17 +1,11 @@
 import ChangeSeason from '@/app/ui/change-season';
-import { PrismaClient } from '@prisma/client/edge';
 import PlayerBySeason from './playerBySeason';
-import { getHeatmap, getSeasonsDesc } from '@/app/lib/data';
-import Heatmap from './heatmap';
 import { getSmashmateAccount } from '@/app/_lib/services/getAccount';
 import { getPlayerSeasonData as getPlayerDataBySeason } from '@/app/_lib/services/getPlayerSeasonData';
-import RatingHistogram from '@/app/_components/RatingHistogram';
 import { Suspense } from 'react';
 import { getSeasons } from '@/app/_lib/services/getSeasons';
 import SeasonDataCard from './seasonDataCard';
-import { addVisitedPlayer } from '@/app/lib/localStorage';
 import VisitPlayer from '@/app/_components/VisitPlayer';
-const prisma = new PrismaClient();
 
 export const runtime = 'edge';
 

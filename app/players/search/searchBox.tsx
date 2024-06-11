@@ -19,6 +19,8 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { Button } from '@/app/ui/button';
+import { characterMap } from '@/app/lib/characters';
+import CharacterImages from '@/app/_components/Characters';
 const prisma = new PrismaClient();
 
 function normalize(str: string) {
@@ -51,7 +53,7 @@ export default function SearchBox() {
   }, [playerData, text]);
 
   return (
-    <>
+    <div>
       <Input
         type="text"
         value={text}
@@ -63,10 +65,14 @@ export default function SearchBox() {
         return (
           <div key={id}>
             <Link href={`/players/${id}`}>
-              <div className="flex">
-                <div>{name}</div>
-                <div>{fighters?.split(',')}</div>
-                {mId != null && <div className="text-red-500">サブ</div>}
+              <div className="flex items-center">
+                <div className="basis-4/12">{name}</div>
+                <div className="basis-6/12 text-sm ">
+                  <CharacterImages charactersCsv={fighters} />
+                </div>
+                {mId != null && (
+                  <div className="basis-2/12 text-sm text-blue-400">サブ</div>
+                )}
               </div>
             </Link>
           </div>
@@ -92,6 +98,6 @@ export default function SearchBox() {
           </Link>
         </div>
       </Field>
-    </>
+    </div>
   );
 }
