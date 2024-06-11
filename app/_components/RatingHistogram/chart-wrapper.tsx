@@ -99,6 +99,7 @@ export default function ChartWrapper({
             x={currentRate}
             stroke="#8884d8"
             ifOverflow="visible"
+            label={currentRate}
             isFront={true}
             strokeWidth={2}
           />
