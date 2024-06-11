@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import { getSeasons } from '@/app/_lib/services/getSeasons';
 import SeasonDataCard from './seasonDataCard';
 import VisitPlayer from '@/app/_components/VisitPlayer';
+import CardInPlayerPage from '@/app/_components/CardInPlayerPage';
 
 export const runtime = 'edge';
 
@@ -43,6 +44,18 @@ export default async function Page({
     return (
       <>
         <ChangeSeason seasons={seasons} initialValue={season} />
+
+        <div className="my-2 flex flex-col justify-between gap-2 md:flex-row">
+          <CardInPlayerPage />
+          <CardInPlayerPage />
+        </div>
+        <div className="my-2 grid grid-cols-1 gap-4 md:grid-cols-3">
+          <CardInPlayerPage />
+
+          <CardInPlayerPage />
+          {/* <CardInPlayerPage /> */}
+        </div>
+
         {playerDataBySeason && (
           <Suspense fallback={<div>Player Season取得中…</div>}>
             <PlayerBySeason
