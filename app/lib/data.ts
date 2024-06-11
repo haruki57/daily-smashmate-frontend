@@ -273,19 +273,3 @@ export const getPlayerIdsToRateMap = cache(async (opponentPlayerIds: number[], s
   return playerIdToRate;
 })
 
-export const getHeatmap = cache(async (playerId: number) => {
-  const data = await prisma.smashmateMatchRoomsOnlyPlayerIds.findMany({
-    select: { created_at: true }, // TODO use smashmate_created_at
-    where: { 
-      OR: [{ player1Id: playerId }, { player2Id: playerId }], }
-  })
-  return data.reduce(
-    (prev, current) => {
-      const dateStr = current.created_at.toISOString().substring(0, 10);
-      return prev.set(dateStr, (prev.get(dateStr) ?? 0) + 1);
-    },
-    new Map<string, number>(),
-  );
-})
-
-
