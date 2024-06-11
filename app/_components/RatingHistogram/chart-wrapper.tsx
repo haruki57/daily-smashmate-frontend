@@ -10,6 +10,7 @@ import {
   CartesianGrid,
   Tooltip,
   ReferenceLine,
+  ResponsiveContainer,
 } from 'recharts';
 const prisma = new PrismaClient();
 
@@ -62,10 +63,8 @@ export default function ChartWrapper({
     }
   }
   return (
-    <div>
+    <ResponsiveContainer height={400}>
       <BarChart
-        width={350}
-        height={400}
         data={data}
         margin={{
           top: 10,
@@ -105,6 +104,6 @@ export default function ChartWrapper({
           />
         )}
       </BarChart>
-    </div>
+    </ResponsiveContainer>
   );
 }

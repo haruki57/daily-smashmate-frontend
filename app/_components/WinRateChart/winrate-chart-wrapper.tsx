@@ -21,6 +21,7 @@ import {
   YAxis,
   CartesianGrid,
   ReferenceLine,
+  ResponsiveContainer,
 } from 'recharts';
 import CharacterImages from '../Characters';
 const prisma = new PrismaClient();
@@ -314,58 +315,60 @@ export default function WinRateChartWrapper({
   };
 
   return (
-    <div style={{ fontFamily: 'monospace' }}>
-      <BarChart
-        layout="vertical"
-        width={350}
+    <div>
+      <ResponsiveContainer
         height={data.length * 40}
-        data={data}
-        margin={{
-          left: 30,
-          right: 30,
-        }}
-        barSize={24}
+        style={{ fontFamily: 'monospace' }}
       >
-        <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-        <XAxis
-          type="number"
-          domain={[0, 100]}
-          hide={true}
-          ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
-        />
-        <YAxis
-          dataKey="name"
-          type="category"
-          tickLine={false}
-          tickFormatter={(value) => {
-            const winLoss = rateRangeToWinLoss.get(Number(value));
-            if (winLoss) {
-              const [win, loss] = winLoss;
-              return `${value}~ (${win}勝${loss}敗)`;
-            } else {
-              return `${value}~`;
-            }
+        <BarChart
+          layout="vertical"
+          data={data}
+          margin={{
+            left: 30,
+            right: 30,
           }}
-        />
+          barSize={24}
+        >
+          <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+          <XAxis
+            type="number"
+            domain={[0, 100]}
+            hide={true}
+            ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+          />
+          <YAxis
+            dataKey="name"
+            type="category"
+            tickLine={false}
+            tickFormatter={(value) => {
+              const winLoss = rateRangeToWinLoss.get(Number(value));
+              if (winLoss) {
+                const [win, loss] = winLoss;
+                return `${value}~ (${win}勝${loss}敗)`;
+              } else {
+                return `${value}~`;
+              }
+            }}
+          />
 
-        <Bar
-          className="cursor-pointer"
-          dataKey="winRate"
-          fill="#82ca9d"
-          stackId="a"
-          onClick={handleBarClick}
-        />
+          <Bar
+            className="cursor-pointer"
+            dataKey="winRate"
+            fill="#82ca9d"
+            stackId="a"
+            onClick={handleBarClick}
+          />
 
-        <Bar
-          className="cursor-pointer"
-          dataKey="lossRate"
-          fill="#FF6969"
-          stackId="a"
-          onClick={handleBarClick}
-        />
-        <ReferenceLine x={50} stroke="#AAAAAA" isFront={false} />
-      </BarChart>
-
+          <Bar
+            className="cursor-pointer"
+            dataKey="lossRate"
+            fill="#FF6969"
+            stackId="a"
+            onClick={handleBarClick}
+          />
+          <ReferenceLine x={50} stroke="#AAAAAA" isFront={false} />
+        </BarChart>
+      </ResponsiveContainer>
       <Transition appear show={isModalOpen} as={Fragment}>
         <Dialog
           as="div"
