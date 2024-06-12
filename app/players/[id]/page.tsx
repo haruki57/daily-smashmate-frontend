@@ -7,8 +7,34 @@ import { getSeasons } from '@/app/_lib/services/getSeasons';
 import SeasonDataCard from './seasonDataCard';
 import VisitPlayer from '@/app/_components/VisitPlayer';
 import CardInPlayerPage from '@/app/_components/CardInPlayerPage';
+import { getRanksForCharacters } from '@/app/_lib/services/getRanksForCharacters';
+import Image from 'next/image';
+import { Account } from '@/app/_lib/services/type';
 
 export const runtime = 'edge';
+
+const PlayerPageHeader = ({
+  account,
+  season,
+}: {
+  account: Account;
+  season?: string;
+}) => {
+  return (
+    // The value of "top-10" depends on the height of RootHeader
+    <div className="sticky top-10 z-50 bg-white">
+      <div className="mx-2 flex items-end justify-between pt-2">
+        <VisitPlayer
+          playerName={account.playerName}
+          playerId={account.playerId}
+        />
+        <h1 className="text-4xl font-semibold">{`${account.playerName}`}</h1>
+        {season != null && <div>{`シーズン ${season}`}</div>}
+      </div>
+      <hr className="my-4 border-2 border-slate-300" />
+    </div>
+  );
+};
 
 export default async function Page({
   params,
@@ -41,18 +67,55 @@ export default async function Page({
 
   if (season) {
     const playerDataBySeason = playerDataBySeasons[season];
+    if (!playerDataBySeason) {
+      return (
+        // TODO
+        <div>{`${account.playerName} さんのシーズン ${season}のデータがありません。`}</div>
+      );
+    }
+    const ranksForCharacters = await getRanksForCharacters({
+      playerId,
+      season,
+    });
     return (
       <>
-        <ChangeSeason seasons={seasons} initialValue={season} />
-
-        <div className="my-2 flex flex-col justify-between gap-2 md:flex-row">
-          <CardInPlayerPage />
-          <CardInPlayerPage />
+        {/* <ChangeSeason seasons={seasons} initialValue={season} /> */}
+        <PlayerPageHeader account={account} season={season} />
+        <div className="my-2 grid grid-cols-2 gap-4">
+          <CardInPlayerPage
+            title="レート"
+            mainContent={2345}
+            annotation={`最高レート 2455`}
+          />
+          <CardInPlayerPage
+            title="全体順位"
+            mainContent={1234}
+            unit="位"
+            annotation="12345人中"
+          />
         </div>
         <div className="my-2 grid grid-cols-1 gap-4 md:grid-cols-3">
-          <CardInPlayerPage />
-
-          <CardInPlayerPage />
+          {ranksForCharacters.map((rankForCharacter) => {
+            return (
+              <CardInPlayerPage
+                key={rankForCharacter.characterId}
+                title={
+                  <div className="flex">
+                    <Image
+                      src={`/characters/${rankForCharacter.characterId}.png`}
+                      alt={rankForCharacter.characterId}
+                      height={24}
+                      width={24}
+                    />
+                    ファイター順位
+                  </div>
+                }
+                mainContent={rankForCharacter.rank}
+                unit="位"
+                annotation={`${rankForCharacter.totalPlayerCount} 人中`}
+              />
+            );
+          })}
           {/* <CardInPlayerPage /> */}
         </div>
 
@@ -71,6 +134,7 @@ export default async function Page({
 
   return (
     <>
+      <PlayerPageHeader account={account} season={season} />
       <div>{account.playerName}</div>
       <div>
         <a
@@ -99,7 +163,6 @@ export default async function Page({
             return;
           }
         })}
-      <VisitPlayer playerName={account.playerName} playerId={playerId} />
     </>
   );
 }

@@ -85,3 +85,11 @@ export type Comment = {
   photoId: string;
   comment: string;
 };
+
+export type RankForCharacter = {
+  characterId: string;
+  rank: number;
+  season: string;
+  playerId: number;
+  totalPlayerCount: number;
+}
