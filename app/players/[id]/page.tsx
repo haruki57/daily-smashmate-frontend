@@ -10,6 +10,7 @@ import CardInPlayerPage from '@/app/_components/CardInPlayerPage';
 import { getRanksForCharacters } from '@/app/_lib/services/getRanksForCharacters';
 import Image from 'next/image';
 import { Account } from '@/app/_lib/services/type';
+import { getTotalPlayers } from '@/app/_lib/services/getTotalPlayers/[season]';
 
 export const runtime = 'edge';
 
@@ -77,6 +78,7 @@ export default async function Page({
       playerId,
       season,
     });
+    const totalPlayerCount = await getTotalPlayers({ season });
     return (
       <>
         <PlayerPageHeader account={account} season={season} />
@@ -96,7 +98,7 @@ export default async function Page({
               playerDataBySeason.rankFromTop200 ?? playerDataBySeason.rank
             }
             unit="位"
-            annotation="TODO人中"
+            annotation={`${totalPlayerCount.totalPlayers}人中`}
           />
         </div>
         <div className="my-2 grid grid-cols-1 gap-4 md:grid-cols-3">
