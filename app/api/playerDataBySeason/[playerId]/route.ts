@@ -11,29 +11,34 @@ export async function GET(
   const ret = await getPlayerDataBySeason(Number(params.playerId));
   return Response.json(
     ret.reduce((prev, current) => { 
-      if (current.lastPlayerPageVisitedAt.getFullYear() === 1000) {
+      if ((current as any).lastPlayerPageVisitedAt.getFullYear() === 1000) {
         prev[current.season] = { ...current, lastPlayerPageVisitedAt: undefined} as any;
       } else {
         prev[current.season] = current;
       }
-      
       return prev;
     }, {} as { [key in string]: Omit<PlayerDataBySeason, "lastPlayerPageVisitedAt"> })
   );
 }
 
-const getPlayerDataBySeason = async (playerId: number) => {
-  return await prisma.smashmatePlayerDataBySeason.findMany({
-    where: { playerId },
-    select: {
-      season: true,
-      playerId: true,
-      currentRate: true,
-      maxRate: true,
-      win: true,
-      loss: true,
-      currentCharactersCsv: true,
-      lastPlayerPageVisitedAt: true,
-    }
-  });
+const getPlayerDataBySeason = async (playerId: number): Promise<Omit<PlayerDataBySeason, "lastPlayerPageVisitedAt">[]> => {
+  const ret = await prisma.$queryRaw`select 
+    "smashmatePlayerDataBySeason"."season", 
+    "smashmatePlayerDataBySeason"."playerId", 
+    "smashmatePlayerDataBySeason"."currentRate", 
+    "smashmatePlayerDataBySeason"."maxRate", 
+    "smashmatePlayerDataBySeason"."win", 
+    "smashmatePlayerDataBySeason"."loss", 
+    "smashmatePlayerDataBySeason"."currentCharactersCsv", 
+    "smashmatePlayerDataBySeason"."lastPlayerPageVisitedAt", 
+    "smashmatePlayerDataBySeason"."loss", 
+    "smashmateRateToRank"."rank",
+    "smashmateCurrentTop200"."rank" as "rankFromTop200"
+    from "smashmatePlayerDataBySeason" 
+    left join "smashmateRateToRank" on "currentRate" = "rate" and 
+    "smashmatePlayerDataBySeason"."season" = "smashmateRateToRank"."season" 
+    left join "smashmateCurrentTop200" on 
+    "smashmatePlayerDataBySeason"."playerId" = "smashmateCurrentTop200"."playerId"
+    where "smashmatePlayerDataBySeason"."playerId" = ${playerId};`
+  return ret as any;
 }

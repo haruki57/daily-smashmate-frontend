@@ -26,6 +26,8 @@ export type PlayerDataBySeason = {
   // I set "1000-04-01 14:00:00+00" for some rows.
   // For the rows, I set undefined on API layer
   lastPlayerPageVisitedAt: string | undefined;
+  rank: number;
+  rankFromTop200: number | null;
 }
 
 export type RateCumulativeCounts = {

@@ -79,19 +79,24 @@ export default async function Page({
     });
     return (
       <>
-        {/* <ChangeSeason seasons={seasons} initialValue={season} /> */}
         <PlayerPageHeader account={account} season={season} />
         <div className="my-2 grid grid-cols-2 gap-4">
           <CardInPlayerPage
             title="レート"
-            mainContent={2345}
-            annotation={`最高レート 2455`}
+            mainContent={playerDataBySeason.currentRate || '----'}
+            annotation={
+              !isSeasonFinished && playerDataBySeason.maxRate != null
+                ? `最高レート ${playerDataBySeason.maxRate}`
+                : undefined
+            }
           />
           <CardInPlayerPage
             title="全体順位"
-            mainContent={1234}
+            mainContent={
+              playerDataBySeason.rankFromTop200 ?? playerDataBySeason.rank
+            }
             unit="位"
-            annotation="12345人中"
+            annotation="TODO人中"
           />
         </div>
         <div className="my-2 grid grid-cols-1 gap-4 md:grid-cols-3">
