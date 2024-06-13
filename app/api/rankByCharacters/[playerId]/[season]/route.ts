@@ -12,6 +12,8 @@ export async function GET(
       rank: true,
     },
   });
+  // This query does seq scan but number of rows is less than 1000 per character for now.
+  // If you want to avoid seq scan, consider using Materialized View.
   const ret2 = await prisma.smashmateRankByCharacter.groupBy({
     by: "characterId", 
     _count: true,

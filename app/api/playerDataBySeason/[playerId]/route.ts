@@ -33,12 +33,15 @@ const getPlayerDataBySeason = async (playerId: number): Promise<Omit<PlayerDataB
     "smashmatePlayerDataBySeason"."lastPlayerPageVisitedAt", 
     "smashmatePlayerDataBySeason"."loss", 
     "smashmateRateToRank"."rank",
-    "smashmateCurrentTop200"."rank" as "rankFromTop200"
+    "smashmateCurrentTop200"."rank" as "rankFromTop200",
+    "mv_smashmateCurrentPlayerRates_countBySeason"."count"::int as "totalPlayerCount"
     from "smashmatePlayerDataBySeason" 
     left join "smashmateRateToRank" on "currentRate" = "rate" and 
     "smashmatePlayerDataBySeason"."season" = "smashmateRateToRank"."season" 
     left join "smashmateCurrentTop200" on 
     "smashmatePlayerDataBySeason"."playerId" = "smashmateCurrentTop200"."playerId"
+    left join "mv_smashmateCurrentPlayerRates_countBySeason" on 
+      "mv_smashmateCurrentPlayerRates_countBySeason"."season" = "smashmatePlayerDataBySeason"."season"
     where "smashmatePlayerDataBySeason"."playerId" = ${playerId};`
   return ret as any;
 }

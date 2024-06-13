@@ -28,6 +28,8 @@ export type PlayerDataBySeason = {
   lastPlayerPageVisitedAt: string | undefined;
   rank: number;
   rankFromTop200: number | null;
+
+  totalPlayerCount: number | null;
 }
 
 export type RateCumulativeCounts = {

@@ -46,7 +46,11 @@ export default function SeasonDataCard({
           <div className="flex-auto ">
             {`レート ${playerDataBySeason.currentRate}`}
           </div>
-          <div className="flex-auto ">{`推定順位 ${99123} 位`}</div>
+          {playerDataBySeason.rankFromTop200 != null ? (
+            <div className="flex-auto ">{`順位 ${playerDataBySeason.rankFromTop200} 位  / ${playerDataBySeason.totalPlayerCount} 人`}</div>
+          ) : (
+            <div className="flex-auto ">{`順位 ${playerDataBySeason.rank} 位 / ${playerDataBySeason.totalPlayerCount} 人`}</div>
+          )}
         </div>
         <div className="mt-2 flex flex-wrap items-center text-lg">
           <div className="flex-auto ">
