@@ -7,7 +7,7 @@ import { getSeasons } from '@/app/_lib/services/getSeasons';
 import SeasonDataCard from './seasonDataCard';
 import VisitPlayer from '@/app/_components/VisitPlayer';
 import CardInPlayerPage from '@/app/_components/CardInPlayerPage';
-import { getRanksForCharacters } from '@/app/_lib/services/getRanksForCharacters';
+import { getRanksByCharacters } from '@/app/_lib/services/getRanksByCharacters';
 import Image from 'next/image';
 import { Account } from '@/app/_lib/services/type';
 import { getTotalPlayers } from '@/app/_lib/services/getTotalPlayers/[season]';
@@ -74,7 +74,7 @@ export default async function Page({
         <div>{`${account.playerName} さんのシーズン ${season}のデータがありません。`}</div>
       );
     }
-    const ranksForCharacters = await getRanksForCharacters({
+    const ranksByCharacters = await getRanksByCharacters({
       playerId,
       season,
     });
@@ -102,7 +102,7 @@ export default async function Page({
           />
         </div>
         <div className="my-2 grid grid-cols-1 gap-4 md:grid-cols-3">
-          {ranksForCharacters.map((rankForCharacter) => {
+          {ranksByCharacters.map((rankForCharacter) => {
             return (
               <CardInPlayerPage
                 key={rankForCharacter.characterId}

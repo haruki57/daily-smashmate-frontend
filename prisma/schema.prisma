@@ -115,6 +115,8 @@ model smashmateAccountInfo {
   twitterScreenName String
   mainAccountId     Int?
   isDeleted         Boolean  @default(false)
+  
+  top200Players smashmateCurrentTop200[]
 }
 
 model smashmateCharacters {
@@ -142,6 +144,8 @@ model smashmateCurrentTop200 {
   playerId             Int      @unique
   currentCharactersCsv String?
   rate                 Int      @db.SmallInt
+
+  accountInfo smashmateAccountInfo? @relation(fields: [playerId], references: [playerId])
 }
 
 model smashmatePlayerNames {
@@ -197,4 +201,14 @@ model smashmateRateToRank {
   rank       Int      @db.SmallInt
 
   @@unique([season, rate])
+}
+
+model smashmateRankByCharacter {
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  rank        Int      @db.SmallInt
+  season      String
+  playerId    Int
+  characterId String
+
+  @@unique([season, playerId, characterId], map: "season_player_character")
 }

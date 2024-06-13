@@ -88,10 +88,8 @@ export type Comment = {
   comment: string;
 };
 
-export type RankForCharacter = {
+export type RankByCharacter = {
   characterId: string;
   rank: number;
-  season: string;
-  playerId: number;
   totalPlayerCount: number;
 }
