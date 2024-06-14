@@ -23,7 +23,7 @@ const PlayerPageHeader = ({
 }) => {
   return (
     // The value of "top-10" depends on the height of RootHeader
-    <div className="top-30 sticky z-10 bg-white">
+    <div className="sticky top-10 z-10 bg-white">
       <div className="mx-2 flex items-end justify-between pt-2">
         <VisitPlayer
           playerName={account.playerName}
