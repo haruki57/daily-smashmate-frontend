@@ -96,7 +96,8 @@ export default function ChartWrapper({
         <Bar dataKey="count" fill="#82ca9d" />
         {currentRate != null && (
           <ReferenceLine
-            x={currentRate}
+            // "-25" is necessary to adjust position for some reason
+            x={currentRate - 25}
             stroke="#8884d8"
             ifOverflow="visible"
             label={currentRate}
