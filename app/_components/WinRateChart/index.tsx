@@ -9,16 +9,22 @@ type Props = {
 };
 
 export default async function WinRateChart({ playerId, season }: Props) {
-  const results = await getResults({ playerId, season });
   const seasons = await getSeasons();
   const isLatestSeason = season === seasons.at(-1)?.season;
-
+  const seasonForOpponentRates = isLatestSeason
+    ? seasons.at(-2)!.season
+    : season;
+  const results = await getResults({
+    playerId,
+    season,
+    seasonForOpponentRates,
+  });
   return (
     <WinRateChartWrapper
       playerId={playerId}
       results={results}
       season={season}
-      seasonForOpponentRates={isLatestSeason ? seasons.at(-2)!.season : season}
+      seasonForOpponentRates={seasonForOpponentRates}
     />
   );
 }

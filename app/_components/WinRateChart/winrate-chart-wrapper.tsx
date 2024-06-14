@@ -2,7 +2,6 @@
 
 import { PlayerDataElem, PlayerDataJson } from '@/app/_lib/services/type';
 import { usePlayerData } from '@/app/lib/hooks/usePlayerData';
-import { usePlayerRates } from '@/app/lib/hooks/usePlayerRates';
 import {
   Checkbox,
   Dialog,
@@ -34,7 +33,8 @@ type Props = {
     matchRoomId: number;
     winnerId: number;
     loserId: number;
-    season: string;
+    opponentId: number;
+    opponentRate: number | null;
   }[];
   season: string;
   seasonForOpponentRates: string;
@@ -53,7 +53,6 @@ export default function WinRateChartWrapper({
   season,
   seasonForOpponentRates,
 }: Props) {
-  const playerRates = usePlayerRates(seasonForOpponentRates);
   const playerData = usePlayerData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rateRange, setRateRange] = useState(1500);
@@ -72,48 +71,31 @@ export default function WinRateChartWrapper({
 
   const [rateRangeToWinnersAndLosers, rateRangeToWinLoss, data] =
     useMemo(() => {
-      if (!playerRates || !playerIdToData) {
+      if (!playerIdToData) {
         return [undefined, undefined];
       }
-      const playerIdToRate = new Map<number, number>();
-      Object.entries(playerRates).forEach(([playerIdStr, currentRate]) => {
-        const playerId = Number(playerIdStr);
-        playerIdToRate.set(playerId, currentRate);
-      });
 
       let min = 99999;
       let max = -1;
       results.forEach((w) => {
-        const { winnerId, loserId } = w;
-        if (playerId === winnerId) {
-          min = Math.min(min, playerIdToRate.get(loserId) ?? 99999);
-          max = Math.max(max, playerIdToRate.get(loserId) ?? -1);
-        } else {
-          min = Math.min(min, playerIdToRate.get(winnerId) ?? 99999);
-          max = Math.max(max, playerIdToRate.get(winnerId) ?? -1);
-        }
+        const { opponentRate } = w;
+        min = Math.min(min, opponentRate ?? 99999);
+        max = Math.max(max, opponentRate ?? -1);
       });
       const rateRangeToWinLoss = new Map<number, number[]>();
       for (let i = min - (min % 100); i <= max; i += 100) {
         rateRangeToWinLoss.set(i, [0, 0]);
       }
       results.forEach((w) => {
-        const { winnerId, loserId } = w;
-        if (
-          playerId === winnerId &&
-          playerIdToRate.get(loserId) !== undefined
-        ) {
-          const rateRange =
-            playerIdToRate.get(loserId)! - (playerIdToRate.get(loserId)! % 100);
+        const { winnerId, loserId, opponentRate } = w;
+        if (opponentRate != null) {
+          const rateRange = opponentRate - (opponentRate % 100);
           rateRangeToWinLoss.get(rateRange)![0]++;
-        } else if (
-          playerId === loserId &&
-          playerIdToRate.get(winnerId) !== undefined
-        ) {
-          const rateRange =
-            playerIdToRate.get(winnerId)! -
-            (playerIdToRate.get(winnerId)! % 100);
-          rateRangeToWinLoss.get(rateRange)![1]++;
+          if (winnerId === playerId) {
+            rateRangeToWinLoss.get(rateRange)![0]++;
+          } else {
+            rateRangeToWinLoss.get(rateRange)![1]++;
+          }
         }
       });
 
@@ -122,23 +104,15 @@ export default function WinRateChartWrapper({
         { winners: Opponent[]; losers: Opponent[] }
       >();
       results.forEach((result) => {
-        const { winnerId, loserId } = result;
+        const { winnerId, loserId, opponentRate } = result;
         let rateRange: number | undefined = undefined;
         let opponentId: number | undefined = undefined;
-        if (
-          playerId === winnerId &&
-          playerIdToRate.get(loserId) !== undefined
-        ) {
-          rateRange =
-            playerIdToRate.get(loserId)! - (playerIdToRate.get(loserId)! % 100);
+        if (opponentRate != null) {
+          rateRange = opponentRate - (opponentRate % 100);
+        }
+        if (playerId === winnerId) {
           opponentId = loserId;
-        } else if (
-          playerId === loserId &&
-          playerIdToRate.get(winnerId) !== undefined
-        ) {
-          rateRange =
-            playerIdToRate.get(winnerId)! -
-            (playerIdToRate.get(winnerId)! % 100);
+        } else if (playerId === loserId) {
           opponentId = winnerId;
         }
         if (rateRange == undefined || opponentId == undefined) {
@@ -182,7 +156,7 @@ export default function WinRateChartWrapper({
           });
       });
       return [rateRangeToWinnersAndLosers, rateRangeToWinLoss, ret];
-    }, [playerId, results, playerRates, playerIdToData]);
+    }, [playerId, results, playerIdToData]);
   if (
     rateRangeToWinLoss == undefined ||
     data == undefined ||
