@@ -54,6 +54,7 @@ export default function WinRateChartWrapper({
   seasonForOpponentRates,
 }: Props) {
   const playerData = usePlayerData();
+  const [range, setRange] = useState<number>(100);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rateRange, setRateRange] = useState(1500);
   const [showCharactersOnly, setShowCharactersOnly] = useState<boolean>(false);
@@ -83,13 +84,13 @@ export default function WinRateChartWrapper({
         max = Math.max(max, opponentRate ?? -1);
       });
       const rateRangeToWinLoss = new Map<number, number[]>();
-      for (let i = min - (min % 100); i <= max; i += 100) {
+      for (let i = min - (min % range); i <= max; i += range) {
         rateRangeToWinLoss.set(i, [0, 0]);
       }
       results.forEach((w) => {
         const { winnerId, loserId, opponentRate } = w;
         if (opponentRate != null) {
-          const rateRange = opponentRate - (opponentRate % 100);
+          const rateRange = opponentRate - (opponentRate % range);
           rateRangeToWinLoss.get(rateRange)![0]++;
           if (winnerId === playerId) {
             rateRangeToWinLoss.get(rateRange)![0]++;
@@ -108,7 +109,7 @@ export default function WinRateChartWrapper({
         let rateRange: number | undefined = undefined;
         let opponentId: number | undefined = undefined;
         if (opponentRate != null) {
-          rateRange = opponentRate - (opponentRate % 100);
+          rateRange = opponentRate - (opponentRate % range);
         }
         if (playerId === winnerId) {
           opponentId = loserId;
@@ -151,12 +152,12 @@ export default function WinRateChartWrapper({
         if (value[0] + value[1] != 0)
           ret.push({
             name: String(key),
-            winRate: (value[0] / (value[0] + value[1])) * 100,
-            lossRate: (value[1] / (value[0] + value[1])) * 100,
+            winRate: (value[0] / (value[0] + value[1])) * range,
+            lossRate: (value[1] / (value[0] + value[1])) * range,
           });
       });
       return [rateRangeToWinnersAndLosers, rateRangeToWinLoss, ret];
-    }, [playerId, results, playerIdToData]);
+    }, [playerId, results, playerIdToData, range]);
   if (
     rateRangeToWinLoss == undefined ||
     data == undefined ||
@@ -237,7 +238,7 @@ export default function WinRateChartWrapper({
           as="h3"
           className="text-lg font-medium leading-6 text-gray-900"
         >
-          {`レート ${rateRange} ~ ${rateRange + 99}`}
+          {`レート ${rateRange} ~ ${rateRange + (range - 1)}`}
         </DialogTitle>
         {/* Fighters data are not correct on Season 27 */}
         {season !== '27' && (
