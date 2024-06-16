@@ -9,29 +9,57 @@ export function RootHeader() {
       <div className="flex h-10 w-full items-center justify-between bg-slate-900 text-slate-100">
         <Link
           href="/"
-          className="ml-2 flex text-xl font-bold"
+          className="ml-2 flex gap-1 text-xl font-bold"
           style={{
             fontFamily: "'Arial', sans-serif",
             textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)' /* 文字の影 */,
           }}
         >
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="white"
-            className="mr-1"
+            viewBox="0 0 480 480"
             height="24px"
             width="24px"
+            xmlns="http://www.w3.org/2000/svg"
             version="1.1"
-            viewBox="0 0 490.4 490.4"
           >
             <g>
-              <g>
-                <g>
-                  <path d="M17.2,251.55c-9.5,0-17.2,7.7-17.2,17.1v179.7c0,9.5,7.7,17.2,17.2,17.2h113c9.5,0,17.1-7.7,17.1-17.2v-179.7     c0-9.5-7.7-17.1-17.1-17.1L17.2,251.55L17.2,251.55z M113,431.25H34.3v-145.4H113V431.25z" />
-                  <path d="M490.4,448.45v-283.7c0-9.5-7.7-17.2-17.2-17.2h-113c-9.5,0-17.2,7.7-17.2,17.2v283.6c0,9.5,7.7,17.2,17.2,17.2h113     C482.7,465.55,490.4,457.85,490.4,448.45z M456.1,431.25h-78.7v-249.3h78.7L456.1,431.25L456.1,431.25z" />
-                  <path d="M301.7,465.55c9.5,0,17.1-7.7,17.1-17.2V42.05c0-9.5-7.7-17.2-17.1-17.2h-113c-9.5,0-17.2,7.7-17.2,17.2v406.3     c0,9.5,7.7,17.2,17.2,17.2H301.7z M205.9,59.25h78.7v372h-78.7L205.9,59.25L205.9,59.25z" />
-                </g>
-              </g>
+              <rect
+                fill="#000000"
+                height="322"
+                id="svg_4"
+                rx="8"
+                ry="8"
+                stroke="#ffffff"
+                stroke-width="27"
+                width="100"
+                x="40"
+                y="136"
+              />
+              <rect
+                fill="#000000"
+                height="398"
+                id="svg_5"
+                rx="8"
+                ry="8"
+                stroke="#ffffff"
+                stroke-width="27"
+                transform="matrix(1 0 0 1 0 0)"
+                width="100"
+                x="192"
+                y="60"
+              />
+              <rect
+                fill="#000000"
+                height="236"
+                id="svg_6"
+                rx="8"
+                ry="8"
+                stroke="#ffffff"
+                stroke-width="27"
+                width="100"
+                x="342"
+                y="220"
+              />
             </g>
           </svg>
           デイリースマメイト
