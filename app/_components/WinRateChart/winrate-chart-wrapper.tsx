@@ -1,7 +1,10 @@
 'use client';
 
-import { PlayerDataElem, PlayerDataJson } from '@/app/_lib/services/type';
-import { usePlayerData } from '@/app/lib/hooks/usePlayerData';
+import {
+  PlayerDataElem,
+  PlayerDataJson,
+  Result,
+} from '@/app/_lib/services/type';
 import {
   Checkbox,
   Dialog,
@@ -29,13 +32,7 @@ const prisma = new PrismaClient();
 
 type Props = {
   playerId: number;
-  results: {
-    matchRoomId: number;
-    winnerId: number;
-    loserId: number;
-    opponentId: number;
-    opponentRate: number | null;
-  }[];
+  results: Result[];
   season: string;
   seasonForOpponentRates: string;
 };
@@ -53,29 +50,14 @@ export default function WinRateChartWrapper({
   season,
   seasonForOpponentRates,
 }: Props) {
-  const playerData = usePlayerData();
+  console.log(results);
   const [range, setRange] = useState<number>(100);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rateRange, setRateRange] = useState(1500);
   const [showCharactersOnly, setShowCharactersOnly] = useState<boolean>(false);
 
-  const playerIdToData = useMemo(() => {
-    if (!playerData) {
-      return undefined;
-    }
-    const ret: { [key in number]: PlayerDataElem } = {};
-    playerData.forEach((d) => {
-      ret[d.id] = d;
-    });
-    return ret;
-  }, [playerData]);
-
   const [rateRangeToWinnersAndLosers, rateRangeToWinLoss, data] =
     useMemo(() => {
-      if (!playerIdToData) {
-        return [undefined, undefined];
-      }
-
       let min = 99999;
       let max = -1;
       results.forEach((w) => {
@@ -130,12 +112,12 @@ export default function WinRateChartWrapper({
         const found = list.find((l) => l.playerId === opponentId);
         if (found) {
           found.count++;
-        } else if (playerIdToData[opponentId]) {
+        } else if (result.playerName) {
           list.push({
             playerId: opponentId,
-            playerName: playerIdToData[opponentId].name,
+            playerName: result.playerName,
             count: 1,
-            fighters: playerIdToData[opponentId].fighters?.split(',') || [],
+            fighters: result.currentCharactersCsv?.split(',') || [],
           });
         }
       });
@@ -157,11 +139,10 @@ export default function WinRateChartWrapper({
           });
       });
       return [rateRangeToWinnersAndLosers, rateRangeToWinLoss, ret];
-    }, [playerId, results, playerIdToData, range]);
+    }, [playerId, results, range]);
   if (
     rateRangeToWinLoss == undefined ||
     data == undefined ||
-    playerIdToData == undefined ||
     rateRangeToWinnersAndLosers == undefined
   ) {
     return <div>読込中...</div>;

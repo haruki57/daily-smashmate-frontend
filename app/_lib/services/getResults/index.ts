@@ -1,5 +1,5 @@
 import { handleFailed, handleSucceed, path } from "..";
-import type { PlayerDataBySeason } from "../type";
+import type { Result } from "../type";
 
 type Props = {
   playerId: number;
@@ -11,7 +11,7 @@ export async function getResults({
   playerId,
   season,
   seasonForOpponentRates,
-}: Props): Promise<{ matchRoomId: number; winnerId: number; loserId: number; opponentId: number;  opponentRate: number | null}[]> {
+}: Props): Promise<Result[]> {
   return fetch(path(`/api/results/${playerId}/${season}?prevSeason=${seasonForOpponentRates}`), {
     next: { revalidate: 3600 }
   })

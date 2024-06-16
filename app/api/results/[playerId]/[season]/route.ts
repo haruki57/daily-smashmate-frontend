@@ -10,13 +10,25 @@ export async function GET(
   const { season, playerId: playerIdStr } = params;
   const playerId = Number(playerIdStr);
   const ret = await prisma.$queryRaw`select 
-    "smashmateMatchRoomResults"."matchRoomId", "smashmateMatchRoomResults"."winnerId",  "smashmateMatchRoomResults"."loserId", "smashmateCurrentPlayerRates"."currentRate" 
+    "smashmateMatchRoomResults"."matchRoomId", 
+    "smashmateMatchRoomResults"."winnerId",  
+    "smashmateMatchRoomResults"."loserId", 
+    "smashmatePlayerDataBySeason"."playerName",
+    "smashmatePlayerDataBySeason"."currentRate",
+    "smashmatePlayerDataBySeason"."currentCharactersCsv"
     from "smashmateMatchRoomResults" 
-    left join "smashmateCurrentPlayerRates" on "smashmateMatchRoomResults"."loserId" = "smashmateCurrentPlayerRates"."playerId" and "smashmateCurrentPlayerRates"."season" = ${seasonForRates}
+    left join "smashmatePlayerDataBySeason" on "smashmateMatchRoomResults"."loserId" = "smashmatePlayerDataBySeason"."playerId" and "smashmatePlayerDataBySeason"."season" = ${seasonForRates}
     where "winnerId" = ${playerId} and "smashmateMatchRoomResults"."season" = ${season}
     union 
-    select "smashmateMatchRoomResults"."matchRoomId", "smashmateMatchRoomResults"."winnerId",  "smashmateMatchRoomResults"."loserId", "smashmateCurrentPlayerRates"."currentRate" from "smashmateMatchRoomResults" 
-    left join "smashmateCurrentPlayerRates" on "smashmateMatchRoomResults"."winnerId" = "smashmateCurrentPlayerRates"."playerId" and "smashmateCurrentPlayerRates"."season" = ${seasonForRates}
+    select 
+    "smashmateMatchRoomResults"."matchRoomId", 
+    "smashmateMatchRoomResults"."winnerId",
+    "smashmateMatchRoomResults"."loserId", 
+    "smashmatePlayerDataBySeason"."playerName",
+    "smashmatePlayerDataBySeason"."currentRate",
+    "smashmatePlayerDataBySeason"."currentCharactersCsv"
+    from "smashmateMatchRoomResults" 
+    left join "smashmatePlayerDataBySeason" on "smashmateMatchRoomResults"."winnerId" = "smashmatePlayerDataBySeason"."playerId" and "smashmatePlayerDataBySeason"."season" = ${seasonForRates}
     where "loserId" = ${playerId} and "smashmateMatchRoomResults"."season" = ${season};` as any
   return Response.json(ret.map((r: any) => {
     return {
