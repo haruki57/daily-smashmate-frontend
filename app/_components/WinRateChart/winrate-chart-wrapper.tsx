@@ -50,7 +50,6 @@ export default function WinRateChartWrapper({
   season,
   seasonForOpponentRates,
 }: Props) {
-  console.log(results);
   const [range, setRange] = useState<number>(100);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rateRange, setRateRange] = useState(1500);
@@ -73,7 +72,6 @@ export default function WinRateChartWrapper({
         const { winnerId, loserId, opponentRate } = w;
         if (opponentRate != null) {
           const rateRange = opponentRate - (opponentRate % range);
-          rateRangeToWinLoss.get(rateRange)![0]++;
           if (winnerId === playerId) {
             rateRangeToWinLoss.get(rateRange)![0]++;
           } else {
