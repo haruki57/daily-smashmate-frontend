@@ -12,7 +12,10 @@ export default async function TopMatchCount({ season }: { season: string }) {
           <div key={player.playerId}>
             {index !== 0 && <hr className="border-slate-300 " />}
             <div className="mt-2 flex tabular-nums">
-              <div className="basis-4/12">{`${truncatedCount} 戦以上`}</div>
+              <div className="flex basis-4/12 justify-around">
+                <div className="basis-10 text-right">{truncatedCount}</div>
+                <div className="mr-2">戦以上</div>
+              </div>
               <div className="basis-5/12 text-blue-600">
                 <Link href={`/players/${player.playerId}`}>
                   {player.playerName}

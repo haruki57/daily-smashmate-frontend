@@ -14,7 +14,10 @@ export default async function Top200() {
           <div key={player.playerId}>
             {index !== 0 && <hr className="border-slate-300 " />}
             <div className="mt-2 flex tabular-nums">
-              <div className="basis-2/12">{`${player.rank} 位`}</div>
+              <div className="flex basis-2/12 justify-around">
+                <div className="basis-6 text-right">{player.rank}</div>
+                <div className="mr-2">位</div>
+              </div>
 
               <div className="basis-5/12 text-blue-600">
                 <Link href={`/players/${player.playerId}`}>
