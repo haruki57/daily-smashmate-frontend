@@ -105,3 +105,11 @@ export type Result = {
   currentCharactersCsv: string | null;
   playerName: string | null
 }
+
+export type MatchCount = {
+  playerId: number;
+  season: string;
+  matchCount: number;
+  playerName: string;
+  currentCharactersCsv: string | null;
+}

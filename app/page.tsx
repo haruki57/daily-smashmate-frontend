@@ -4,17 +4,22 @@ import { lusitana } from './ui/fonts';
 import Image from 'next/image';
 import Top200 from './_components/Top200';
 import VisitedPlayers from './_components/VisitedPlayers';
+import TopMatchCount from './_components/TopMatchCount';
+import { getSeasons } from './_lib/services/getSeasons';
 
 export const runtime = 'edge';
 
 export default async function Page() {
+  const seasons = await getSeasons();
+  const latestSeason = seasons.at(-1)?.season!;
   return (
     <main className="flex min-h-screen flex-col items-center p-6">
       {/* <RatingHistogram season={season} /> */}
       <div className="flex flex-col gap-8 sm:flex-row">
         <Top200 />
-        <VisitedPlayers />
+        <TopMatchCount season={latestSeason} />
       </div>
+      <VisitedPlayers />
 
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
