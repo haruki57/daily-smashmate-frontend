@@ -52,7 +52,7 @@ export default async function PlayerBySeason({
       </div>
       {!isSeasonFinished && (
         <div className="text-sm text-slate-500">
-          対戦相手のレートは、前シーズンの最終レートを使用しています。
+          対戦相手のレートとキャラクターは、前シーズンの最終時点での情報を使用しています。
         </div>
       )}
       <div className="my-8">

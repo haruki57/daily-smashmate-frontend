@@ -219,7 +219,10 @@ export default function WinRateChartWrapper({
         >
           {`レート ${rateRange} ~ ${rateRange + (range - 1)}`}
         </DialogTitle>
+
         {/* Fighters data are not correct on Season 27 */}
+
+        {/* Hide this feature because even if season is 28, we use character data of season 27
         {season !== '27' && (
           <div
             onClick={() => setShowCharactersOnly((prev) => !prev)}
@@ -229,7 +232,6 @@ export default function WinRateChartWrapper({
               checked={showCharactersOnly}
               className="size-4 group block h-4 w-4 rounded border bg-white data-[checked]:bg-blue-500"
             >
-              {/* Checkmark icon */}
               <svg
                 className="stroke-white opacity-0 group-data-[checked]:opacity-100"
                 viewBox="0 0 14 14"
@@ -245,7 +247,8 @@ export default function WinRateChartWrapper({
             </Checkbox>
             <div>キャラクターのみ表示</div>
           </div>
-        )}
+        )}  */}
+
         <div className="flex gap-4">
           <div className="w-1/2">
             <div className="mb-2 text-lg">勝ち</div>
