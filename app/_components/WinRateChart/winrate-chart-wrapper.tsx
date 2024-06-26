@@ -215,7 +215,7 @@ export default function WinRateChartWrapper({
       <div>
         <DialogTitle
           as="h3"
-          className="text-lg font-medium leading-6 text-gray-900"
+          className="mb-4 text-2xl font-medium leading-6 text-gray-900"
         >
           {`レート ${rateRange} ~ ${rateRange + (range - 1)}`}
         </DialogTitle>
@@ -223,7 +223,7 @@ export default function WinRateChartWrapper({
         {season !== '27' && (
           <div
             onClick={() => setShowCharactersOnly((prev) => !prev)}
-            className="flex cursor-pointer items-center"
+            className="my-2 flex cursor-pointer items-center"
           >
             <Checkbox
               checked={showCharactersOnly}
@@ -248,7 +248,7 @@ export default function WinRateChartWrapper({
         )}
         <div className="flex gap-4">
           <div className="w-1/2">
-            <div>勝ち</div>
+            <div className="mb-2 text-lg">勝ち</div>
             {showCharactersOnly ? (
               <CharactersElem players={winners} />
             ) : (
@@ -256,7 +256,7 @@ export default function WinRateChartWrapper({
             )}
           </div>
           <div className="w-1/2">
-            <div>負け</div>
+            <div className="mb-2 text-lg">負け</div>
             {showCharactersOnly ? (
               <CharactersElem players={losers} />
             ) : (
