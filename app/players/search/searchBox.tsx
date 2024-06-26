@@ -53,7 +53,8 @@ export default function SearchBox() {
   }, [playerData, text]);
 
   return (
-    <div>
+    <div className=" mx-auto flex w-full max-w-md flex-col ">
+      <h2 className="my-4 text-3xl">プレイヤー検索</h2>
       <Input
         type="text"
         value={text}
@@ -63,24 +64,27 @@ export default function SearchBox() {
       {filteredPlayerData.map((data) => {
         const { id, name, fighters, mId } = data;
         return (
-          <div key={id}>
+          <div key={id} className="my-2 w-8/12">
             <Link href={`/players/${id}`}>
-              <div className="flex items-center">
-                <div className="basis-4/12">{name}</div>
-                <div className="basis-6/12 text-sm ">
+              <div className="flex  items-center justify-between">
+                <div className="">
+                  {name}
+                  {mId != null && (
+                    <span className="ml-1 text-sm text-blue-400">サブ</span>
+                  )}
+                </div>
+                <div className="">
                   <CharacterImages charactersCsv={fighters} />
                 </div>
-                {mId != null && (
-                  <div className="basis-2/12 text-sm text-blue-400">サブ</div>
-                )}
               </div>
             </Link>
           </div>
         );
       })}
-      <Field>
+
+      {/* <Field>
         <Description className="text-sm/6 ">
-          見つからない場合は、スマメイトIDを直接入力してください
+          見つからない場合は、スマメイトIDを入力してください
         </Description>
         <div className="flex">
           <Input
@@ -97,7 +101,7 @@ export default function SearchBox() {
             <Button disabled={!smashmateId.trim().match(/\d/)}>hoge</Button>
           </Link>
         </div>
-      </Field>
+      </Field> */}
     </div>
   );
 }

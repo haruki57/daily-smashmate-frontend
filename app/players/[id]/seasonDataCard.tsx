@@ -23,7 +23,7 @@ export default function SeasonDataCard({
     <div
       className={clsx([
         playerDataBySeason ? 'cursor-pointer' : 'bg-slate-100',
-        'max-w-xs  rounded-lg border-2 p-4 shadow-xl',
+        'w-full max-w-sm rounded-lg border-2 p-4 shadow-xl',
       ])}
       onClick={handleClick}
     >
@@ -42,14 +42,12 @@ export default function SeasonDataCard({
             charactersCsv={playerDataBySeason.currentCharactersCsv}
           />
         </div>
-        <div className="mt-2 flex flex-wrap items-center text-lg">
-          <div className="flex-auto ">
-            {`レート ${playerDataBySeason.currentRate}`}
-          </div>
+        <div className="mt-2 flex items-center justify-between text-lg">
+          <div className="">{`レート ${playerDataBySeason.currentRate}`}</div>
           {playerDataBySeason.rankFromTop200 != null ? (
-            <div className="flex-auto ">{`順位 ${playerDataBySeason.rankFromTop200} 位  / ${playerDataBySeason.totalPlayerCount} 人`}</div>
+            <div className="">{`${playerDataBySeason.rankFromTop200} 位  / ${playerDataBySeason.totalPlayerCount} 人`}</div>
           ) : (
-            <div className="flex-auto ">{`順位 ${playerDataBySeason.rank} 位 / ${playerDataBySeason.totalPlayerCount} 人`}</div>
+            <div className="">{`${playerDataBySeason.rank} 位 / ${playerDataBySeason.totalPlayerCount} 人`}</div>
           )}
         </div>
         <div className="mt-2 flex flex-wrap items-center text-lg">

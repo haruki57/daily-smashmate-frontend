@@ -6,6 +6,7 @@ export default async function TopMatchCount({ season }: { season: string }) {
   const topMatchCount = await getTopMatchCount({ season });
   return (
     <div className="max-h-96 w-96 overflow-y-scroll rounded border border-slate-400 px-4 py-3">
+      <h4 className="mb-4 text-xl font-semibold">対戦回数ランキング</h4>
       {topMatchCount.map((player, index) => {
         const truncatedCount = player.matchCount - (player.matchCount % 100);
         return (

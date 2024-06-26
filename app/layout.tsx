@@ -24,7 +24,9 @@ export default function RootLayout({
         className={`${inter.className} flex min-h-screen flex-col antialiased`}
       >
         <RootHeader />
-        <div className="mx-auto max-w-4xl">{children}</div>
+        <div className="container mx-auto w-screen max-w-4xl px-4">
+          {children}
+        </div>
         <RootFooter />
       </body>
     </html>

@@ -17,7 +17,7 @@ export default function playerPageLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="container mx-auto">
       {children}
       <div>TODO データ取得について</div>
     </div>

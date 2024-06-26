@@ -17,9 +17,11 @@ export const runtime = 'edge';
 const PlayerPageHeader = ({
   account,
   season,
+  withSmashmateLink,
 }: {
   account: Account;
   season?: string;
+  withSmashmateLink?: boolean;
 }) => {
   return (
     // The value of "top-10" depends on the height of RootHeader
@@ -31,6 +33,16 @@ const PlayerPageHeader = ({
         />
         <h1 className="text-4xl font-semibold">{`${account.playerName}`}</h1>
         {season != null && <div>{`シーズン ${season}`}</div>}
+        {withSmashmateLink && (
+          <a
+            href={`https://smashmate.net/user/${account.playerId}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500"
+          >
+            スマメイト(本家)のページへ
+          </a>
+        )}
       </div>
       <hr className="my-4 border-2 border-slate-300" />
     </div>
@@ -101,21 +113,21 @@ export default async function Page({
             annotation={`${totalPlayerCount.totalPlayers}人中`}
           />
         </div>
-        <div className="my-2 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="my-2 grid grid-cols-2 gap-4">
           {ranksByCharacters.map((rankForCharacter) => {
             return (
               <CardInPlayerPage
                 key={rankForCharacter.characterId}
                 title={
-                  <div className="flex">
+                  <h4 className="flex">
                     <Image
                       src={`/characters/${rankForCharacter.characterId}.png`}
                       alt={rankForCharacter.characterId}
-                      height={24}
-                      width={24}
+                      height={28}
+                      width={28}
                     />
                     ファイター順位
-                  </div>
+                  </h4>
                 }
                 mainContent={rankForCharacter.rank}
                 unit="位"
@@ -141,35 +153,30 @@ export default async function Page({
 
   return (
     <>
-      <PlayerPageHeader account={account} season={season} />
-      <div>{account.playerName}</div>
-      <div>
-        <a
-          href={`https://smashmate.net/user/${account.playerId}/`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          スマメイト(本家)のページへ
-        </a>
-      </div>
-      {seasons
-        .slice()
-        .reverse()
-        .map((season) => {
-          if (playerDataBySeasons[season]) {
-            return (
-              <div key={season}>
+      <PlayerPageHeader
+        account={account}
+        season={season}
+        withSmashmateLink={true}
+      />
+      <div className="my-2 flex flex-col items-center gap-4">
+        {seasons
+          .slice()
+          .reverse()
+          .map((season) => {
+            if (playerDataBySeasons[season]) {
+              return (
                 <SeasonDataCard
                   playerDataBySeason={playerDataBySeasons[season]!}
                   season={season}
                   isLatestSeason={currentSeasonRow?.season == season}
+                  key={season}
                 />
-              </div>
-            );
-          } else {
-            return;
-          }
-        })}
+              );
+            } else {
+              return;
+            }
+          })}
+      </div>
     </>
   );
 }

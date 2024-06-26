@@ -6,6 +6,7 @@ export default async function Top200() {
   const top200 = await getTop200();
   return (
     <div className="max-h-96 w-96 overflow-y-scroll rounded border border-slate-400 px-4 py-3">
+      <h4 className="mb-4 text-xl font-semibold">レートランキング</h4>
       {top200.map((player, index) => {
         if (!player.accountInfo) {
           return undefined;

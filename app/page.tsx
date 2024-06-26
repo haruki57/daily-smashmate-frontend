@@ -14,12 +14,14 @@ export default async function Page() {
   const latestSeason = seasons.at(-1)?.season!;
   return (
     <main className="flex min-h-screen flex-col items-center p-6">
-      {/* <RatingHistogram season={season} /> */}
-      <div className="flex flex-col gap-8 sm:flex-row">
-        <Top200 />
+      <p className="mb-4 text-lg">
+        デイリースマメイトは、スマメイト27期以降の戦績を閲覧できるサービスです。
+      </p>
+      <div className="grid  grid-cols-1 gap-4 lg:grid-cols-2">
         <TopMatchCount season={latestSeason} />
+        <Top200 />
+        <VisitedPlayers />
       </div>
-      <VisitedPlayers />
 
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">

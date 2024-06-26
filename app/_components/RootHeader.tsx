@@ -9,7 +9,7 @@ export function RootHeader() {
       <div className="flex h-10 w-full items-center justify-between bg-slate-900 text-slate-100">
         <Link
           href="/"
-          className="ml-2 flex gap-1 text-xl font-bold"
+          className="ml-4 flex gap-1 text-xl font-bold"
           style={{
             fontFamily: "'Arial', sans-serif",
             textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)' /* 文字の影 */,
@@ -65,7 +65,7 @@ export function RootHeader() {
           デイリースマメイト
         </Link>
 
-        <Link href="/players/search" className="bold mr-2 flex text-slate-300">
+        <Link href="/players/search" className="bold mr-4 flex text-slate-300">
           <svg
             width="24"
             height="24"

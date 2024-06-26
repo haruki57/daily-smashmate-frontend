@@ -246,23 +246,23 @@ export default function WinRateChartWrapper({
             <div>キャラクターのみ表示</div>
           </div>
         )}
-        <div className="flex">
-          <p>
+        <div className="flex gap-4">
+          <div className="w-1/2">
             <div>勝ち</div>
             {showCharactersOnly ? (
               <CharactersElem players={winners} />
             ) : (
               winners.map(playerElem)
             )}
-          </p>
-          <p>
+          </div>
+          <div className="w-1/2">
             <div>負け</div>
             {showCharactersOnly ? (
               <CharactersElem players={losers} />
             ) : (
               losers.map(playerElem)
             )}
-          </p>
+          </div>
         </div>
       </div>
     );
@@ -352,7 +352,7 @@ export default function WinRateChartWrapper({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <DialogPanel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogPanel className="my-10 w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <WinLossPlayers />
                   <div className="mt-4">
                     <button

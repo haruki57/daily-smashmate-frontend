@@ -63,7 +63,7 @@ export default function ChartWrapper({
     }
   }
   return (
-    <ResponsiveContainer height={400}>
+    <ResponsiveContainer height={500}>
       <BarChart
         data={data}
         margin={{

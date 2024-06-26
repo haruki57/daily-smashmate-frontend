@@ -7,7 +7,7 @@ export default function VisitedPlayers() {
   const visitedPlayers = getVisitedPlayers().reverse();
   return (
     <div className="max-h-96 w-96 overflow-y-scroll rounded border border-slate-400 px-4 py-3">
-      <div>ページ訪問履歴</div>
+      <h4 className="mb-4 text-xl font-semibold">ページ訪問履歴</h4>
       <div>
         {visitedPlayers.map(({ playerName, playerId }, index) => {
           return (

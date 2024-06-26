@@ -40,16 +40,14 @@ export default async function PlayerBySeason({
   const totalPlayers = (await getTotalPlayers({ season })).totalPlayers;
   return (
     <>
-      {/* <div>{JSON.stringify({ ...playerDataBySeason })}</div> */}
-      {/* <div>{JSON.stringify({ rank, totalPlayers, isRankEstimated })}</div> */}
-      <div className="m-8">
+      <div className="my-8">
+        <WinRateChart playerId={playerId} season={season} />
+      </div>
+      <div className="my-8">
         <RatingHistogram
           season={season}
           currentRate={currentRate ?? undefined}
         />
-      </div>
-      <div className="m-8">
-        <WinRateChart playerId={playerId} season={season} />
       </div>
     </>
   );
