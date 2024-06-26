@@ -3,6 +3,7 @@ import { getPlayerSeasonData as getPlayerDataBySeason } from '@/app/_lib/service
 import { getSeasons } from '@/app/_lib/services/getSeasons';
 import SeasonDataCard from './seasonDataCard';
 import { PlayerPageHeader } from './PlayerPageHeader';
+import { notFound } from 'next/navigation';
 
 export const runtime = 'edge';
 
@@ -15,7 +16,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   // TODO
   if (!account) {
-    return <div>Player not found</div>;
+    notFound();
   }
   const playerDataBySeasons = await getPlayerDataBySeason({ playerId });
 

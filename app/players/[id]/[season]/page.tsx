@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { getTotalPlayers } from '@/app/_lib/services/getTotalPlayers/[season]';
 import { PlayerPageHeader } from '../PlayerPageHeader';
 import PlayerBySeason from './playerBySeason';
+import { notFound } from 'next/navigation';
 
 export const runtime = 'edge';
 
@@ -21,6 +22,10 @@ export default async function Page({
     playerId,
     revalidate: 60,
   });
+  if (!account) {
+    notFound();
+  }
+
   const playerDataBySeasons = await getPlayerDataBySeason({ playerId });
 
   const seasonRows = await getSeasons();
