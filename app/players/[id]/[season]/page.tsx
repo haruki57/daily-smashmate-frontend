@@ -33,7 +33,7 @@ export default async function Page({
   const currentSeasonRow = seasonRows
     .filter((row) => row.season == season)
     .at(0);
-  const isSeasonFinished = currentSeasonRow?.ended_at == null ? true : false;
+  const isSeasonFinished = currentSeasonRow?.ended_at == null ? false : true;
 
   const playerDataBySeason = playerDataBySeasons[season];
   if (!playerDataBySeason) {
@@ -55,7 +55,7 @@ export default async function Page({
           title="レート"
           mainContent={playerDataBySeason.currentRate || '----'}
           annotation={
-            !isSeasonFinished && playerDataBySeason.maxRate != null
+            isSeasonFinished && playerDataBySeason.maxRate != null
               ? `最高レート ${playerDataBySeason.maxRate}`
               : undefined
           }
@@ -91,7 +91,6 @@ export default async function Page({
             />
           );
         })}
-        {/* <CardInPlayerPage /> */}
       </div>
 
       {playerDataBySeason && (

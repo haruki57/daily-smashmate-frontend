@@ -1,18 +1,8 @@
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { useDebouncedCallback } from 'use-debounce';
-import { Select } from '@headlessui/react';
-import { PrismaClient } from '@prisma/client/edge';
-import { getPlayerIdsToRateMap } from '@/app/lib/data';
 import RatingHistogram from '@/app/_components/RatingHistogram';
 import { PlayerDataBySeason } from '@/app/_lib/services/type';
-import { getResults } from '@/app/_lib/services/getResults';
-import { getPlayerRates } from '@/app/_lib/services/getPlayerRates';
 import WinRateChart from '@/app/_components/WinRateChart';
 import { getRank } from '@/app/_lib/services/getRank';
 import { getTop200 } from '@/app/_lib/services/getTop200';
-import { getTotalPlayers } from '@/app/_lib/services/getTotalPlayers/[season]';
-const prisma = new PrismaClient();
 
 export default async function PlayerBySeason({
   playerDataBySeason,
@@ -37,17 +27,36 @@ export default async function PlayerBySeason({
     rank = rankRet?.rank;
     isRankEstimated = true;
   }
-  const totalPlayers = (await getTotalPlayers({ season })).totalPlayers;
+
   return (
     <>
-      <div className="my-8">
-        <WinRateChart playerId={playerId} season={season} />
-      </div>
       <div className="my-8">
         <RatingHistogram
           season={season}
           currentRate={currentRate ?? undefined}
         />
+      </div>
+
+      <div className="flex items-start justify-between">
+        <h4 className="text-2xl font-bold">レート別対戦成績</h4>
+        {playerDataBySeason.lastPlayerPageVisitedAt && (
+          <div className="text-right text-sm text-slate-500">
+            <div>対戦成績最終更新日</div>
+            <div>
+              {new Date(
+                playerDataBySeason.lastPlayerPageVisitedAt,
+              ).toLocaleDateString('ja-JP')}
+            </div>
+          </div>
+        )}
+      </div>
+      {!isSeasonFinished && (
+        <div className="text-sm text-slate-500">
+          対戦相手のレートは、前シーズンの最終レートを使用しています。
+        </div>
+      )}
+      <div className="my-8">
+        <WinRateChart playerId={playerId} season={season} />
       </div>
     </>
   );
