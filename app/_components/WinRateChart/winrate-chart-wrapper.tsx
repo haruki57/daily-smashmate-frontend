@@ -1,19 +1,13 @@
 'use client';
 
+import { Result } from '@/app/_lib/services/type';
 import {
-  PlayerDataElem,
-  PlayerDataJson,
-  Result,
-} from '@/app/_lib/services/type';
-import {
-  Checkbox,
   Dialog,
   DialogPanel,
   DialogTitle,
   Transition,
   TransitionChild,
 } from '@headlessui/react';
-import { PrismaClient } from '@prisma/client/edge';
 import Image from 'next/image';
 import { Fragment, useMemo, useState } from 'react';
 import {
@@ -26,7 +20,6 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import CharacterImages from '../Characters';
-const prisma = new PrismaClient();
 
 // Note: https://blog.mmmcorp.co.jp/2023/08/29/react-recharts/
 

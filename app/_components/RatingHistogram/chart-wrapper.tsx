@@ -1,6 +1,5 @@
 'use client';
 
-import { PrismaClient } from '@prisma/client/edge';
 import { useMemo, useState } from 'react';
 import {
   BarChart,
@@ -12,7 +11,6 @@ import {
   ReferenceLine,
   ResponsiveContainer,
 } from 'recharts';
-const prisma = new PrismaClient();
 
 // Note: https://blog.mmmcorp.co.jp/2023/08/29/react-recharts/
 

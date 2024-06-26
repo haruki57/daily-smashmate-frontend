@@ -1,8 +1,5 @@
-import { PlayerDataBySeason } from '@/app/_lib/services/type';
-import { PrismaClient } from '@prisma/client/edge';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-
-export const runtime = 'edge';
 
 export async function GET(
   request: Request, 

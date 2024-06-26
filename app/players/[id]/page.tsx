@@ -5,8 +5,6 @@ import SeasonDataCard from './seasonDataCard';
 import { PlayerPageHeader } from './PlayerPageHeader';
 import { notFound } from 'next/navigation';
 
-export const runtime = 'edge';
-
 export default async function Page({ params }: { params: { id: string } }) {
   const playerId = Number(params.id);
   const account = await getSmashmateAccount({

@@ -11,7 +11,7 @@ import {
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
 import { cache } from 'react'
-import { PrismaClient } from '@prisma/client/edge';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function fetchRevenue() {

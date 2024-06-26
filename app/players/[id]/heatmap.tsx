@@ -1,11 +1,3 @@
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { useDebouncedCallback } from 'use-debounce';
-import { Select } from '@headlessui/react';
-import { PrismaClient } from '@prisma/client/edge';
-import { getPlayerIdsToRateMap } from '@/app/lib/data';
-const prisma = new PrismaClient();
-
 export default async function Heatmap({ data }: { data: Map<string, number> }) {
   const now = new Date();
   const oneYearAgo = new Date();

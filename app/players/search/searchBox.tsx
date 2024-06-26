@@ -1,27 +1,10 @@
 'use client';
 
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { useDebouncedCallback } from 'use-debounce';
-import { Description, Field, Input, Select } from '@headlessui/react';
-import { PrismaClient } from '@prisma/client/edge';
-import { getPlayerIdsToRateMap } from '@/app/lib/data';
-import RatingHistogram from '@/app/_components/RatingHistogram';
-import { PlayerDataBySeason } from '@/app/_lib/services/type';
-import { getResults } from '@/app/_lib/services/getResults';
-import { getPlayerRates } from '@/app/_lib/services/getPlayerRates';
-import WinRateChart from '@/app/_components/WinRateChart';
-import { getRank } from '@/app/_lib/services/getRank';
-import { getTop200 } from '@/app/_lib/services/getTop200';
-import { getTotalPlayers } from '@/app/_lib/services/getTotalPlayers/[season]';
+import { Input } from '@headlessui/react';
 import { usePlayerData } from '@/app/lib/hooks/usePlayerData';
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import clsx from 'clsx';
-import { Button } from '@/app/ui/button';
-import { characterMap } from '@/app/lib/characters';
 import CharacterImages from '@/app/_components/Characters';
-const prisma = new PrismaClient();
 
 function normalize(str: string) {
   return str

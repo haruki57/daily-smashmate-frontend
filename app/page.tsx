@@ -7,8 +7,6 @@ import VisitedPlayers from './_components/VisitedPlayers';
 import TopMatchCount from './_components/TopMatchCount';
 import { getSeasons } from './_lib/services/getSeasons';
 
-export const runtime = 'edge';
-
 export default async function Page() {
   const seasons = await getSeasons();
   const latestSeason = seasons.at(-1)?.season!;
