@@ -68,7 +68,7 @@ export default function ChartWrapper({
         data={data}
         margin={{
           top: 10,
-          right: 30,
+          right: 50,
           left: 20,
           bottom: 50,
         }}
