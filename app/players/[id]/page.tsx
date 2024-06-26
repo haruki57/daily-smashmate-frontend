@@ -1,63 +1,12 @@
-import ChangeSeason from '@/app/ui/change-season';
-import PlayerBySeason from './playerBySeason';
 import { getSmashmateAccount } from '@/app/_lib/services/getAccount';
 import { getPlayerSeasonData as getPlayerDataBySeason } from '@/app/_lib/services/getPlayerSeasonData';
-import { Suspense } from 'react';
 import { getSeasons } from '@/app/_lib/services/getSeasons';
 import SeasonDataCard from './seasonDataCard';
-import VisitPlayer from '@/app/_components/VisitPlayer';
-import CardInPlayerPage from '@/app/_components/CardInPlayerPage';
-import { getRanksByCharacters } from '@/app/_lib/services/getRanksByCharacters';
-import Image from 'next/image';
-import { Account } from '@/app/_lib/services/type';
-import { getTotalPlayers } from '@/app/_lib/services/getTotalPlayers/[season]';
+import { PlayerPageHeader } from './PlayerPageHeader';
 
 export const runtime = 'edge';
 
-const PlayerPageHeader = ({
-  account,
-  season,
-  withSmashmateLink,
-}: {
-  account: Account;
-  season?: string;
-  withSmashmateLink?: boolean;
-}) => {
-  return (
-    // The value of "top-10" depends on the height of RootHeader
-    <div className="sticky top-10 z-10 bg-white">
-      <div className="mx-2 flex items-end justify-between pt-2">
-        <VisitPlayer
-          playerName={account.playerName}
-          playerId={account.playerId}
-        />
-        <h1 className="text-4xl font-semibold">{`${account.playerName}`}</h1>
-        {season != null && <div>{`シーズン ${season}`}</div>}
-        {withSmashmateLink && (
-          <a
-            href={`https://smashmate.net/user/${account.playerId}/`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500"
-          >
-            スマメイト(本家)のページへ
-          </a>
-        )}
-      </div>
-      <hr className="my-4 border-2 border-slate-300" />
-    </div>
-  );
-};
-
-export default async function Page({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams?: {
-    season?: string;
-  };
-}) {
+export default async function Page({ params }: { params: { id: string } }) {
   const playerId = Number(params.id);
   const account = await getSmashmateAccount({
     playerId,
@@ -72,92 +21,12 @@ export default async function Page({
 
   const seasonRows = await getSeasons();
   const seasons = seasonRows.map((row) => row.season);
-  const season = searchParams?.season;
-  const currentSeasonRow = seasonRows
-    .filter((row) => row.season == season)
-    .at(0);
-  const isSeasonFinished = currentSeasonRow?.ended_at == null ? true : false;
 
-  if (season) {
-    const playerDataBySeason = playerDataBySeasons[season];
-    if (!playerDataBySeason) {
-      return (
-        // TODO
-        <div>{`${account.playerName} さんのシーズン ${season}のデータがありません。`}</div>
-      );
-    }
-    const ranksByCharacters = await getRanksByCharacters({
-      playerId,
-      season,
-    });
-    const totalPlayerCount = await getTotalPlayers({ season });
-    return (
-      <>
-        <PlayerPageHeader account={account} season={season} />
-        <div className="my-2 grid grid-cols-2 gap-4">
-          <CardInPlayerPage
-            title="レート"
-            mainContent={playerDataBySeason.currentRate || '----'}
-            annotation={
-              !isSeasonFinished && playerDataBySeason.maxRate != null
-                ? `最高レート ${playerDataBySeason.maxRate}`
-                : undefined
-            }
-          />
-          <CardInPlayerPage
-            title="全体順位"
-            mainContent={
-              playerDataBySeason.rankFromTop200 ?? playerDataBySeason.rank
-            }
-            unit="位"
-            annotation={`${totalPlayerCount.totalPlayers}人中`}
-          />
-        </div>
-        <div className="my-2 grid grid-cols-2 gap-4">
-          {ranksByCharacters.map((rankForCharacter) => {
-            return (
-              <CardInPlayerPage
-                key={rankForCharacter.characterId}
-                title={
-                  <h4 className="flex">
-                    <Image
-                      src={`/characters/${rankForCharacter.characterId}.png`}
-                      alt={rankForCharacter.characterId}
-                      height={28}
-                      width={28}
-                    />
-                    ファイター順位
-                  </h4>
-                }
-                mainContent={rankForCharacter.rank}
-                unit="位"
-                annotation={`${rankForCharacter.totalPlayerCount} 人中`}
-              />
-            );
-          })}
-          {/* <CardInPlayerPage /> */}
-        </div>
-
-        {playerDataBySeason && (
-          <Suspense fallback={<div>Player Season取得中…</div>}>
-            <PlayerBySeason
-              playerDataBySeason={playerDataBySeason}
-              season={season}
-              isSeasonFinished={!!isSeasonFinished}
-            />
-          </Suspense>
-        )}
-      </>
-    );
-  }
+  const latestSeasonRow = seasonRows.at(-1);
 
   return (
     <>
-      <PlayerPageHeader
-        account={account}
-        season={season}
-        withSmashmateLink={true}
-      />
+      <PlayerPageHeader account={account} withSmashmateLink={true} />
       <div className="my-2 flex flex-col items-center gap-4">
         {seasons
           .slice()
@@ -168,7 +37,7 @@ export default async function Page({
                 <SeasonDataCard
                   playerDataBySeason={playerDataBySeasons[season]!}
                   season={season}
-                  isLatestSeason={currentSeasonRow?.season == season}
+                  isLatestSeason={latestSeasonRow?.season == season}
                   key={season}
                 />
               );

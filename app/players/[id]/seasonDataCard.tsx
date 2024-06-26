@@ -17,7 +17,7 @@ export default function SeasonDataCard({
 }) {
   const router = useRouter();
   const handleClick = () => {
-    router.push(`/players/${playerDataBySeason.playerId}?season=${season}`);
+    router.push(`/players/${playerDataBySeason.playerId}/${season}`);
   };
   return (
     <div
