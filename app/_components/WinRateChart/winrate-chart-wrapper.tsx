@@ -2,6 +2,7 @@
 
 import { Result } from '@/app/_lib/services/type';
 import {
+  Checkbox,
   Dialog,
   DialogPanel,
   DialogTitle,
@@ -213,34 +214,29 @@ export default function WinRateChartWrapper({
           {`レート ${rateRange} ~ ${rateRange + (range - 1)}`}
         </DialogTitle>
 
-        {/* Fighters data are not correct on Season 27 */}
-
-        {/* Hide this feature because even if season is 28, we use character data of season 27
-        {season !== '27' && (
-          <div
-            onClick={() => setShowCharactersOnly((prev) => !prev)}
-            className="my-2 flex cursor-pointer items-center"
+        <div
+          onClick={() => setShowCharactersOnly((prev) => !prev)}
+          className="my-2 flex cursor-pointer items-center"
+        >
+          <Checkbox
+            checked={showCharactersOnly}
+            className="size-4 group block h-4 w-4 rounded border bg-white data-[checked]:bg-blue-500"
           >
-            <Checkbox
-              checked={showCharactersOnly}
-              className="size-4 group block h-4 w-4 rounded border bg-white data-[checked]:bg-blue-500"
+            <svg
+              className="stroke-white opacity-0 group-data-[checked]:opacity-100"
+              viewBox="0 0 14 14"
+              fill="none"
             >
-              <svg
-                className="stroke-white opacity-0 group-data-[checked]:opacity-100"
-                viewBox="0 0 14 14"
-                fill="none"
-              >
-                <path
-                  d="M3 8L6 11L11 3.5"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Checkbox>
-            <div>キャラクターのみ表示</div>
-          </div>
-        )}  */}
+              <path
+                d="M3 8L6 11L11 3.5"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Checkbox>
+          <div>キャラクターのみ表示</div>
+        </div>
 
         <div className="flex gap-4">
           <div className="w-1/2">
