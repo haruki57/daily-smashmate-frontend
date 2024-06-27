@@ -17,6 +17,6 @@ export const usePlayerData = () => {
     if (!playerData) {
       fetchData();
     }
-  }, [])
+  }, [playerData])
   return playerData;
 };
