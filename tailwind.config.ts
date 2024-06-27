@@ -25,6 +25,14 @@ const config: Config = {
           transform: 'translateX(100%)',
         },
       },
+      spin: {
+        from: {
+          transform: "rotate(0deg)",
+        },
+        to: {
+          transform: "rotate(360deg)",
+        }
+      }
     },
   },
   plugins: [require('@tailwindcss/forms')],
