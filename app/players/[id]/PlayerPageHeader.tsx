@@ -2,14 +2,17 @@
 
 import VisitPlayer from '@/app/_components/VisitPlayer';
 import { Account } from '@/app/_lib/services/type';
+import Link from 'next/link';
 
 export const PlayerPageHeader = ({
   account,
   season,
+  linkToTopPlayerPage,
   withSmashmateLink,
 }: {
   account: Account;
   season?: string;
+  linkToTopPlayerPage?: boolean;
   withSmashmateLink?: boolean;
 }) => {
   return (
@@ -20,7 +23,15 @@ export const PlayerPageHeader = ({
           playerName={account.playerName}
           playerId={account.playerId}
         />
-        <h1 className="text-4xl font-semibold">{`${account.playerName}`}</h1>
+        <h1 className="text-4xl font-semibold">
+          {linkToTopPlayerPage ? (
+            <Link
+              href={`/players/${account.playerId}`}
+            >{`${account.playerName}`}</Link>
+          ) : (
+            `${account.playerName}`
+          )}
+        </h1>
         {season != null && <div>{`シーズン ${season}`}</div>}
         {withSmashmateLink && (
           <a
@@ -29,7 +40,7 @@ export const PlayerPageHeader = ({
             rel="noopener noreferrer"
             className="text-blue-500"
           >
-            スマメイト(本家)のページへ
+            スマメイトのページへ
           </a>
         )}
       </div>

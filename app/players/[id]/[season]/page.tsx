@@ -47,7 +47,11 @@ export default async function Page({
   const totalPlayerCount = await getTotalPlayers({ season });
   return (
     <>
-      <PlayerPageHeader account={account} season={season} />
+      <PlayerPageHeader
+        account={account}
+        season={season}
+        linkToTopPlayerPage={true}
+      />
       <div className="my-2 grid grid-cols-2 gap-4">
         <CardInPlayerPage
           title="レート"
