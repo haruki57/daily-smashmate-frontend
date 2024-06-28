@@ -6,21 +6,35 @@ import Top200 from './_components/Top200';
 import VisitedPlayers from './_components/VisitedPlayers';
 import TopMatchCount from './_components/TopMatchCount';
 import { getSeasons } from './_lib/services/getSeasons';
+import ChangeSeason from './ui/change-season';
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { season: string };
+}) {
   const seasons = await getSeasons();
   const latestSeason = seasons.at(-1)?.season!;
+  const season = searchParams.season || latestSeason;
   return (
     <main className="flex min-h-screen flex-col items-center p-6">
-      <p className="mb-4 text-lg">
+      <p className="mb-4">
         デイリースマメイトは、スマメイト27期以降の戦績を閲覧できるサービスです。
       </p>
-      <div className="grid  grid-cols-1 gap-4 lg:grid-cols-2">
-        <TopMatchCount season={latestSeason} />
-        <Top200 season={latestSeason} />
-        <VisitedPlayers />
-      </div>
 
+      <div>
+        <div className="mb-4 flex w-full justify-end">
+          <ChangeSeason
+            seasons={seasons.map((s) => s.season).reverse()}
+            initialValue={searchParams.season}
+          />
+        </div>
+        <div className="grid  grid-cols-1 gap-4 lg:grid-cols-2">
+          <TopMatchCount season={season} />
+          <Top200 season={season} />
+          <VisitedPlayers />
+        </div>
+      </div>
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
           <div className="h-0 w-0 border-b-[30px] border-l-[20px] border-r-[20px] border-b-black border-l-transparent border-r-transparent" />

@@ -12,6 +12,9 @@ export default function VisitedPlayers() {
     const _visitedPlayers = getVisitedPlayers().reverse();
     setVisitedPlayers(_visitedPlayers);
   }, []);
+  if (visitedPlayers.length == 0) {
+    return undefined;
+  }
 
   return (
     <div className="max-h-96 w-96 overflow-y-scroll rounded border border-slate-400 px-4 py-3">

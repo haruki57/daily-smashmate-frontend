@@ -17,7 +17,7 @@ export default async function PlayerBySeason({
   let rank = undefined;
   let isRankEstimated = false;
 
-  const top200 = await getTop200();
+  const top200 = await getTop200({ season });
   const foundTop200 = top200.find((t) => t.playerId === playerId);
   if (foundTop200) {
     rank = foundTop200.rank;
