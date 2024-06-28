@@ -3,6 +3,7 @@ const prisma = new PrismaClient();
 
 export async function GET(
   request: Request, 
+  { params }: { params: { season: string } }
 ) {
   const ret = await prisma.smashmateCurrentTop200.findMany({
     select: {
@@ -15,6 +16,9 @@ export async function GET(
           playerName: true,
         },
       }
+    },
+    where: {
+      season: params.season,
     },
     orderBy: { rank: 'asc' }
     

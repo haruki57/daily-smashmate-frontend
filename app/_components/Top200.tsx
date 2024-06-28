@@ -2,8 +2,8 @@ import { getTop200 } from '../_lib/services/getTop200';
 import Link from 'next/link';
 import CharacterImages from './Characters';
 
-export default async function Top200() {
-  const top200 = await getTop200();
+export default async function Top200({ season }: { season: string }) {
+  const top200 = await getTop200({ season });
   return (
     <div className="max-h-96 w-96 overflow-y-scroll rounded border border-slate-400 px-4 py-3">
       <h4 className="mb-4 text-xl font-semibold">レートランキング</h4>

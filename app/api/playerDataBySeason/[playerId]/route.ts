@@ -37,7 +37,8 @@ const getPlayerDataBySeason = async (playerId: number): Promise<Omit<PlayerDataB
     left join "smashmateRateToRank" on "currentRate" = "rate" and 
     "smashmatePlayerDataBySeason"."season" = "smashmateRateToRank"."season" 
     left join "smashmateCurrentTop200" on 
-    "smashmatePlayerDataBySeason"."playerId" = "smashmateCurrentTop200"."playerId"
+    "smashmatePlayerDataBySeason"."playerId" = "smashmateCurrentTop200"."playerId" and
+    "smashmatePlayerDataBySeason"."season" = "smashmateCurrentTop200"."season" 
     left join "mv_smashmateCurrentPlayerRates_countBySeason" on 
       "mv_smashmateCurrentPlayerRates_countBySeason"."season" = "smashmatePlayerDataBySeason"."season"
     where "smashmatePlayerDataBySeason"."playerId" = ${playerId};`

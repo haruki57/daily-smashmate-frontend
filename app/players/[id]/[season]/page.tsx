@@ -68,7 +68,7 @@ export default async function Page({
             playerDataBySeason.rankFromTop200 ?? playerDataBySeason.rank
           }
           unit="位"
-          annotation={`${totalPlayerCount.totalPlayers}人中`}
+          annotation={`${totalPlayerCount.totalPlayers} 人中`}
         />
       </div>
       <div className="my-2 grid grid-cols-2 gap-4">

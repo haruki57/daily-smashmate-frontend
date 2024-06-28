@@ -290,7 +290,7 @@ export default function WinRateChartWrapper({
               const winLoss = rateRangeToWinLoss.get(Number(value));
               if (winLoss) {
                 const [win, loss] = winLoss;
-                return `${value}~ (${win}勝${loss}敗)`;
+                return `${value}~ ${win}勝${loss}敗`;
               } else {
                 return `${value}~`;
               }

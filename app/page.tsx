@@ -17,7 +17,7 @@ export default async function Page() {
       </p>
       <div className="grid  grid-cols-1 gap-4 lg:grid-cols-2">
         <TopMatchCount season={latestSeason} />
-        <Top200 />
+        <Top200 season={latestSeason} />
         <VisitedPlayers />
       </div>
 
