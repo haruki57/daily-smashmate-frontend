@@ -5,8 +5,8 @@ export type Account = {
 
 export type Season = {
   season: string;
-  started_at: Date;
-  ended_at: Date | null;
+  started_at: string;
+  ended_at: string | null;
 };
 export type PlayerRate = {
   playerId: number;

@@ -1,23 +1,30 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { PlayerDataBySeason } from '@/app/_lib/services/type';
+import { PlayerDataBySeason, Season } from '@/app/_lib/services/type';
 import Image from 'next/image';
 import clsx from 'clsx';
 import CharacterImages from '@/app/_components/Characters';
 
+const dateToJstDate = (dateStr: string | null) => {
+  if (dateStr == null) {
+    return '';
+  }
+  return new Date(dateStr).toLocaleDateString('ja-JP');
+};
+
 export default function SeasonDataCard({
   playerDataBySeason,
-  season,
+  seasonData,
   isLatestSeason,
 }: {
   playerDataBySeason: PlayerDataBySeason;
-  season: string;
+  seasonData: Season;
   isLatestSeason: boolean;
 }) {
   const router = useRouter();
   const handleClick = () => {
-    router.push(`/players/${playerDataBySeason.playerId}/${season}`);
+    router.push(`/players/${playerDataBySeason.playerId}/${seasonData.season}`);
   };
   return (
     <div
@@ -29,11 +36,12 @@ export default function SeasonDataCard({
     >
       <div className="flex flex-wrap items-center">
         <h1 className="flex-auto text-lg font-semibold text-slate-900">
-          {`シーズン ${season}`}
+          {`シーズン ${seasonData.season}`}
         </h1>
 
         <div className="text-xs font-semibold text-slate-500">
-          2024-06-09 ~ TODO TODO
+          {dateToJstDate(seasonData.started_at)} -
+          {dateToJstDate(seasonData.ended_at)}
         </div>
       </div>
       <div>

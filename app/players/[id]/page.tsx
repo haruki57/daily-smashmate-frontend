@@ -27,15 +27,16 @@ export default async function Page({ params }: { params: { id: string } }) {
     <>
       <PlayerPageHeader account={account} withSmashmateLink={true} />
       <div className="mx-4 my-2 flex flex-col items-center gap-4">
-        {seasons
+        {seasonRows
           .slice()
           .reverse()
-          .map((season) => {
+          .map((seasonRow) => {
+            const { season } = seasonRow;
             if (playerDataBySeasons[season]) {
               return (
                 <SeasonDataCard
                   playerDataBySeason={playerDataBySeasons[season]!}
-                  season={season}
+                  seasonData={seasonRow}
                   isLatestSeason={latestSeasonRow?.season == season}
                   key={season}
                 />
