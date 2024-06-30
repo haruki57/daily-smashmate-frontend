@@ -52,64 +52,69 @@ export default async function Page({
         season={season}
         linkToTopPlayerPage={true}
       />
-      <div className="my-2 grid grid-cols-2 gap-4">
-        <CardInPlayerPage
-          title="レート"
-          mainContent={playerDataBySeason.currentRate || '----'}
-          annotation={
-            isSeasonFinished && playerDataBySeason.maxRate != null
-              ? `最高レート ${playerDataBySeason.maxRate}`
-              : undefined
-          }
-        />
-        <CardInPlayerPage
-          title="全体順位"
-          mainContent={
-            playerDataBySeason.rankFromTop200 ?? playerDataBySeason.rank
-          }
-          unit="位"
-          annotation={`${totalPlayerCount.totalPlayers} 人中`}
-        />
-      </div>
-      <div className="my-2 grid grid-cols-2 gap-4">
-        {ranksByCharacters.map((rankForCharacter) => {
-          return (
-            <CardInPlayerPage
-              key={rankForCharacter.characterId}
-              title={
-                <h4 className="flex">
-                  <Image
-                    src={`/characters/${rankForCharacter.characterId}.png`}
-                    alt={rankForCharacter.characterId}
-                    height={28}
-                    width={28}
-                  />
-                  ファイター順位
-                </h4>
-              }
-              mainContent={rankForCharacter.rank}
-              unit="位"
-              annotation={`${rankForCharacter.totalPlayerCount} 人中`}
-            />
-          );
-        })}
-      </div>
-
-      {playerDataBySeason && (
-        <Suspense
-          fallback={
-            <div className="mt-32 flex justify-center" aria-label="読み込み中">
-              <div className="h-20 w-20 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
-            </div>
-          }
-        >
-          <PlayerBySeason
-            playerDataBySeason={playerDataBySeason}
-            season={season}
-            isSeasonFinished={!!isSeasonFinished}
+      <div className="mx-4">
+        <div className="my-2 grid grid-cols-2 gap-4">
+          <CardInPlayerPage
+            title="レート"
+            mainContent={playerDataBySeason.currentRate || '----'}
+            annotation={
+              isSeasonFinished && playerDataBySeason.maxRate != null
+                ? `最高レート ${playerDataBySeason.maxRate}`
+                : undefined
+            }
           />
-        </Suspense>
-      )}
+          <CardInPlayerPage
+            title="全体順位"
+            mainContent={
+              playerDataBySeason.rankFromTop200 ?? playerDataBySeason.rank
+            }
+            unit="位"
+            annotation={`${totalPlayerCount.totalPlayers} 人中`}
+          />
+        </div>
+        <div className="my-2 grid grid-cols-1 gap-4 md:grid-cols-2">
+          {ranksByCharacters.map((rankForCharacter) => {
+            return (
+              <CardInPlayerPage
+                key={rankForCharacter.characterId}
+                title={
+                  <h4 className="flex">
+                    <Image
+                      src={`/characters/${rankForCharacter.characterId}.png`}
+                      alt={rankForCharacter.characterId}
+                      height={28}
+                      width={28}
+                    />
+                    ファイター順位
+                  </h4>
+                }
+                mainContent={rankForCharacter.rank}
+                unit="位"
+                annotation={`${rankForCharacter.totalPlayerCount} 人中`}
+              />
+            );
+          })}
+        </div>
+
+        {playerDataBySeason && (
+          <Suspense
+            fallback={
+              <div
+                className="mt-32 flex justify-center"
+                aria-label="読み込み中"
+              >
+                <div className="h-20 w-20 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+              </div>
+            }
+          >
+            <PlayerBySeason
+              playerDataBySeason={playerDataBySeason}
+              season={season}
+              isSeasonFinished={!!isSeasonFinished}
+            />
+          </Suspense>
+        )}
+      </div>
     </>
   );
 }

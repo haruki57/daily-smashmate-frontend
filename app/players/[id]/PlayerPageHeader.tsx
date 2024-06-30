@@ -18,12 +18,12 @@ export const PlayerPageHeader = ({
   return (
     // The value of "top-10" depends on the height of RootHeader
     <div className="sticky top-10 z-10 bg-white">
-      <div className="mx-2 flex items-end justify-between pt-2">
+      <div className="mx-4 items-end pt-2">
         <VisitPlayer
           playerName={account.playerName}
           playerId={account.playerId}
         />
-        <h1 className="text-4xl font-semibold">
+        <h1 className="text-2xl font-semibold">
           {linkToTopPlayerPage ? (
             <Link
               href={`/players/${account.playerId}`}
@@ -32,19 +32,21 @@ export const PlayerPageHeader = ({
             `${account.playerName}`
           )}
         </h1>
-        {season != null && <div>{`シーズン ${season}`}</div>}
-        {withSmashmateLink && (
-          <a
-            href={`https://smashmate.net/user/${account.playerId}/`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500"
-          >
-            スマメイトのページへ
-          </a>
-        )}
+        <div className="flex justify-end text-sm">
+          {season != null && <div>{`シーズン ${season}`}</div>}
+          {withSmashmateLink && (
+            <a
+              href={`https://smashmate.net/user/${account.playerId}/`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500"
+            >
+              スマメイトのページへ
+            </a>
+          )}
+        </div>
       </div>
-      <hr className="my-4 border-2 border-slate-300" />
+      <hr className="my-2 mb-4 border-2 border-slate-300" />
     </div>
   );
 };

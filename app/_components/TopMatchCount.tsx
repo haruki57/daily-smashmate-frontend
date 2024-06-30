@@ -5,7 +5,7 @@ import { getTopMatchCount } from '../_lib/services/getTopMatchCount';
 export default async function TopMatchCount({ season }: { season: string }) {
   const topMatchCount = await getTopMatchCount({ season });
   return (
-    <div className="max-h-96 w-96 overflow-y-scroll rounded border border-slate-400 px-4 py-3">
+    <div className="max-h-96 w-72 overflow-y-scroll rounded border border-slate-400 px-4 py-3 text-sm md:w-96 md:text-base">
       <h4 className="mb-4 text-xl font-semibold">対戦回数ランキング</h4>
       {topMatchCount.map((player, index) => {
         const truncatedCount = player.matchCount - (player.matchCount % 100);
@@ -13,11 +13,11 @@ export default async function TopMatchCount({ season }: { season: string }) {
           <div key={player.playerId}>
             {index !== 0 && <hr className="border-slate-300 " />}
             <div className="mt-2 flex tabular-nums">
-              <div className="flex basis-4/12 justify-around">
+              <div className="flex basis-5/12 justify-around">
                 <div className="basis-10 text-right">{truncatedCount}</div>
                 <div className="mr-2">戦以上</div>
               </div>
-              <div className="basis-5/12 text-blue-600">
+              <div className="basis-4/12 text-blue-600">
                 <Link href={`/players/${player.playerId}`}>
                   {player.playerName}
                 </Link>

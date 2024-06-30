@@ -37,22 +37,20 @@ export default async function PlayerBySeason({
         />
       </div>
 
-      <div className="flex items-start justify-between">
-        <h4 className="text-2xl font-bold">レート別対戦成績</h4>
-        {playerDataBySeason.lastPlayerPageVisitedAt && (
-          <div className="text-right text-sm text-slate-500">
-            <div>対戦成績最終更新日</div>
-            <div>
-              {new Date(
-                playerDataBySeason.lastPlayerPageVisitedAt,
-              ).toLocaleDateString('ja-JP')}
-            </div>
+      <h4 className="text-2xl font-bold">レート別対戦成績</h4>
+      {playerDataBySeason.lastPlayerPageVisitedAt && (
+        <div className="text-right text-sm text-slate-500">
+          <div>対戦成績最終更新日</div>
+          <div>
+            {new Date(
+              playerDataBySeason.lastPlayerPageVisitedAt,
+            ).toLocaleDateString('ja-JP')}
           </div>
-        )}
-      </div>
+        </div>
+      )}
       {!isSeasonFinished && (
-        <div className="text-sm text-slate-500">
-          対戦相手のレートとキャラクターは、前シーズンの最終時点での情報を使用しています。
+        <div className="mt-2 text-sm text-slate-500">
+          継続中のシーズン成績では、対戦相手のレートとキャラクターは前シーズンの最終時点での情報を使用しています。
         </div>
       )}
       <div className="my-8">

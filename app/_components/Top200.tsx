@@ -5,7 +5,7 @@ import CharacterImages from './Characters';
 export default async function Top200({ season }: { season: string }) {
   const top200 = await getTop200({ season });
   return (
-    <div className="max-h-96 w-96 overflow-y-scroll rounded border border-slate-400 px-4 py-3">
+    <div className="max-h-96 w-72 overflow-y-scroll rounded border border-slate-400 px-4 py-3 text-sm md:w-96 md:text-base">
       <h4 className="mb-4 text-xl font-semibold">レートランキング</h4>
       {top200.map((player, index) => {
         if (!player.accountInfo) {

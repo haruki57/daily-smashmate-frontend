@@ -36,18 +36,18 @@ export default function SearchBox() {
   }, [playerData, text]);
 
   return (
-    <div className=" mx-auto flex w-full max-w-md flex-col ">
+    <div className="mx-auto flex w-full max-w-md flex-col px-4 ">
       <h2 className="my-4 text-3xl">プレイヤー検索</h2>
       <Input
         type="text"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        className="border data-[focus]:bg-blue-100 data-[hover]:shadow"
+        className="mb-4 border data-[focus]:bg-blue-100 data-[hover]:shadow"
       />
       {filteredPlayerData.map((data) => {
         const { id, name, fighters, mId } = data;
         return (
-          <div key={id} className="my-2 w-8/12">
+          <div key={id} className="mx-2 my-2 w-8/12">
             <Link href={`/players/${id}`}>
               <div className="flex  items-center justify-between">
                 <div className="">

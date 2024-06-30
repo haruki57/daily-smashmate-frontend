@@ -5,7 +5,13 @@ export function RootFooter() {
       <div>
         <div className="flex h-10 w-full items-center justify-center bg-slate-50 text-sm text-slate-700">
           Developed by&nbsp;
-          <a href="https://x.com/harukisb">@harukisb</a>
+          <a
+            href="https://x.com/harukisb"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @harukisb
+          </a>
         </div>
       </div>
     </footer>

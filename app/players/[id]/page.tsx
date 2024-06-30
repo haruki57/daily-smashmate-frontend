@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <>
       <PlayerPageHeader account={account} withSmashmateLink={true} />
-      <div className="my-2 flex flex-col items-center gap-4">
+      <div className="mx-4 my-2 flex flex-col items-center gap-4">
         {seasons
           .slice()
           .reverse()

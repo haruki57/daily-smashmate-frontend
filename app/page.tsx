@@ -18,10 +18,9 @@ export default async function Page({
   const season = searchParams.season || latestSeason;
   return (
     <main className="flex min-h-screen flex-col items-center p-6">
-      <p className="mb-4">
+      <p className="mb-4  text-center">
         デイリースマメイトは、スマメイト27期以降の戦績を閲覧できるサービスです。
       </p>
-
       <div>
         <div className="mb-4 flex w-full justify-end">
           <ChangeSeason
@@ -29,7 +28,7 @@ export default async function Page({
             initialValue={searchParams.season}
           />
         </div>
-        <div className="grid  grid-cols-1 gap-4 lg:grid-cols-2">
+        <div className="grid  grid-cols-1 justify-center gap-4 md:justify-normal lg:grid-cols-2">
           <TopMatchCount season={season} />
           <Top200 season={season} />
           <VisitedPlayers />
