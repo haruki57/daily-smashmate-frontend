@@ -19,12 +19,5 @@ export default async function WinRateChart({ playerId, season }: Props) {
     season,
     seasonForOpponentRates,
   });
-  return (
-    <WinRateChartWrapper
-      playerId={playerId}
-      results={results}
-      season={season}
-      seasonForOpponentRates={seasonForOpponentRates}
-    />
-  );
+  return <WinRateChartWrapper playerId={playerId} results={results} />;
 }

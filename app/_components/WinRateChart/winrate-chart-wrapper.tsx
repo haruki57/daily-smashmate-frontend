@@ -27,8 +27,6 @@ import CharacterImages from '../Characters';
 type Props = {
   playerId: number;
   results: Result[];
-  season: string;
-  seasonForOpponentRates: string;
 };
 
 type Opponent = {
@@ -38,15 +36,13 @@ type Opponent = {
   fighters: string[];
 };
 
-export default function WinRateChartWrapper({
-  playerId,
-  results,
-  season,
-  seasonForOpponentRates,
-}: Props) {
+const NO_DATA_KEY = 'データ無し';
+type NO_DATA_KEY = 'データ無し';
+
+export default function WinRateChartWrapper({ playerId, results }: Props) {
   const [range, setRange] = useState<number>(100);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [rateRange, setRateRange] = useState(1500);
+  const [rateRange, setRateRange] = useState<number | NO_DATA_KEY>(1500);
   const [showCharactersOnly, setShowCharactersOnly] = useState<boolean>(false);
 
   const [rateRangeToWinnersAndLosers, rateRangeToWinLoss, data] =
@@ -58,32 +54,44 @@ export default function WinRateChartWrapper({
         min = Math.min(min, opponentRate ?? 99999);
         max = Math.max(max, opponentRate ?? -1);
       });
-      const rateRangeToWinLoss = new Map<number, number[]>();
+      const hasNoData = results.reduce((prev, cur) => {
+        return prev || cur.opponentRate == null;
+      }, false);
+      const rateRangeToWinLoss = new Map<number | NO_DATA_KEY, number[]>();
+      if (hasNoData) {
+        rateRangeToWinLoss.set(NO_DATA_KEY, [0, 0]);
+      }
       for (let i = min - (min % range); i <= max; i += range) {
         rateRangeToWinLoss.set(i, [0, 0]);
       }
+
       results.forEach((w) => {
-        const { winnerId, loserId, opponentRate } = w;
+        const { winnerId, opponentRate } = w;
+        let rateRange: number | NO_DATA_KEY | undefined = undefined;
         if (opponentRate != null) {
-          const rateRange = opponentRate - (opponentRate % range);
-          if (winnerId === playerId) {
-            rateRangeToWinLoss.get(rateRange)![0]++;
-          } else {
-            rateRangeToWinLoss.get(rateRange)![1]++;
-          }
+          rateRange = opponentRate - (opponentRate % range);
+        } else {
+          rateRange = NO_DATA_KEY;
+        }
+        if (winnerId === playerId) {
+          rateRangeToWinLoss.get(rateRange)![0]++;
+        } else {
+          rateRangeToWinLoss.get(rateRange)![1]++;
         }
       });
 
       const rateRangeToWinnersAndLosers = new Map<
-        number,
+        number | NO_DATA_KEY,
         { winners: Opponent[]; losers: Opponent[] }
       >();
       results.forEach((result) => {
         const { winnerId, loserId, opponentRate } = result;
-        let rateRange: number | undefined = undefined;
+        let rateRange: number | NO_DATA_KEY | undefined = undefined;
         let opponentId: number | undefined = undefined;
         if (opponentRate != null) {
           rateRange = opponentRate - (opponentRate % range);
+        } else {
+          rateRange = NO_DATA_KEY;
         }
         if (playerId === winnerId) {
           opponentId = loserId;
@@ -104,10 +112,10 @@ export default function WinRateChartWrapper({
         const found = list.find((l) => l.playerId === opponentId);
         if (found) {
           found.count++;
-        } else if (result.playerName) {
+        } else {
           list.push({
             playerId: opponentId,
-            playerName: result.playerName,
+            playerName: result.playerName || '【退会済】',
             count: 1,
             fighters: result.currentCharactersCsv?.split(',') || [],
           });
@@ -137,11 +145,15 @@ export default function WinRateChartWrapper({
     data == undefined ||
     rateRangeToWinnersAndLosers == undefined
   ) {
-    return <div>読込中...</div>;
+    return (
+      <div className="mt-32 flex justify-center" aria-label="読み込み中">
+        <div className="h-20 w-20 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+      </div>
+    );
   }
 
   const handleBarClick = (data: any) => {
-    const rateRange = Number(data.name);
+    const rateRange = Number(data.name) || NO_DATA_KEY;
     setRateRange(rateRange);
     setIsModalOpen(true);
   };
@@ -211,7 +223,9 @@ export default function WinRateChartWrapper({
           as="h3"
           className="mb-4 text-2xl font-medium leading-6 text-gray-900"
         >
-          {`レート ${rateRange} ~ ${rateRange + (range - 1)}`}
+          {rateRange == NO_DATA_KEY
+            ? NO_DATA_KEY
+            : `レート ${rateRange} ~ ${rateRange + (range - 1)}`}
         </DialogTitle>
 
         <div
@@ -263,7 +277,7 @@ export default function WinRateChartWrapper({
   return (
     <div>
       <ResponsiveContainer
-        height={data.length * 40}
+        height={data.length * 35}
         style={{ fontFamily: 'monospace' }}
       >
         <BarChart
@@ -287,12 +301,16 @@ export default function WinRateChartWrapper({
             type="category"
             tickLine={false}
             tickFormatter={(value) => {
-              const winLoss = rateRangeToWinLoss.get(Number(value));
+              const s = value === NO_DATA_KEY ? '' : '~';
+              const winLoss =
+                value === NO_DATA_KEY
+                  ? rateRangeToWinLoss.get(NO_DATA_KEY)
+                  : rateRangeToWinLoss.get(Number(value));
               if (winLoss) {
                 const [win, loss] = winLoss;
-                return `${value}~ ${win}勝${loss}敗`;
+                return `${value}${s} ${win}勝${loss}敗`;
               } else {
-                return `${value}~`;
+                return `${value}${s}`;
               }
             }}
           />
