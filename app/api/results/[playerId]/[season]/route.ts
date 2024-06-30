@@ -13,22 +13,24 @@ export async function GET(
     "smashmateMatchRoomResults"."matchRoomId", 
     "smashmateMatchRoomResults"."winnerId",  
     "smashmateMatchRoomResults"."loserId", 
-    "smashmatePlayerDataBySeason"."playerName",
+    "smashmateAccountInfo"."playerName",
     "smashmatePlayerDataBySeason"."currentRate",
     "smashmatePlayerDataBySeason"."currentCharactersCsv"
     from "smashmateMatchRoomResults" 
     left join "smashmatePlayerDataBySeason" on "smashmateMatchRoomResults"."loserId" = "smashmatePlayerDataBySeason"."playerId" and "smashmatePlayerDataBySeason"."season" = ${seasonForRates}
+    left join "smashmateAccountInfo" on "smashmateMatchRoomResults"."loserId" = "smashmateAccountInfo"."playerId"
     where "winnerId" = ${playerId} and "smashmateMatchRoomResults"."season" = ${season}
     union 
     select 
     "smashmateMatchRoomResults"."matchRoomId", 
     "smashmateMatchRoomResults"."winnerId",
     "smashmateMatchRoomResults"."loserId", 
-    "smashmatePlayerDataBySeason"."playerName",
+    "smashmateAccountInfo"."playerName",
     "smashmatePlayerDataBySeason"."currentRate",
     "smashmatePlayerDataBySeason"."currentCharactersCsv"
     from "smashmateMatchRoomResults" 
     left join "smashmatePlayerDataBySeason" on "smashmateMatchRoomResults"."winnerId" = "smashmatePlayerDataBySeason"."playerId" and "smashmatePlayerDataBySeason"."season" = ${seasonForRates}
+        left join "smashmateAccountInfo" on "smashmateMatchRoomResults"."winnerId" = "smashmateAccountInfo"."playerId"
     where "loserId" = ${playerId} and "smashmateMatchRoomResults"."season" = ${season};` as any
   return Response.json(ret.map((r: any) => {
     return {
