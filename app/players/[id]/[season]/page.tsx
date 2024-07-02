@@ -9,6 +9,22 @@ import { getTotalPlayers } from '@/app/_lib/services/getTotalPlayers/[season]';
 import { PlayerPageHeader } from '../PlayerPageHeader';
 import PlayerBySeason from './playerBySeason';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string; season: string };
+}): Promise<Metadata> {
+  const playerId = Number(params.id);
+  const account = await getSmashmateAccount({
+    playerId,
+    revalidate: 60,
+  });
+  return {
+    title: `${account.playerName} (シーズン ${params.season})`,
+  };
+}
 
 export default async function Page({
   params,

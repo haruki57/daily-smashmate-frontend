@@ -4,6 +4,22 @@ import { getSeasons } from '@/app/_lib/services/getSeasons';
 import SeasonDataRow from './seasonDataRow';
 import { PlayerPageHeader } from './PlayerPageHeader';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const playerId = Number(params.id);
+  const account = await getSmashmateAccount({
+    playerId,
+    revalidate: 60,
+  });
+  return {
+    title: account.playerName,
+  };
+}
 
 export default async function Page({ params }: { params: { id: string } }) {
   const playerId = Number(params.id);
