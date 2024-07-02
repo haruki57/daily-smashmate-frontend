@@ -3,6 +3,7 @@ import { PlayerDataBySeason } from '@/app/_lib/services/type';
 import WinRateChart from '@/app/_components/WinRateChart';
 import { getRank } from '@/app/_lib/services/getRank';
 import { getTop200 } from '@/app/_lib/services/getTop200';
+import DataUpdateDescription from './dataUpdateDescription';
 
 export default async function PlayerBySeason({
   playerDataBySeason,
@@ -40,7 +41,10 @@ export default async function PlayerBySeason({
       <h4 className="text-2xl font-bold">レート別対戦成績</h4>
       {playerDataBySeason.lastPlayerPageVisitedAt && (
         <div className="text-right text-sm text-slate-500">
-          <div>対戦成績最終更新日</div>
+          <div className="flex items-center justify-end">
+            対戦成績最終更新日
+            <DataUpdateDescription />
+          </div>
           <div>
             {new Date(
               playerDataBySeason.lastPlayerPageVisitedAt,
