@@ -1,8 +1,6 @@
 'use client';
 
-import { getTop200 } from '../_lib/services/getTop200';
 import Image from 'next/image';
-import Link from 'next/link';
 
 type Props = {
   charactersCsv?: string | null;
@@ -14,7 +12,7 @@ export default function CharacterImages({ charactersCsv, size = 24 }: Props) {
     return undefined;
   }
   return (
-    <div className="flex">
+    <div>
       {charactersCsv.split(',').map((characterId) => {
         if (characterId.indexOf('!') >= 0) {
           return undefined;
@@ -27,6 +25,7 @@ export default function CharacterImages({ charactersCsv, size = 24 }: Props) {
             width={size}
             height={size}
             style={{ height: `${size}px` }}
+            className="inline"
           />
         );
       })}

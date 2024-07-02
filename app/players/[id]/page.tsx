@@ -1,7 +1,7 @@
 import { getSmashmateAccount } from '@/app/_lib/services/getAccount';
 import { getPlayerSeasonData as getPlayerDataBySeason } from '@/app/_lib/services/getPlayerSeasonData';
 import { getSeasons } from '@/app/_lib/services/getSeasons';
-import SeasonDataCard from './seasonDataCard';
+import SeasonDataRow from './seasonDataRow';
 import { PlayerPageHeader } from './PlayerPageHeader';
 import { notFound } from 'next/navigation';
 
@@ -19,7 +19,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   const playerDataBySeasons = await getPlayerDataBySeason({ playerId });
 
   const seasonRows = await getSeasons();
-  const seasons = seasonRows.map((row) => row.season);
 
   const latestSeasonRow = seasonRows.at(-1);
 
@@ -34,12 +33,15 @@ export default async function Page({ params }: { params: { id: string } }) {
             const { season } = seasonRow;
             if (playerDataBySeasons[season]) {
               return (
-                <SeasonDataCard
-                  playerDataBySeason={playerDataBySeasons[season]!}
-                  seasonData={seasonRow}
-                  isLatestSeason={latestSeasonRow?.season == season}
-                  key={season}
-                />
+                <>
+                  <SeasonDataRow
+                    playerDataBySeason={playerDataBySeasons[season]!}
+                    seasonData={seasonRow}
+                    isLatestSeason={latestSeasonRow?.season == season}
+                    key={season}
+                  />
+                  <hr className="w-full border-slate-300" />
+                </>
               );
             } else {
               return;
