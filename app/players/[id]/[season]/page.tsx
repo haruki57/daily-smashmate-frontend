@@ -78,7 +78,7 @@ export default async function Page({
               <CardInPlayerPage
                 key={rankForCharacter.characterId}
                 title={
-                  <h4 className="flex">
+                  <div className="flex">
                     <Image
                       src={`/characters/${rankForCharacter.characterId}.png`}
                       alt={rankForCharacter.characterId}
@@ -86,7 +86,7 @@ export default async function Page({
                       width={28}
                     />
                     ファイター順位
-                  </h4>
+                  </div>
                 }
                 mainContent={rankForCharacter.rank}
                 unit="位"
