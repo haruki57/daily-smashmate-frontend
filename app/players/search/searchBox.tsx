@@ -47,7 +47,7 @@ export default function SearchBox() {
       {filteredPlayerData.map((data) => {
         const { id, name, fighters, mId } = data;
         return (
-          <div key={id} className="mx-2 my-2 w-8/12">
+          <div key={id} className="mx-auto my-2 w-8/12">
             <Link href={`/players/${id}`}>
               <div className="flex  items-center justify-between">
                 <div className="">
