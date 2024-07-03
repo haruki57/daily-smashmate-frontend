@@ -36,15 +36,16 @@ model smashmateDeletedPlayers {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model smashmateMatchRoomResults {
-  id          BigInt   @id(map: "smashmateMatchRooms_pkey") @default(autoincrement())
-  created_at  DateTime @default(now()) @db.Timestamptz(6)
-  season      String   @db.VarChar
+  id          BigInt    @id(map: "smashmateMatchRooms_pkey") @default(autoincrement())
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
+  season      String    @db.VarChar
   matchRoomId Int
   player1Id   Int
   player2Id   Int
   winnerId    Int?
   loserId     Int?
-  rateChange  Int      @default(0) @db.SmallInt
+  rateChange  Int       @default(0) @db.SmallInt
+  date        DateTime? @db.Date
 
   @@unique([season, matchRoomId], map: "unique_season_matchRoomId")
   @@index([loserId], map: "loserId_index")

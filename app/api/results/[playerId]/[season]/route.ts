@@ -13,6 +13,7 @@ export async function GET(
     "smashmateMatchRoomResults"."matchRoomId", 
     "smashmateMatchRoomResults"."winnerId",  
     "smashmateMatchRoomResults"."loserId", 
+    "smashmateMatchRoomResults"."date", 
     "smashmateAccountInfo"."playerName",
     "smashmatePlayerDataBySeason"."currentRate",
     "smashmatePlayerDataBySeason"."currentCharactersCsv"
@@ -25,6 +26,7 @@ export async function GET(
     "smashmateMatchRoomResults"."matchRoomId", 
     "smashmateMatchRoomResults"."winnerId",
     "smashmateMatchRoomResults"."loserId", 
+    "smashmateMatchRoomResults"."date", 
     "smashmateAccountInfo"."playerName",
     "smashmatePlayerDataBySeason"."currentRate",
     "smashmatePlayerDataBySeason"."currentCharactersCsv"

@@ -104,6 +104,7 @@ export type Result = {
   opponentRate: number | null;
   currentCharactersCsv: string | null;
   playerName: string | null
+  date: Date | null
 }
 
 export type MatchCount = {
