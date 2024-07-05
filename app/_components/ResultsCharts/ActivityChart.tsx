@@ -16,7 +16,7 @@ import { date } from 'zod';
 import { WinLossPlayersModal } from './WinLossPlayersModal';
 import { Opponent } from './results-chart-client';
 import clsx from 'clsx';
-import styles from './gridTemplateRows.module.css';
+import styles from './activity-chart.module.css';
 
 const monthNumToEng = {
   1: 'Jan',
@@ -92,6 +92,7 @@ export default function ActivityChart({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dateStrForModal, setDateStrForModal] = useState<string>('');
   const [onlyWins, setOnlyWins] = useState(false);
+  const [showNumbers, setShowNumbers] = useState(false);
   const minDate = new Date(seasonRow.started_at);
   const maxDate =
     seasonRow.ended_at != null ? new Date(seasonRow.ended_at) : new Date();
@@ -164,7 +165,7 @@ export default function ActivityChart({
         <div
           className={clsx(
             'mx-12 grid grid-flow-col justify-start gap-2',
-            styles.gridTemplateRows,
+            styles.gridTemplateRows7,
           )}
         >
           {allDates.map((date) => {
@@ -177,7 +178,13 @@ export default function ActivityChart({
               );
             }
             const dateStr = date.toISOString().substring(0, 10);
-            const results = dateStrToResults.get(dateStr) || [];
+            const results =
+              dateStrToResults.get(dateStr)?.filter((r) => {
+                if (!onlyWins) {
+                  return true;
+                }
+                return r.winnerId === playerId;
+              }) || [];
             let borderColor, bgColor;
             if (results.length >= 10) {
               borderColor = 'border-green-600';
@@ -199,8 +206,9 @@ export default function ActivityChart({
               <div
                 key={date.toISOString()}
                 className={clsx([
-                  `h-6 w-6 rounded border-2 ${borderColor} ${bgColor}`,
+                  `flex h-6 w-6 items-center justify-center rounded border-2 ${borderColor} ${bgColor} `,
                   results.length > 0 && 'hover:cursor-pointer',
+                  styles.textShadowWhite,
                 ])}
                 onClick={() => {
                   if (results.length > 0) {
@@ -208,7 +216,9 @@ export default function ActivityChart({
                     setIsModalOpen(true);
                   }
                 }}
-              ></div>
+              >
+                {showNumbers && results.length > 0 && results.length}
+              </div>
             );
           })}
           {/* Hack: Because padding-right with overflow-x doesn't work, 
@@ -218,24 +228,52 @@ export default function ActivityChart({
             return <div key={idx} className={`h-6 w-6 rounded `}></div>;
           })}
         </div>
-        <div className="ml-4 mt-2">
-          <div className="flex gap-2">
-            <div className="h-6 w-6 rounded border-2 border-green-500 bg-green-600"></div>
-            <div>10対戦以上</div>
+        <div className="ml-4 mt-2 flex">
+          <div>
+            <div className="flex gap-2">
+              <div className="h-6 w-6 rounded border-2 border-green-500 bg-green-600"></div>
+              <div>10対戦以上</div>
+            </div>
+            <div className="mt-0.5 flex gap-2 ">
+              <div className="h-6 w-6 rounded border-2 border-green-400 bg-green-500"></div>
+              <div>6対戦以上</div>
+            </div>
+            <div className="mt-0.5 flex gap-2 ">
+              <div className="h-6 w-6 rounded border-2 border-green-300 bg-green-400"></div>
+              <div>3対戦以上</div>
+            </div>
+            <div className="mt-0.5 flex gap-2 ">
+              <div className="h-6 w-6 rounded border-2 border-green-200 bg-green-300"></div>
+              <div>1対戦以上</div>
+            </div>
           </div>
-          <div className="mt-0.5 flex gap-2 ">
-            <div className="h-6 w-6 rounded border-2 border-green-400 bg-green-500"></div>
-            <div>6対戦以上</div>
-          </div>
-          <div className="mt-0.5 flex gap-2 ">
-            <div className="h-6 w-6 rounded border-2 border-green-300 bg-green-400"></div>
-            <div>3対戦以上</div>
-          </div>
-          <div className="mt-0.5 flex gap-2 ">
-            <div className="h-6 w-6 rounded border-2 border-green-200 bg-green-300"></div>
-            <div>1対戦以上</div>
+          <div>
+            <div
+              onClick={() => setShowNumbers((prev) => !prev)}
+              className="ml-4 flex cursor-pointer items-center"
+            >
+              <Checkbox
+                checked={showNumbers}
+                className="size-4 group block h-4 w-4 rounded border bg-white data-[checked]:bg-blue-500"
+              >
+                <svg
+                  className="stroke-white opacity-0 group-data-[checked]:opacity-100"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                >
+                  <path
+                    d="M3 8L6 11L11 3.5"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Checkbox>
+              <div>対戦数を表示</div>
+            </div>
           </div>
         </div>
+
         <Transition appear show={isModalOpen} as={Fragment}>
           <Dialog
             as="div"
