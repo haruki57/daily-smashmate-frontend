@@ -54,7 +54,7 @@ export default function SeasonDataRow({
           className="w-fit cursor-pointer text-blue-500"
           onClick={handleClick}
         >
-          対戦成績詳細
+          詳細
         </div>
         {isLatestSeason && (
           <div className="mt-2 text-sm text-slate-500">

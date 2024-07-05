@@ -5,14 +5,10 @@ import {
   Checkbox,
   Dialog,
   DialogPanel,
-  DialogTitle,
   Transition,
   TransitionChild,
 } from '@headlessui/react';
-import Image from 'next/image';
-import { Fragment, useMemo, useState } from 'react';
-import CharacterImages from '../Characters';
-import { date } from 'zod';
+import { Fragment, useState } from 'react';
 import { WinLossPlayersModal } from './WinLossPlayersModal';
 import { Opponent } from './results-chart-client';
 import clsx from 'clsx';
@@ -93,6 +89,7 @@ export default function ActivityChart({
   const [dateStrForModal, setDateStrForModal] = useState<string>('');
   const [onlyWins, setOnlyWins] = useState(false);
   const [showNumbers, setShowNumbers] = useState(false);
+
   const minDate = new Date(seasonRow.started_at);
   const maxDate =
     seasonRow.ended_at != null ? new Date(seasonRow.ended_at) : new Date();
@@ -137,7 +134,7 @@ export default function ActivityChart({
 
   return (
     <div>
-      <h4 className="mb-4 mt-12 text-2xl font-bold">日別対戦記録</h4>
+      <h4 className="mb-4 mt-12 text-xl font-bold">日別対戦数</h4>
       <div className="relative overflow-x-scroll rounded border pb-8 pl-4 pt-12">
         <div className="absolute text-lg" style={{ top: '4.8rem' }}>
           Mon
@@ -232,19 +229,19 @@ export default function ActivityChart({
           <div>
             <div className="flex gap-2">
               <div className="h-6 w-6 rounded border-2 border-green-500 bg-green-600"></div>
-              <div>10対戦以上</div>
+              <div>10戦以上</div>
             </div>
             <div className="mt-0.5 flex gap-2 ">
               <div className="h-6 w-6 rounded border-2 border-green-400 bg-green-500"></div>
-              <div>6対戦以上</div>
+              <div>6戦以上</div>
             </div>
             <div className="mt-0.5 flex gap-2 ">
               <div className="h-6 w-6 rounded border-2 border-green-300 bg-green-400"></div>
-              <div>3対戦以上</div>
+              <div>3戦以上</div>
             </div>
             <div className="mt-0.5 flex gap-2 ">
               <div className="h-6 w-6 rounded border-2 border-green-200 bg-green-300"></div>
-              <div>1対戦以上</div>
+              <div>1戦以上</div>
             </div>
           </div>
           <div>

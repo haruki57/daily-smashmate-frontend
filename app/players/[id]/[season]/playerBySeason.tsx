@@ -37,29 +37,38 @@ export default async function PlayerBySeason({
           currentRate={currentRate ?? undefined}
         />
       </div>
+      <h3 className="text-2xl font-bold">詳細戦績</h3>
+      {Number(season) <= 27 ? (
+        <div className="my-8">
+          シーズン27以前のデータでは日別対戦数は利用できません
+        </div>
+      ) : (
+        <>
+          {!isSeasonFinished && (
+            <div className="mt-2 text-sm text-slate-500">
+              継続中のシーズンでは、対戦相手のレートとキャラクターは前シーズンの最終時点での情報を使用しています。
+            </div>
+          )}
+          {!isSeasonFinished && playerDataBySeason.lastPlayerPageVisitedAt && (
+            <div className="text-right text-sm text-slate-500">
+              <div className="flex items-center justify-start">
+                詳細戦績最終更新日:
+                {new Date(
+                  playerDataBySeason.lastPlayerPageVisitedAt,
+                ).toLocaleDateString('ja-JP')}
+                <DataUpdateDescription />
+              </div>
+              <div></div>
+            </div>
+          )}
 
-      <h4 className="text-2xl font-bold">レート別対戦成績</h4>
-      {playerDataBySeason.lastPlayerPageVisitedAt && (
-        <div className="text-right text-sm text-slate-500">
-          <div className="flex items-center justify-end">
-            対戦成績最終更新日
-            <DataUpdateDescription />
+          <h4 className="mt-2 text-xl font-bold">レート別対戦戦績</h4>
+
+          <div className="my-8">
+            <ResultCharts playerId={playerId} season={season} />
           </div>
-          <div>
-            {new Date(
-              playerDataBySeason.lastPlayerPageVisitedAt,
-            ).toLocaleDateString('ja-JP')}
-          </div>
-        </div>
+        </>
       )}
-      {!isSeasonFinished && (
-        <div className="mt-2 text-sm text-slate-500">
-          継続中のシーズン成績では、対戦相手のレートとキャラクターは前シーズンの最終時点での情報を使用しています。
-        </div>
-      )}
-      <div className="my-8">
-        <ResultCharts playerId={playerId} season={season} />
-      </div>
     </>
   );
 }
