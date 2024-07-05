@@ -1,0 +1,10 @@
+/*
+このファイルが必要な理由。
+1. tailwindのgrid-rows-7がなぜか動かない。6までは動く。
+2. style={{ gridTemplateRows: 'repeat(7, minmax(0, 1fr));' }} が不安定。
+  ページに直接アクセスすると反映されるが、ページ遷移からだと反映されない。
+*/
+
+.gridTemplateRows {
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+}

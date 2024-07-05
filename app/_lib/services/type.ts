@@ -100,11 +100,10 @@ export type Result = {
   matchRoomId: number;
   winnerId: number;
   loserId: number;
-  opponentId: number;
   opponentRate: number | null;
   currentCharactersCsv: string | null;
   playerName: string | null
-  date: Date | null
+  date: string | null
 }
 
 export type MatchCount = {

@@ -1,6 +1,6 @@
 import RatingHistogram from '@/app/_components/RatingHistogram';
 import { PlayerDataBySeason } from '@/app/_lib/services/type';
-import WinRateChart from '@/app/_components/WinRateChart';
+import ResultCharts from '@/app/_components/ResultsCharts';
 import { getRank } from '@/app/_lib/services/getRank';
 import { getTop200 } from '@/app/_lib/services/getTop200';
 import DataUpdateDescription from './dataUpdateDescription';
@@ -58,7 +58,7 @@ export default async function PlayerBySeason({
         </div>
       )}
       <div className="my-8">
-        <WinRateChart playerId={playerId} season={season} />
+        <ResultCharts playerId={playerId} season={season} />
       </div>
     </>
   );
