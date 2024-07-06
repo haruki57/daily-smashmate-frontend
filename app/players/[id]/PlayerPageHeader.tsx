@@ -25,11 +25,11 @@ export const PlayerPageHeader = ({
         />
         <h1 className="text-2xl font-semibold">
           {linkToTopPlayerPage ? (
-            <Link
-              href={`/players/${account.playerId}`}
-            >{`${account.playerName}`}</Link>
+            <Link href={`/players/${account.playerId}`}>{`${
+              account.playerName || '_'
+            }`}</Link>
           ) : (
-            `${account.playerName}`
+            `${account.playerName || '_'}`
           )}
         </h1>
         <div className="flex justify-end text-sm">

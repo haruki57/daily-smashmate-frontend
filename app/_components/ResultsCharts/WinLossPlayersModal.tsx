@@ -20,7 +20,7 @@ export const WinLossPlayersModal = ({ title, winners, losers }: Props) => {
         className="flex items-center text-sm text-gray-600"
       >
         <div className="mr-1">
-          <span>{player.playerName}</span>
+          <span>{player.playerName || '_'}</span>
           <span className="text-red-700">{` ×  ${player.count}`}</span>
         </div>
         <div>

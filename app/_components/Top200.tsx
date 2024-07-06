@@ -22,7 +22,7 @@ export default async function Top200({ season }: { season: string }) {
 
               <div className="basis-5/12 text-blue-600">
                 <Link href={`/players/${player.playerId}`}>
-                  {player.accountInfo.playerName}
+                  {player.accountInfo.playerName || '_'}
                 </Link>
               </div>
 

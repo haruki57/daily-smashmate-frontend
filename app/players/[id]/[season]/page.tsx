@@ -53,7 +53,9 @@ export default async function Page({
   if (!playerDataBySeason) {
     return (
       // TODO
-      <div>{`${account.playerName} さんのシーズン ${season}のデータがありません。`}</div>
+      <div>{`${
+        account.playerName || '_'
+      } さんのシーズン ${season}のデータがありません。`}</div>
     );
   }
   const ranksByCharacters = await getRanksByCharacters({

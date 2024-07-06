@@ -19,7 +19,7 @@ export default async function TopMatchCount({ season }: { season: string }) {
               </div>
               <div className="basis-4/12 text-blue-600">
                 <Link href={`/players/${player.playerId}`}>
-                  {player.playerName}
+                  {player.playerName || '_'}
                 </Link>
               </div>
 

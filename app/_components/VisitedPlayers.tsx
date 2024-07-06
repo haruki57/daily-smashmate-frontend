@@ -25,7 +25,7 @@ export default function VisitedPlayers() {
             <>
               {index !== 0 && <hr className="border-slate-300 " />}
               <div className="mt-3 text-blue-600">
-                <Link href={`/players/${playerId}`}>{playerName}</Link>
+                <Link href={`/players/${playerId}`}>{playerName || '_'}</Link>
               </div>
             </>
           );
