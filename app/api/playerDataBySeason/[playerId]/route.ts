@@ -1,6 +1,5 @@
 import { PlayerDataBySeason } from '@/app/_lib/services/type';
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import prisma from "@/app/_lib/prisma";
 
 export async function GET(
   request: Request, 
