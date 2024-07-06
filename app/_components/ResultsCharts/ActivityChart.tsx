@@ -66,7 +66,7 @@ const getOpponents = ({
       .reduce((prev, current) => {
         const opponentId = isWinners ? current.loserId : current.winnerId;
         const opponent = prev.get(opponentId) || {
-          playerId,
+          playerId: opponentId,
           playerName: current.playerName || '【退会済み】',
           count: 0,
           fighters: current.currentCharactersCsv?.split(',') || [],
@@ -303,6 +303,7 @@ export default function ActivityChart({
                   <DialogPanel className="my-10 w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                     <WinLossPlayersModal
                       title={dateStrForModal}
+                      season={seasonRow.season}
                       winners={getOpponents({
                         dateStrToResults,
                         dateStr: dateStrForModal,

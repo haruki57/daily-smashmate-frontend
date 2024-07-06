@@ -3,30 +3,38 @@ import CharacterImages from '../Characters';
 import { Checkbox, DialogTitle } from '@headlessui/react';
 import { NO_DATA_KEY, Opponent } from './results-chart-client';
 import { useState } from 'react';
+import Link from 'next/link';
 
 type Props = {
   title: string;
   winners: Opponent[];
   losers: Opponent[];
+  season: string;
 };
 
-export const WinLossPlayersModal = ({ title, winners, losers }: Props) => {
+export const WinLossPlayersModal = ({
+  title,
+  winners,
+  losers,
+  season,
+}: Props) => {
   const [showCharactersOnly, setShowCharactersOnly] = useState<boolean>(false);
 
   const playerElem = (player: Opponent) => {
     return (
-      <div
+      <Link
+        href={`/players/${player.playerId}/${season}`}
         key={player.playerId}
-        className="flex items-center text-sm text-gray-600"
+        className="my-2 flex w-fit items-center text-sm text-blue-500"
       >
         <div className="mr-1">
           <span>{player.playerName || '_'}</span>
-          <span className="text-red-700">{` ×  ${player.count}`}</span>
+          <span className="text-gray-600">{` ×  ${player.count}`}</span>
         </div>
         <div>
           <CharacterImages charactersCsv={player.fighters.join(',')} />
         </div>
-      </div>
+      </Link>
     );
   };
 

@@ -286,6 +286,7 @@ export default function WinRateChartsClient({
                             showingModalRateRange + (range - 1)
                           }`
                     }
+                    season={seasonRow.season}
                     winners={
                       rateRangeToWinnersAndLosers.get(showingModalRateRange)
                         ?.winners || []
