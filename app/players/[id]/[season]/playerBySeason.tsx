@@ -40,7 +40,7 @@ export default async function PlayerBySeason({
       <h3 className="text-2xl font-bold">詳細戦績</h3>
       {Number(season) <= 27 ? (
         <div className="my-8">
-          シーズン27以前のデータでは日別対戦数は利用できません
+          シーズン27以前のデータでは詳細戦績は利用できません
         </div>
       ) : (
         <>
