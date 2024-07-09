@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
   description:
     'デイリースマメイトは、スマメイト27期以降の戦績を閲覧できるサービスです。',
-  metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
+  metadataBase: process.env.URL ? new URL(process.env.URL) : undefined,
   formatDetection: {
     telephone: false,
   },
