@@ -98,7 +98,7 @@ export default async function Page({
                 title={
                   <div className="flex">
                     <Image
-                      src={`/characters/${rankForCharacter.characterId}.png`}
+                      src={`/fighters/${rankForCharacter.characterId}.png`}
                       alt={rankForCharacter.characterId}
                       height={28}
                       width={28}

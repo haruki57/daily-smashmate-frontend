@@ -69,7 +69,7 @@ export const WinLossPlayersModal = ({
             return (
               <Image
                 key={`${charaId}-${index}`}
-                src={`/characters/${charaId}.png`}
+                src={`/fighters/${charaId}.png`}
                 alt={charaId}
                 width={24}
                 height={24}

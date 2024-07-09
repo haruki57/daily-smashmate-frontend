@@ -20,7 +20,7 @@ export default function CharacterImages({ charactersCsv, size = 24 }: Props) {
         return (
           <Image
             key={`${characterId}`}
-            src={`/characters/${characterId}.png`}
+            src={`/fighters/${characterId}.png`}
             alt={characterId}
             width={size}
             height={size}
