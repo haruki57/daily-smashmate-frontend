@@ -6,8 +6,9 @@ export const metadata: Metadata = {
     template: '%s | デイリースマメイト',
     default: 'デイリースマメイト',
   },
-  description: 'The official Next.js Learn Dashboard built with App Router.',
-  metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
+  description:
+    'デイリースマメイトは、スマメイト27期以降の戦績を閲覧できるサービスです。',
+  metadataBase: process.env.URL ? new URL(process.env.URL) : undefined,
   formatDetection: {
     telephone: false,
   },
