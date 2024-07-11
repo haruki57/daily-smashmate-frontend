@@ -12,10 +12,20 @@ export async function generateMetadata({
   params: { id: string };
 }): Promise<Metadata> {
   const playerId = Number(params.id);
+  if (playerId == null || Number.isNaN(playerId)) {
+    return {
+      title: 'Player Not Found',
+    };
+  }
   const account = await getSmashmateAccount({
     playerId,
     revalidate: 60,
   });
+  if (!account) {
+    return {
+      title: 'Player Not Found',
+    };
+  }
   return {
     title: account.playerName,
   };
@@ -23,6 +33,10 @@ export async function generateMetadata({
 
 export default async function Page({ params }: { params: { id: string } }) {
   const playerId = Number(params.id);
+  console.log({ playerId });
+  if (playerId == null || Number.isNaN(playerId)) {
+    notFound();
+  }
   const account = await getSmashmateAccount({
     playerId,
     revalidate: 60,
@@ -30,6 +44,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   // TODO
   if (!account) {
+    console.log('not found');
     notFound();
   }
   const playerDataBySeasons = await getPlayerDataBySeason({ playerId });

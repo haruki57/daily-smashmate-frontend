@@ -53,7 +53,7 @@ export default async function Page({
   if (!playerDataBySeason) {
     return (
       // TODO
-      <div>{`${
+      <div className="mt-4 flex justify-center">{`${
         account.playerName || '_'
       } さんのシーズン ${season}のデータがありません。`}</div>
     );
