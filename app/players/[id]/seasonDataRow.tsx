@@ -41,12 +41,18 @@ export default function SeasonDataRow({
         />
       </div>
       <div className="flex basis-5/12 flex-col justify-center">
-        <div>{`${playerDataBySeason.win}勝 ${playerDataBySeason.loss}敗`}</div>
-        <div className="">{`レート ${playerDataBySeason.currentRate}`}</div>
+        <div>{`${playerDataBySeason.win ?? '-'}勝 ${
+          playerDataBySeason.loss ?? '-'
+        }敗`}</div>
+        <div className="">{`レート ${
+          playerDataBySeason.currentRate ?? '-'
+        }`}</div>
         {playerDataBySeason.rankFromTop200 != null ? (
           <div>{`${playerDataBySeason.rankFromTop200} 位  / ${playerDataBySeason.totalPlayerCount} 人`}</div>
         ) : (
-          <div>{`${playerDataBySeason.rank} 位 / ${playerDataBySeason.totalPlayerCount} 人`}</div>
+          <div>{`${playerDataBySeason.rank ?? '-'} 位 / ${
+            playerDataBySeason.totalPlayerCount
+          } 人`}</div>
         )}
       </div>
       <div className="flex basis-3/12 flex-col items-end justify-center">

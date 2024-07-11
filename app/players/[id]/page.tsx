@@ -33,7 +33,6 @@ export async function generateMetadata({
 
 export default async function Page({ params }: { params: { id: string } }) {
   const playerId = Number(params.id);
-  console.log({ playerId });
   if (playerId == null || Number.isNaN(playerId)) {
     notFound();
   }
@@ -44,7 +43,6 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   // TODO
   if (!account) {
-    console.log('not found');
     notFound();
   }
   const playerDataBySeasons = await getPlayerDataBySeason({ playerId });

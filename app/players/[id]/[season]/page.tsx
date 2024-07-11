@@ -84,7 +84,9 @@ export default async function Page({
           <CardInPlayerPage
             title="全体順位"
             mainContent={
-              playerDataBySeason.rankFromTop200 ?? playerDataBySeason.rank
+              playerDataBySeason.rankFromTop200 ??
+              playerDataBySeason.rank ??
+              '-'
             }
             unit="位"
             annotation={`${totalPlayerCount.totalPlayers} 人中`}
