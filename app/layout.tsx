@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+  icons: {
+    icon: '/apple-touch-icon.png',
+    apple: '/apple-touch-icon.png',
+  },
   openGraph: {
     images: '/og.png',
     siteName: 'デイリースマメイト',
