@@ -19,7 +19,6 @@ export async function generateMetadata({
   }
   const account = await getSmashmateAccount({
     playerId,
-    revalidate: 60,
   });
   if (!account) {
     return {
@@ -38,7 +37,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
   const account = await getSmashmateAccount({
     playerId,
-    revalidate: 60,
   });
 
   // TODO

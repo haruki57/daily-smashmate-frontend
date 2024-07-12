@@ -1,10 +1,5 @@
 'use client';
 
-import RatingHistogram from '@/app/_components/RatingHistogram';
-import { PlayerDataBySeason } from '@/app/_lib/services/type';
-import ResultCharts from '@/app/_components/ResultsCharts';
-import { getRank } from '@/app/_lib/services/getRank';
-import { getTop200 } from '@/app/_lib/services/getTop200';
 import { Fragment, useState } from 'react';
 import {
   Dialog,

@@ -19,7 +19,6 @@ export async function generateMetadata({
   const playerId = Number(params.id);
   const account = await getSmashmateAccount({
     playerId,
-    revalidate: 60,
   });
   return {
     title: `${account.playerName} (シーズン ${params.season})`,
@@ -34,7 +33,6 @@ export default async function Page({
   const playerId = Number(params.id);
   const account = await getSmashmateAccount({
     playerId,
-    revalidate: 60,
   });
   if (!account) {
     notFound();

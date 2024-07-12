@@ -3,16 +3,14 @@ import type { Account } from "../type";
 
 type Props = {
   playerId: number;
-  revalidate?: number;
 };
 
 export async function getSmashmateAccount({
   playerId,
-  revalidate,
 }: Props): Promise<Account> {
   return fetch(path(`/api/accounts/${playerId}`), {
     next: {
-      ...(revalidate !== undefined && { revalidate }),
+      revalidate: 60 * 60 * 24,
     },
   })
     .then(handleSucceed)

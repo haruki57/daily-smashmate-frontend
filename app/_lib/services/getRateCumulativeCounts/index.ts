@@ -1,5 +1,4 @@
 import { handleFailed, handleSucceed, path } from "..";
-import type { PlayerDataBySeason } from "../type";
 
 type Props = {
   season: string;
