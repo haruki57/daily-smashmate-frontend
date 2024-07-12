@@ -1,6 +1,5 @@
 import WinRateChartsClient from './results-chart-client';
 import { getResults } from '@/app/_lib/services/getResults';
-import { getPlayerRates } from '@/app/_lib/services/getPlayerRates';
 import { getSeasons } from '@/app/_lib/services/getSeasons';
 
 type Props = {
