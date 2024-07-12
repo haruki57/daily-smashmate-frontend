@@ -11,7 +11,6 @@ export async function getSmashmateAccount({
   revalidate,
 }: Props): Promise<Account> {
   return fetch(path(`/api/accounts/${playerId}`), {
-    cache: "force-cache",
     next: {
       ...(revalidate !== undefined && { revalidate }),
     },

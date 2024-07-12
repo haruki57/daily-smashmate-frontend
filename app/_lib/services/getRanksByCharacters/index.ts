@@ -13,7 +13,6 @@ export async function getRanksByCharacters({
   revalidate,
 }: Props): Promise<RankByCharacter[]> {
   return fetch(path(`/api/rankByCharacters/${playerId}/${season}`), {
-    cache: "force-cache",
     next: {
       ...(revalidate !== undefined && { revalidate }),
     },

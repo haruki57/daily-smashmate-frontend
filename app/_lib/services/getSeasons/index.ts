@@ -5,7 +5,6 @@ export async function getSeasons(
   
 ): Promise<Season[]> {
   return fetch(path(`/api/seasons`), {
-    cache: "force-cache",
     next: {
       revalidate: 3600 * 24
     },
