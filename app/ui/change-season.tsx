@@ -21,8 +21,6 @@ export default function ChangeSeason({
   };
   return (
     <Select
-      name="status"
-      aria-label="Project status"
       onChange={(e) => handleChange(e.target.value)}
       defaultValue={initialValue}
     >

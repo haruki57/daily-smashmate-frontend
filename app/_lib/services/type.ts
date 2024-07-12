@@ -47,6 +47,12 @@ export type Top200 = {
   accountInfo?: Account;
 }
 
+export type RateToRank = {
+  rank: number;
+  rate: number;
+  season: string;
+}
+
 export type SeasonResult = {
   season: string;
   totalPlayers: number;

@@ -3,18 +3,19 @@ import VisitedPlayers from './_components/VisitedPlayers';
 import TopMatchCount from './_components/TopMatchCount';
 import { getSeasons } from './_lib/services/getSeasons';
 import ChangeSeason from './ui/change-season';
+import RateBorder from './_components/RateBorder';
 
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { season: string };
+  searchParams: { season: string; rate: string };
 }) {
   const seasons = await getSeasons();
   const latestSeason = seasons.at(-1)?.season!;
   const season = searchParams.season || latestSeason;
   return (
     <main className="flex min-h-screen flex-col items-center p-6">
-      <p className="mb-4  text-center">
+      <p className="mb-4 text-center">
         デイリースマメイトは、スマメイト27期以降の戦績を閲覧できるサービスです。
       </p>
       <div>
@@ -23,6 +24,9 @@ export default async function Page({
             seasons={seasons.map((s) => s.season).reverse()}
             initialValue={searchParams.season}
           />
+        </div>
+        <div>
+          <RateBorder season={season} rateStr={searchParams.rate} />
         </div>
         <div className="grid  grid-cols-1 justify-center gap-4 md:justify-normal lg:grid-cols-2">
           <TopMatchCount season={season} />
