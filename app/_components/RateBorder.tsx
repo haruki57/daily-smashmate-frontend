@@ -55,7 +55,7 @@ export default async function RateBorder({
 
   return (
     <div className="mb-4 justify-center gap-4 md:flex">
-      <div className="flex w-96 flex-col items-center rounded border p-8 md:w-64 md:p-12">
+      <div className="flex w-96 flex-col items-center rounded border p-8 md:w-80 md:p-12">
         <div className="h-12 text-2xl font-semibold">レート</div>
         <div>
           <ChangeRate value={rate} max={max ?? 3000} min={min ?? 1000} />
@@ -63,7 +63,7 @@ export default async function RateBorder({
       </div>
       <div className="mt-28 hidden md:block">{rightArrow}</div>
       <div className="my-2 flex justify-center md:hidden">{downArrow}</div>
-      <div className="flex w-96 flex-col items-center rounded border p-8 md:w-64 md:p-12">
+      <div className="flex w-96 flex-col items-center rounded border p-8 md:w-80 md:p-12">
         <div className="h-12 text-2xl font-semibold">推定順位</div>
         <div className="mt-0.5 flex items-end justify-center text-6xl font-bold">
           <div className="my-2">{rank}</div>
