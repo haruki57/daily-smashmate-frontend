@@ -54,15 +54,62 @@ export default async function RateBorder({
   const rank = rateToRank(top200, rateToRankArr, rate);
 
   return (
-    <div className="flex justify-center gap-10">
-      <div className="flex flex-col items-center">
-        <div>レート</div>
-        <ChangeRate value={rate} max={max ?? 3000} min={min ?? 1000} />
+    <div className="mb-4 justify-center gap-4 md:flex">
+      <div className="flex w-96 flex-col items-center rounded border p-8 md:w-64 md:p-12">
+        <div className="h-12 text-2xl font-semibold">レート</div>
+        <div>
+          <ChangeRate value={rate} max={max ?? 3000} min={min ?? 1000} />
+        </div>
       </div>
-      <div className="flex flex-col items-center">
-        <div>順位</div>
-        <div>{`${rank} / ${total} 人中`}</div>
+      <div className="mt-28 hidden md:block">{rightArrow}</div>
+      <div className="my-2 flex justify-center md:hidden">{downArrow}</div>
+      <div className="flex w-96 flex-col items-center rounded border p-8 md:w-64 md:p-12">
+        <div className="h-12 text-2xl font-semibold">推定順位</div>
+        <div className="mt-0.5 flex items-end justify-center text-6xl font-bold">
+          <div className="my-2">{rank}</div>
+          <div className="mb-1 ml-2 text-sm">{` 位`}</div>
+        </div>
+        <div className="mt-1 flex justify-center text-sm text-slate-500">
+          {`${total} 人中`}
+        </div>
       </div>
     </div>
   );
 }
+
+// https://www.svgrepo.com/svg/533605/arrow-narrow-right
+const rightArrow = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="64px"
+    height="64px"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M4 12H20M20 12L16 8M20 12L16 16"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+const downArrow = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="64px"
+    height="64px"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M12 4V20M12 20L8 16M12 20L16 16"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);

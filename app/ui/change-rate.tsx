@@ -27,7 +27,7 @@ export default function ChangeRate({
       defaultValue={value}
       max={max}
       min={min}
-      className="rounded"
+      className="rounded text-center text-6xl font-bold"
     ></input>
   );
 }
