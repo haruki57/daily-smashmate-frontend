@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RateToRank, Top200 } from '../_lib/services/type';
 
 const rateToRank = (
@@ -39,14 +39,42 @@ export default function RateBorderClient({
   total: number;
   top200: Top200[];
 }) {
-  const [rate, setRate] = useState(2000);
+  const [rate, setRate] = useState<number | ''>(1900);
+  const [isSetManually, setIsSetManually] = useState(false);
 
-  const handleChange = (rate: number) => {
-    setRate(rate);
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (isSetManually || rate === '' || rate >= 2000) {
+        clearInterval(id);
+        return;
+      }
+      setRate((prev) => {
+        if (prev === '') {
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, 10);
+    return () => {
+      clearInterval(id);
+    };
+  }, [rate, isSetManually]);
+
+  const handleChange = (rateStr: string) => {
+    setIsSetManually(true);
+    if (rateStr === '') {
+      setRate(rateStr);
+      return;
+    }
+    const rateNum = Number(rateStr);
+    if (Number.isNaN(rateNum)) {
+      return;
+    }
+    if (0 <= rateNum && rateNum <= 9999) {
+      setRate(rateNum);
+    }
   };
-  const max = rateToRanks.at(0)?.rate;
-  const min = rateToRanks.at(-1)?.rate;
-  const rank = rateToRank(top200, rateToRanks, rate);
+  const rank = rateToRank(top200, rateToRanks, rate === '' ? 1000 : rate);
 
   return (
     <div className="mb-4 justify-center gap-4 md:flex">
@@ -54,12 +82,10 @@ export default function RateBorderClient({
         <div className="h-12 text-2xl font-semibold">レート</div>
         <div>
           <input
-            type="number"
-            onChange={(e) => handleChange(Number(e.target.value))}
+            type="text"
+            onChange={(e) => handleChange(e.target.value)}
             value={rate}
-            max={max}
-            min={min}
-            className="rounded text-center text-6xl font-bold tabular-nums"
+            className="w-48 rounded text-center text-6xl font-bold tabular-nums"
           ></input>
         </div>
       </div>
