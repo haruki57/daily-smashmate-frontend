@@ -8,7 +8,7 @@ import RateBorder from './_components/RateBorder';
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { season: string; rate: string };
+  searchParams: { season: string };
 }) {
   const seasons = await getSeasons();
   const latestSeason = seasons.at(-1)?.season!;
@@ -22,7 +22,7 @@ export default async function Page({
         />
       </div>
       <div className="my-8 flex w-full flex-col items-center md:my-16">
-        <RateBorder season={season} rateStr={searchParams.rate} />
+        <RateBorder season={season} />
       </div>
       <p className="mb-4 text-center">
         デイリースマメイトは、スマメイト27期以降の戦績を閲覧できるサービスです。
