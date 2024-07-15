@@ -39,7 +39,7 @@ export default function RateBorderClient({
   total: number;
   top200: Top200[];
 }) {
-  const [rate, setRate] = useState<number | ''>(1900);
+  const [rate, setRate] = useState<number | ''>(1800);
   const [isSetManually, setIsSetManually] = useState(false);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function RateBorderClient({
         }
         return prev + 1;
       });
-    }, 10);
+    }, 3);
     return () => {
       clearInterval(id);
     };
@@ -74,24 +74,58 @@ export default function RateBorderClient({
       setRate(rateNum);
     }
   };
+  const max = rateToRanks.at(0)?.rate;
+  const min = rateToRanks.at(-1)?.rate;
   const rank = rateToRank(top200, rateToRanks, rate === '' ? 1000 : rate);
 
   return (
     <div className="mb-4 justify-center gap-4 md:flex">
-      <div className="flex w-96 flex-col items-center rounded border p-8 md:w-80 md:p-12">
+      <div className="flex w-80 flex-col items-center rounded border p-8 md:w-80 md:p-12">
         <div className="h-12 text-2xl font-semibold">レート</div>
-        <div>
+        <div className="flex flex-col items-center">
           <input
             type="text"
             onChange={(e) => handleChange(e.target.value)}
             value={rate}
             className="w-48 rounded text-center text-6xl font-bold tabular-nums"
-          ></input>
+          />
+          <div className="mt-4 flex w-72 gap-1 md:w-48">
+            <button
+              className="rounded-full border px-1"
+              onClick={() => {
+                setRate((prev) => {
+                  if (prev === '') return prev;
+                  return prev - 1;
+                });
+              }}
+            >
+              -
+            </button>
+            <input
+              type="range"
+              className="w-full"
+              value={rate}
+              min={min}
+              max={max}
+              onChange={(e) => handleChange(e.target.value)}
+            />
+            <button
+              className="rounded-full border px-1"
+              onClick={() => {
+                setRate((prev) => {
+                  if (prev === '') return prev;
+                  return prev + 1;
+                });
+              }}
+            >
+              +
+            </button>
+          </div>
         </div>
       </div>
       <div className="mt-28 hidden md:block">{rightArrow}</div>
       <div className="my-2 flex justify-center md:hidden">{downArrow}</div>
-      <div className="flex w-96 flex-col items-center rounded border p-8 md:w-80 md:p-12">
+      <div className="flex w-80 flex-col items-center rounded border p-8 md:w-80 md:p-12">
         <div className="h-12 text-2xl font-semibold">推定順位</div>
         <div className="mt-0.5 flex items-end justify-center text-6xl font-bold">
           <div className="my-2 tabular-nums">{rank}</div>
