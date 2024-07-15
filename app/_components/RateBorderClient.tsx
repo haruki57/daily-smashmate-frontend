@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { RateToRank, Top200 } from '../_lib/services/type';
+import { getOrdinal } from '../_lib/utils';
 
 const rateToRank = (
   top200: Top200[],
@@ -127,9 +128,9 @@ export default function RateBorderClient({
       <div className="my-2 flex justify-center md:hidden">{downArrow}</div>
       <div className="flex w-80 flex-col items-center rounded border p-8 md:w-80 md:p-12">
         <div className="h-12 text-2xl font-semibold">推定順位</div>
-        <div className="mt-0.5 flex items-end justify-center text-6xl font-bold">
-          <div className="my-2 tabular-nums">{rank}</div>
-          <div className="mb-1 ml-2 text-sm">{` 位`}</div>
+        <div className="mt-0.5 flex items-end justify-center text-6xl font-bold tabular-nums">
+          <div className="my-2">{rank}</div>
+          <div className="mb-2 ml-2 text-base">{` ${getOrdinal(rank)}`}</div>
         </div>
         <div className="mt-1 flex justify-center text-sm text-slate-500">
           {`${total} 人中`}

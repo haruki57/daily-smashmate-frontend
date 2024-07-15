@@ -1,6 +1,7 @@
 import { getTop200 } from '../_lib/services/getTop200';
 import Link from 'next/link';
 import CharacterImages from './Characters';
+import { getOrdinal } from '../_lib/utils';
 
 export default async function Top200({ season }: { season: string }) {
   const top200 = await getTop200({ season });
@@ -17,7 +18,7 @@ export default async function Top200({ season }: { season: string }) {
             <div className="mt-2 flex tabular-nums">
               <div className="flex basis-2/12 justify-around">
                 <div className="basis-6 text-right">{player.rank}</div>
-                <div className="mr-2">位</div>
+                <div className="mr-2">{getOrdinal(player.rank)}</div>
               </div>
 
               <div className="basis-5/12 text-blue-600">

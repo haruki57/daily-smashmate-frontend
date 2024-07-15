@@ -5,6 +5,7 @@ import { PlayerDataBySeason, Season } from '@/app/_lib/services/type';
 import Image from 'next/image';
 import clsx from 'clsx';
 import CharacterImages from '@/app/_components/Characters';
+import { getOrdinal } from '@/app/_lib/utils';
 
 const dateToJstDate = (dateStr: string | null) => {
   if (dateStr == null) {
@@ -48,11 +49,13 @@ export default function SeasonDataRow({
           playerDataBySeason.currentRate ?? '-'
         }`}</div>
         {playerDataBySeason.rankFromTop200 != null ? (
-          <div>{`${playerDataBySeason.rankFromTop200} 位  / ${playerDataBySeason.totalPlayerCount} 人`}</div>
+          <div>{`${playerDataBySeason.rankFromTop200} ${getOrdinal(
+            playerDataBySeason.rankFromTop200,
+          )}  / ${playerDataBySeason.totalPlayerCount} 人`}</div>
         ) : (
-          <div>{`${playerDataBySeason.rank ?? '-'} 位 / ${
-            playerDataBySeason.totalPlayerCount
-          } 人`}</div>
+          <div>{`${playerDataBySeason.rank ?? '-'} ${getOrdinal(
+            playerDataBySeason.rank || 0,
+          )} / ${playerDataBySeason.totalPlayerCount} 人`}</div>
         )}
       </div>
       <div className="flex basis-3/12 flex-col items-end justify-center">

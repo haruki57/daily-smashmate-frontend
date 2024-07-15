@@ -10,6 +10,7 @@ import { PlayerPageHeader } from '../PlayerPageHeader';
 import PlayerBySeason from './playerBySeason';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import { getOrdinal } from '@/app/_lib/utils';
 
 export async function generateMetadata({
   params,
@@ -86,7 +87,9 @@ export default async function Page({
               playerDataBySeason.rank ??
               '-'
             }
-            unit="位"
+            unit={getOrdinal(
+              playerDataBySeason.rankFromTop200 || playerDataBySeason.rank || 0,
+            )}
             annotation={`${totalPlayerCount.totalPlayers} 人中`}
           />
         </div>
@@ -107,7 +110,7 @@ export default async function Page({
                   </div>
                 }
                 mainContent={rankForCharacter.rank}
-                unit="位"
+                unit={getOrdinal(rankForCharacter.rank)}
                 annotation={`${rankForCharacter.totalPlayerCount} 人中`}
               />
             );
