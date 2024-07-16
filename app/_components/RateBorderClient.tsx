@@ -90,7 +90,7 @@ export default function RateBorderClient({
             value={rate}
             className="w-48 rounded text-center text-6xl font-bold tabular-nums"
           />
-          <div className="mt-4 flex w-72 gap-1 md:w-48">
+          <div className="mt-4 flex w-72 gap-1">
             <button
               className="rounded-full border px-1"
               onClick={() => {
