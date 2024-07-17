@@ -23,6 +23,7 @@ export default function ChangeSeason({
     <Select
       onChange={(e) => handleChange(e.target.value)}
       defaultValue={initialValue}
+      className="rounded"
     >
       {seasons.map((season) => {
         return (
