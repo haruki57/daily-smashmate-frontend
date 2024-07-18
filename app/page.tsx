@@ -17,7 +17,7 @@ export default async function Page({
     <main className="flex min-h-screen flex-col items-center p-6 pt-2">
       <div className="mb-4 flex w-full justify-end">
         <ChangeSeason
-          seasons={seasons.map((s) => s.season).reverse()}
+          seasonRows={seasons.reverse()}
           initialValue={searchParams.season}
         />
       </div>

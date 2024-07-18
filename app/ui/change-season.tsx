@@ -2,12 +2,18 @@
 
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { Select } from '@headlessui/react';
+import { Season } from '../_lib/services/type';
+
+const convertDateStr = (dateStr: string) => {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('ja-JP').split('/').slice(0, 2).join('/');
+};
 
 export default function ChangeSeason({
-  seasons,
+  seasonRows,
   initialValue,
 }: {
-  seasons: string[];
+  seasonRows: Season[];
   initialValue: string;
 }) {
   const searchParams = useSearchParams();
@@ -25,9 +31,11 @@ export default function ChangeSeason({
       defaultValue={initialValue}
       className="rounded"
     >
-      {seasons.map((season) => {
+      {seasonRows.map((seasonRow) => {
         return (
-          <option key={season} value={season}>{`シーズン ${season}`}</option>
+          <option key={seasonRow.season} value={seasonRow.season}>{`シーズン ${
+            seasonRow.season
+          } (${convertDateStr(seasonRow.started_at)} 〜)`}</option>
         );
       })}
     </Select>
