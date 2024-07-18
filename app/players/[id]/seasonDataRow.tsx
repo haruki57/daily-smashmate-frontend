@@ -17,11 +17,11 @@ const dateToJstDate = (dateStr: string | null) => {
 export default function SeasonDataRow({
   playerDataBySeason,
   seasonData,
-  isLatestSeason,
+  isSeasonFinished,
 }: {
   playerDataBySeason: PlayerDataBySeason;
   seasonData: Season;
-  isLatestSeason: boolean;
+  isSeasonFinished: boolean;
 }) {
   const router = useRouter();
   const handleClick = () => {
@@ -65,7 +65,7 @@ export default function SeasonDataRow({
         >
           詳細
         </div>
-        {isLatestSeason && (
+        {!isSeasonFinished && (
           <div className="mt-2 text-sm text-slate-500">
             <div>最終更新日:</div>
             <div>

@@ -10,10 +10,10 @@ type Props = {
 export default async function ResultCharts({ playerId, season }: Props) {
   const seasons = await getSeasons();
   const seasonRow = seasons.find((s) => s.season === season)!;
-  const isLatestSeason = season === seasons.at(-1)?.season;
-  const seasonForOpponentRates = isLatestSeason
-    ? seasons.at(-2)!.season
-    : season;
+  const isSeasonFinished = seasonRow.ended_at == null ? false : true;
+  const seasonForOpponentRates = isSeasonFinished
+    ? season
+    : seasons.at(-2)!.season;
   const results = await getResults({
     playerId,
     season,

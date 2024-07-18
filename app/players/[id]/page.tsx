@@ -44,11 +44,9 @@ export default async function Page({ params }: { params: { id: string } }) {
     notFound();
   }
   const playerDataBySeasons = await getPlayerDataBySeason({ playerId });
-
   const seasonRows = await getSeasons();
-
   const latestSeasonRow = seasonRows.at(-1);
-
+  const isSeasonFinished = latestSeasonRow?.ended_at != null;
   return (
     <>
       <PlayerPageHeader account={account} withSmashmateLink={true} />
@@ -64,7 +62,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                   <SeasonDataRow
                     playerDataBySeason={playerDataBySeasons[season]!}
                     seasonData={seasonRow}
-                    isLatestSeason={latestSeasonRow?.season == season}
+                    isSeasonFinished={isSeasonFinished}
                     key={season}
                   />
                   <hr className="w-full border-slate-300" />
