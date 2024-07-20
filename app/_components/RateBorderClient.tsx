@@ -94,6 +94,7 @@ export default function RateBorderClient({
             <button
               className="rounded-full border px-1"
               onClick={() => {
+                setIsSetManually(true);
                 setRate((prev) => {
                   if (prev === '') return prev;
                   return prev - 1;
@@ -114,6 +115,7 @@ export default function RateBorderClient({
               className="rounded-full border px-1"
               onClick={() => {
                 setRate((prev) => {
+                  setIsSetManually(true);
                   if (prev === '') return prev;
                   return prev + 1;
                 });
