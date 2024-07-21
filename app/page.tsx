@@ -13,6 +13,7 @@ export default async function Page({
   const seasons = await getSeasons();
   const latestSeason = seasons.at(-1)?.season!;
   const season = searchParams.season || latestSeason;
+  const seasonRow = seasons.find((s) => s.season == season)!;
   return (
     <main className="flex min-h-screen flex-col items-center p-6 pt-2">
       <div className="mb-4 flex w-full justify-end">
@@ -22,15 +23,15 @@ export default async function Page({
         />
       </div>
       <div className="my-8 flex w-full flex-col items-center md:my-16">
-        <RateBorder season={season} />
+        <RateBorder season={seasonRow} />
       </div>
       <p className="mb-4 text-center">
         デイリースマメイトは、スマメイト27期以降の戦績を閲覧できるサービスです。
       </p>
 
       <div className="grid grid-cols-1 justify-center gap-4 md:justify-normal lg:grid-cols-2">
-        <TopMatchCount season={season} />
-        <Top200 season={season} />
+        <TopMatchCount season={seasonRow} />
+        <Top200 season={seasonRow} />
         <VisitedPlayers />
       </div>
     </main>

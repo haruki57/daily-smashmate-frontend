@@ -18,6 +18,7 @@ export default async function ResultCharts({ playerId, season }: Props) {
     playerId,
     season,
     seasonForOpponentRates,
+    setRevalidate: !isSeasonFinished,
   });
   return (
     <WinRateChartsClient

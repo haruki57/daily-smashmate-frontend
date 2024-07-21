@@ -18,13 +18,17 @@ export default async function PlayerBySeason({
   let rank = undefined;
   let isRankEstimated = false;
 
-  const top200 = await getTop200({ season });
+  const top200 = await getTop200({ season, setRevalidate: !isSeasonFinished });
   const foundTop200 = top200.find((t) => t.playerId === playerId);
   if (foundTop200) {
     rank = foundTop200.rank;
     isRankEstimated = false;
   } else if (currentRate != null) {
-    const rankRet = await getRank({ currentRate, season });
+    const rankRet = await getRank({
+      currentRate,
+      season,
+      setRevalidate: !isSeasonFinished,
+    });
     rank = rankRet?.rank;
     isRankEstimated = true;
   }

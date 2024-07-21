@@ -2,9 +2,12 @@ import { getTop200 } from '../_lib/services/getTop200';
 import Link from 'next/link';
 import CharacterImages from './Characters';
 import { getOrdinal } from '../_lib/utils';
+import { Season } from '../_lib/services/type';
 
-export default async function Top200({ season }: { season: string }) {
-  const top200 = await getTop200({ season });
+export default async function Top200({ season }: { season: Season }) {
+  const isSeasonFinished = season.ended_at != null;
+  const setRevalidate = !isSeasonFinished;
+  const top200 = await getTop200({ season: season.season, setRevalidate });
   return (
     <div className="max-h-96 w-72 overflow-y-scroll rounded border border-slate-400 px-4 py-3 text-sm md:w-96 md:text-base">
       <h4 className="mb-4 text-xl font-semibold">レートランキング</h4>

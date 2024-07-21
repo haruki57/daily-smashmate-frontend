@@ -60,8 +60,12 @@ export default async function Page({
   const ranksByCharacters = await getRanksByCharacters({
     playerId,
     season,
+    setRevalidate: !isSeasonFinished,
   });
-  const totalPlayerCount = await getTotalPlayers({ season });
+  const totalPlayerCount = await getTotalPlayers({
+    season,
+    setRevalidate: !isSeasonFinished,
+  });
   return (
     <>
       <PlayerPageHeader
