@@ -10,7 +10,7 @@ export async function getTotalPlayers({
   setRevalidate=true,
 }: Props): Promise<{ totalPlayers: number; }> {
   return fetch(path(`/api/totalPlayers/${season}`), {
-    next: { revalidate: setRevalidate ? 3600 * 12 : undefined }
+    next: { revalidate: setRevalidate ? 60 * 10 : undefined }
   })
     .then(handleSucceed)
     .catch(handleFailed);

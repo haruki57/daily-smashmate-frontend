@@ -7,7 +7,7 @@ export async function getRateToRank(
   { season: string; setRevalidate: boolean; }
 ): Promise<RateToRank[]> {
   return fetch(path(`/api/rateToRank/${season}`), {
-    next: { revalidate: setRevalidate ? 3600 * 12 : undefined }
+    next: { revalidate: setRevalidate ? 60 * 10 : undefined }
   })
     .then(handleSucceed)
     .catch(handleFailed);
