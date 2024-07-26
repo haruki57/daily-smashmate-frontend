@@ -5,10 +5,10 @@ import { Season } from '../_lib/services/type';
 
 export default async function TopMatchCount({ season }: { season: Season }) {
   const isSeasonFinished = season.ended_at != null;
-  const setRevalidate = !isSeasonFinished;
+  const cache = !isSeasonFinished;
   const topMatchCount = await getTopMatchCount({
     season: season.season,
-    setRevalidate,
+    cache,
   });
   return (
     <div className="max-h-96 w-72 overflow-y-scroll rounded border border-slate-400 px-4 py-3 text-sm md:w-96 md:text-base">

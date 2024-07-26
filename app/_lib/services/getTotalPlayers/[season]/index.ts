@@ -2,15 +2,15 @@ import { handleFailed, handleSucceed, path } from "../..";
 
 type Props = {
   season: string;
-  setRevalidate: boolean;
+  cache?: boolean;
 };
 
 export async function getTotalPlayers({
   season,
-  setRevalidate=true,
+  cache=true,
 }: Props): Promise<{ totalPlayers: number; }> {
   return fetch(path(`/api/totalPlayers/${season}`), {
-    next: { revalidate: setRevalidate ? 60 * 10 : undefined }
+    cache: cache ? "force-cache" : "no-store",
   })
     .then(handleSucceed)
     .catch(handleFailed);

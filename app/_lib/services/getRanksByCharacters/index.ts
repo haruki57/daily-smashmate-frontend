@@ -4,18 +4,16 @@ import type { RankByCharacter } from "../type";
 type Props = {
   playerId: number;
   season: string;
-  setRevalidate: boolean;
+  cache?: boolean;
 };
 
 export async function getRanksByCharacters({
   playerId,
   season,
-  setRevalidate=true,
+  cache=true,
 }: Props): Promise<RankByCharacter[]> {
   return fetch(path(`/api/rankByCharacters/${playerId}/${season}`), {
-    next: {
-      revalidate: setRevalidate ?  60 * 10 : undefined,
-    },
+    cache: cache ? "force-cache" : "no-store",
   })
     .then(handleSucceed)
     .catch(handleFailed);

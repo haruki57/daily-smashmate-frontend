@@ -11,6 +11,7 @@ export default async function ResultCharts({ playerId, season }: Props) {
   const seasons = await getSeasons();
   const seasonRow = seasons.find((s) => s.season === season)!;
   const isSeasonFinished = seasonRow.ended_at == null ? false : true;
+  const cache = !isSeasonFinished;
   const seasonForOpponentRates = isSeasonFinished
     ? season
     : seasons.at(-2)!.season;
@@ -18,7 +19,7 @@ export default async function ResultCharts({ playerId, season }: Props) {
     playerId,
     season,
     seasonForOpponentRates,
-    setRevalidate: !isSeasonFinished,
+    cache,
   });
   return (
     <WinRateChartsClient

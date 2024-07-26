@@ -46,8 +46,6 @@ export default async function Page({
   const currentSeasonRow = seasonRows
     .filter((row) => row.season == season)
     .at(0);
-  const isSeasonFinished = currentSeasonRow?.ended_at == null ? false : true;
-
   const playerDataBySeason = playerDataBySeasons[season];
   if (!playerDataBySeason) {
     return (
@@ -57,14 +55,16 @@ export default async function Page({
       } さんのシーズン ${season}のデータがありません。`}</div>
     );
   }
+  const isSeasonFinished = currentSeasonRow?.ended_at == null ? false : true;
+  const cache = !isSeasonFinished;
   const ranksByCharacters = await getRanksByCharacters({
     playerId,
     season,
-    setRevalidate: !isSeasonFinished,
+    cache,
   });
   const totalPlayerCount = await getTotalPlayers({
     season,
-    setRevalidate: !isSeasonFinished,
+    cache,
   });
   return (
     <>

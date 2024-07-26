@@ -6,7 +6,7 @@ export async function getSeasons(
 ): Promise<Season[]> {
   return fetch(path(`/api/seasons`), {
     next: {
-      revalidate: 3600 * 24
+      revalidate: 3600,
     },
   })
     .then(handleSucceed)

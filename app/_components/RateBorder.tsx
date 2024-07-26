@@ -6,15 +6,14 @@ import RateBorderClient from './RateBorderClient';
 
 export default async function RateBorder({ season }: { season: Season }) {
   const isSeasonFinished = season.ended_at == null;
-  const setRevalidate = !isSeasonFinished;
+  const cache = !isSeasonFinished;
   const rateToRankArr = await getRateToRank({
     season: season.season,
-    setRevalidate,
+    cache,
   });
-  const total = (
-    await getTotalPlayers({ season: season.season, setRevalidate })
-  ).totalPlayers;
-  const top200 = await getTop200({ season: season.season, setRevalidate });
+  const total = (await getTotalPlayers({ season: season.season, cache }))
+    .totalPlayers;
+  const top200 = await getTop200({ season: season.season, cache });
   return (
     <RateBorderClient
       rateToRanks={rateToRankArr}
