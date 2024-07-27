@@ -5,8 +5,8 @@ import { Season } from '../_lib/services/type';
 import RateBorderClient from './RateBorderClient';
 
 export default async function RateBorder({ season }: { season: Season }) {
-  const isSeasonFinished = season.ended_at == null;
-  const cache = !isSeasonFinished;
+  const isSeasonFinished = season.ended_at != null;
+  const cache = isSeasonFinished;
   const rateToRankArr = await getRateToRank({
     season: season.season,
     cache,

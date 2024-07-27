@@ -6,7 +6,7 @@ import { Season } from '../_lib/services/type';
 
 export default async function Top200({ season }: { season: Season }) {
   const isSeasonFinished = season.ended_at != null;
-  const cache = !isSeasonFinished;
+  const cache = isSeasonFinished;
   const top200 = await getTop200({ season: season.season, cache });
   return (
     <div className="max-h-96 w-72 overflow-y-scroll rounded border border-slate-400 px-4 py-3 text-sm md:w-96 md:text-base">

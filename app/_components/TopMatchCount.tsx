@@ -5,7 +5,7 @@ import { Season } from '../_lib/services/type';
 
 export default async function TopMatchCount({ season }: { season: Season }) {
   const isSeasonFinished = season.ended_at != null;
-  const cache = !isSeasonFinished;
+  const cache = isSeasonFinished;
   const topMatchCount = await getTopMatchCount({
     season: season.season,
     cache,

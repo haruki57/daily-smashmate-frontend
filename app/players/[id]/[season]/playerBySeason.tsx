@@ -18,7 +18,7 @@ export default async function PlayerBySeason({
   let rank = undefined;
   let isRankEstimated = false;
 
-  const cache = !isSeasonFinished;
+  const cache = isSeasonFinished;
   const top200 = await getTop200({ season, cache });
   const foundTop200 = top200.find((t) => t.playerId === playerId);
   if (foundTop200) {

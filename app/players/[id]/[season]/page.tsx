@@ -56,7 +56,7 @@ export default async function Page({
     );
   }
   const isSeasonFinished = currentSeasonRow?.ended_at == null ? false : true;
-  const cache = !isSeasonFinished;
+  const cache = isSeasonFinished;
   const ranksByCharacters = await getRanksByCharacters({
     playerId,
     season,
