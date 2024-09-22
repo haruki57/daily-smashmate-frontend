@@ -1,5 +1,5 @@
-## Next.js App Router Course - Starter
+# Daily Smashmate
 
-This is the starter template for the Next.js App Router Course. It contains the starting code for the dashboard application.
+[Daily Smashmate (デイリースマメイト)](https://daily-smashmate.harukisb.net/) is a web application that allows you to search for players on [Smashmate(スマメイト)](https://smashmate.net/) and view their records.
 
-For more information, see the [course curriculum](https://nextjs.org/learn) on the Next.js Website.
+Please note that this repository does not include any web crawlers.
