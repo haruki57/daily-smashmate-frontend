@@ -39,6 +39,7 @@ export default async function PlayerBySeason({
       <div className="my-8">
         <RatingHistogram
           season={season}
+          isSeasonFinished={isSeasonFinished}
           currentRate={currentRate ?? undefined}
         />
       </div>

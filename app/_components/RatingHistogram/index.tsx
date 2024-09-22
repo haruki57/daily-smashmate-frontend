@@ -3,10 +3,19 @@ import ChartWrapper from './chart-wrapper';
 
 type Props = {
   season: string;
+  isSeasonFinished: boolean;
   currentRate?: number;
 };
 
-export default async function RatingHistogram({ season, currentRate }: Props) {
-  const cumulativeCounts = await getRateCumulativeCounts({ season });
+export default async function RatingHistogram({
+  season,
+  isSeasonFinished,
+  currentRate,
+}: Props) {
+  const cumulativeCounts = await getRateCumulativeCounts({
+    season,
+    cache: isSeasonFinished,
+  });
+  console.log({ cumulativeCounts });
   return <ChartWrapper data={cumulativeCounts} currentRate={currentRate} />;
 }
