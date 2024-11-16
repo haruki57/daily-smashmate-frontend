@@ -12,7 +12,6 @@ export default async function Heatmap({ data }: { data: Map<string, number> }) {
     }
     dateStrList.push(date.toISOString().substring(0, 10));
   }
-  console.log(data);
   return (
     <>
       {dateStrList.map((dateStr) => {

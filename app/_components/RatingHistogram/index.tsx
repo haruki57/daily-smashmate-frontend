@@ -16,6 +16,5 @@ export default async function RatingHistogram({
     season,
     cache: isSeasonFinished,
   });
-  console.log({ cumulativeCounts });
   return <ChartWrapper data={cumulativeCounts} currentRate={currentRate} />;
 }

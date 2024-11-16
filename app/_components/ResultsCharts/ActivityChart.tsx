@@ -92,7 +92,11 @@ export default function ActivityChart({
 
   const minDate = new Date(seasonRow.started_at);
   const maxDate =
-    seasonRow.ended_at != null ? new Date(seasonRow.ended_at) : new Date();
+    seasonRow.season === '29'
+      ? new Date('2024-10-29')
+      : seasonRow.ended_at != null
+      ? new Date(seasonRow.ended_at)
+      : new Date();
   minDate.setDate(minDate.getDate() - minDate.getDay());
   const allDates: Date[] = [];
   for (let i = minDate; i <= maxDate; i.setDate(i.getDate() + 1)) {
@@ -135,6 +139,11 @@ export default function ActivityChart({
   return (
     <div>
       <h4 className="mb-4 mt-12 text-xl font-bold">日別対戦数</h4>
+      {seasonRow.season === '29' && (
+        <div className="mb-2 text-xs text-slate-700">
+          10月29日以降のデータは欠損しています。
+        </div>
+      )}
       <div className="relative overflow-x-scroll rounded border pb-8 pl-4 pt-12">
         <div className="absolute text-lg" style={{ top: '4.8rem' }}>
           Mon
