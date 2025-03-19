@@ -28,6 +28,9 @@ export default async function Page({
       <p className="mb-4 text-center">
         デイリースマメイトは、スマメイト27期以降の戦績を閲覧できるサービスです。
       </p>
+      <p className="mb-4 text-center font-bold text-red-500">
+        スマメイトの仕様変更によりデータ収集が困難になったため、30期以降の更新を停止しています。
+      </p>
 
       <div className="grid grid-cols-1 justify-center gap-4 md:justify-normal lg:grid-cols-2">
         <TopMatchCount season={seasonRow} />
