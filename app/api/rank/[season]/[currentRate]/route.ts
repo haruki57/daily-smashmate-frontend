@@ -1,22 +1,26 @@
-import prisma from "@/app/_lib/prisma";
+import { supabase } from "@/app/_lib/supabase";
+
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function GET(
-  request: Request, 
-  { params }: { params: { season: string, currentRate: string } }
+  request: Request,
+  { params }: { params: { season: string; currentRate: string } }
 ) {
   const currentRateNum = Number(params.currentRate);
-  const ret = await prisma.smashmateRateCumulativeCounts.findFirst({
-    where: { season: params.season, rate: {gt: currentRateNum} },
-    select: {
-      cumulativeCount: true,
-    },
-    orderBy: { rate: 'asc' },
-    take: 1,    
-  });
-  
-  if (ret) {
-    return Response.json({rank: ret.cumulativeCount+1});
+
+  const { data } = await supabase
+    .from('smashmateRateCumulativeCounts')
+    .select('cumulativeCount')
+    .eq('season', params.season)
+    .gt('rate', currentRateNum)
+    .order('rate', { ascending: true })
+    .limit(1)
+    .single();
+
+  if (data) {
+    return Response.json({ rank: data.cumulativeCount + 1 });
   } else {
-    return Response.json({rank: 1});
+    return Response.json({ rank: 1 });
   }
 }

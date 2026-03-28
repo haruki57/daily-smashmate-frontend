@@ -1,27 +1,17 @@
-import prisma from "@/app/_lib/prisma";
+import { supabase } from "@/app/_lib/supabase";
+
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function GET(
-  request: Request, 
+  request: Request,
   { params }: { params: { season: string } }
 ) {
-  const ret = await prisma.smashmateCurrentTop200.findMany({
-    select: {
-      rank: true,
-      playerId: true,
-      rate: true,
-      currentCharactersCsv: true,
-      accountInfo: {
-        select: {
-          playerName: true,
-        },
-      }
-    },
-    where: {
-      season: params.season,
-    },
-    orderBy: { rank: 'asc' }
-    
-  })
-  
-  return Response.json(ret.map((r) => { return { ...r, id: undefined } }));
+  const { data } = await supabase
+    .from('smashmateCurrentTop200')
+    .select('rank, playerId, rate, currentCharactersCsv, smashmateAccountInfo(playerName)')
+    .eq('season', params.season)
+    .order('rank', { ascending: true });
+
+  return Response.json(data ?? []);
 }

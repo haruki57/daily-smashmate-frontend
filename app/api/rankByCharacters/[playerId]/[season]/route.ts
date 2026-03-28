@@ -1,32 +1,40 @@
-import prisma from "@/app/_lib/prisma";
+import { supabase } from "@/app/_lib/supabase";
+
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function GET(
-  request: Request, 
+  request: Request,
   { params }: { params: { playerId: string; season: string } }
 ) {
-  const ret = await prisma.smashmateRankByCharacter.findMany({
-    where: { season: params.season,  playerId: Number(params.playerId)},
-    select: {
-      characterId: true,
-      rank: true,
-    },
+  const { data: rankData } = await supabase
+    .from('smashmateRankByCharacter')
+    .select('characterId, rank')
+    .eq('season', params.season)
+    .eq('playerId', Number(params.playerId));
+
+  if (!rankData || rankData.length === 0) {
+    return Response.json([]);
+  }
+
+  const characterIds = rankData.map((row) => row.characterId);
+
+  // groupBy の代わりにまとめて取得してコードでカウント
+  const { data: allRows } = await supabase
+    .from('smashmateRankByCharacter')
+    .select('characterId')
+    .eq('season', params.season)
+    .in('characterId', characterIds);
+
+  const countMap: Record<string, number> = {};
+  (allRows ?? []).forEach((row) => {
+    countMap[row.characterId] = (countMap[row.characterId] ?? 0) + 1;
   });
-  // This query does seq scan but number of rows is less than 1000 per character for now.
-  // If you want to avoid seq scan, consider using Materialized View.
-  const ret2 = await prisma.smashmateRankByCharacter.groupBy({
-    by: "characterId", 
-    _count: true,
-    where: {
-      season: params.season,
-      characterId: {
-        in: ret.map((row) => row.characterId)
-      }
-    },
-  });
-  return Response.json(ret.map((row) => {
-    const totalPlayerCount = ret2.find((r) => r.characterId === row.characterId)?._count;
-    return {
-      ...row, totalPlayerCount,
-    }
-  }));
+
+  return Response.json(
+    rankData.map((row) => ({
+      ...row,
+      totalPlayerCount: countMap[row.characterId] ?? 0,
+    }))
+  );
 }

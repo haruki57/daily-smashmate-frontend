@@ -1,16 +1,17 @@
-import prisma from "@/app/_lib/prisma";
+import { supabase } from "@/app/_lib/supabase";
+
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function GET(
-  request: Request, 
+  request: Request,
   { params }: { params: { season: string } }
 ) {
-  const ret = await prisma.smashmateRateCumulativeCounts.findMany({
-    where: { season: params.season },
-    select: {
-      rate: true,
-      cumulativeCount: true,
-    },
-    orderBy: { rate: 'desc'},
-  });
-  return Response.json(ret);
+  const { data } = await supabase
+    .from('smashmateRateCumulativeCounts')
+    .select('rate, cumulativeCount')
+    .eq('season', params.season)
+    .order('rate', { ascending: false });
+
+  return Response.json(data ?? []);
 }

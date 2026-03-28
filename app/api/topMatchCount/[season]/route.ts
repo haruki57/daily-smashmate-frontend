@@ -1,17 +1,17 @@
-import prisma from "@/app/_lib/prisma";
+import { supabase } from "@/app/_lib/supabase";
+
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function GET(
-  request: Request, 
+  request: Request,
   { params }: { params: { season: string } }
 ) {
-  const ret = await fetchDB(params.season);
-  return Response.json(ret);
-}
+  const { data } = await supabase
+    .from('mv_smashmatePlayerDataBySeason_matchCountTop100')
+    .select('*')
+    .eq('season', params.season)
+    .order('matchCount', { ascending: false });
 
-const fetchDB = async (season: string) => {
-  const ret = await prisma.$queryRaw`
-    select * from 
-    "mv_smashmatePlayerDataBySeason_matchCountTop100"
-    where season = ${season} order by "matchCount" desc;`
-  return ret as any;
+  return Response.json(data ?? []);
 }

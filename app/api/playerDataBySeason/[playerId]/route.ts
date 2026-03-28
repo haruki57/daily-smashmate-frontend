@@ -1,45 +1,76 @@
-import { PlayerDataBySeason } from '@/app/_lib/services/type';
-import prisma from "@/app/_lib/prisma";
+import { supabase } from "@/app/_lib/supabase";
+
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function GET(
-  request: Request, 
+  request: Request,
   { params }: { params: { playerId: string } }
 ) {
-  const ret = await getPlayerDataBySeason(Number(params.playerId));
-  return Response.json(
-    ret.reduce((prev, current) => { 
-      if ((current as any).lastPlayerPageVisitedAt.getFullYear() === 1000) {
-        prev[current.season] = { ...current, lastPlayerPageVisitedAt: undefined} as any;
-      } else {
-        prev[current.season] = current;
-      }
-      return prev;
-    }, {} as { [key in string]: Omit<PlayerDataBySeason, "lastPlayerPageVisitedAt"> })
-  );
-}
+  const playerId = Number(params.playerId);
 
-const getPlayerDataBySeason = async (playerId: number): Promise<Omit<PlayerDataBySeason, "lastPlayerPageVisitedAt">[]> => {
-  const ret = await prisma.$queryRaw`select 
-    "smashmatePlayerDataBySeason"."season", 
-    "smashmatePlayerDataBySeason"."playerId", 
-    "smashmatePlayerDataBySeason"."currentRate", 
-    "smashmatePlayerDataBySeason"."maxRate", 
-    "smashmatePlayerDataBySeason"."win", 
-    "smashmatePlayerDataBySeason"."loss", 
-    "smashmatePlayerDataBySeason"."currentCharactersCsv", 
-    "smashmatePlayerDataBySeason"."lastPlayerPageVisitedAt", 
-    "smashmatePlayerDataBySeason"."loss", 
-    "smashmateRateToRank"."rank",
-    "smashmateCurrentTop200"."rank" as "rankFromTop200",
-    "mv_smashmateCurrentPlayerRates_countBySeason"."count"::int as "totalPlayerCount"
-    from "smashmatePlayerDataBySeason" 
-    left join "smashmateRateToRank" on "currentRate" = "rate" and 
-    "smashmatePlayerDataBySeason"."season" = "smashmateRateToRank"."season" 
-    left join "smashmateCurrentTop200" on 
-    "smashmatePlayerDataBySeason"."playerId" = "smashmateCurrentTop200"."playerId" and
-    "smashmatePlayerDataBySeason"."season" = "smashmateCurrentTop200"."season" 
-    left join "mv_smashmateCurrentPlayerRates_countBySeason" on 
-      "mv_smashmateCurrentPlayerRates_countBySeason"."season" = "smashmatePlayerDataBySeason"."season"
-    where "smashmatePlayerDataBySeason"."playerId" = ${playerId};`
-  return ret as any;
+  const { data: playerData } = await supabase
+    .from('smashmatePlayerDataBySeason')
+    .select('season, playerId, currentRate, maxRate, win, loss, currentCharactersCsv, lastPlayerPageVisitedAt')
+    .eq('playerId', playerId);
+
+  if (!playerData || playerData.length === 0) {
+    return Response.json({});
+  }
+
+  const seasons = Array.from(new Set(playerData.map((p) => p.season)));
+
+  // 複数テーブルからまとめて取得
+  const [{ data: rateToRanks }, { data: top200 }, { data: playerCounts }] = await Promise.all([
+    supabase
+      .from('smashmateRateToRank')
+      .select('season, rate, rank')
+      .in('season', seasons),
+    supabase
+      .from('smashmateCurrentTop200')
+      .select('season, rank, playerId')
+      .eq('playerId', playerId)
+      .in('season', seasons),
+    supabase
+      .from('mv_smashmateCurrentPlayerRates_countBySeason')
+      .select('season, count')
+      .in('season', seasons),
+  ]);
+
+  // ルックアップマップを作成
+  const rateToRankMap: Record<string, Record<number, number>> = {};
+  (rateToRanks ?? []).forEach((r) => {
+    if (!rateToRankMap[r.season]) rateToRankMap[r.season] = {};
+    rateToRankMap[r.season][r.rate] = r.rank;
+  });
+
+  const top200Map: Record<string, number | null> = {};
+  (top200 ?? []).forEach((t) => { top200Map[t.season] = t.rank; });
+
+  const countMap: Record<string, number | null> = {};
+  (playerCounts ?? []).forEach((c) => { countMap[c.season] = Number(c.count); });
+
+  const result = playerData.reduce((prev, current) => {
+    const lastVisited = current.lastPlayerPageVisitedAt;
+    const isInvalidDate = lastVisited && new Date(lastVisited).getFullYear() === 1000;
+
+    prev[current.season] = {
+      season: current.season,
+      playerId: current.playerId,
+      currentRate: current.currentRate,
+      maxRate: current.maxRate,
+      win: current.win,
+      loss: current.loss,
+      currentCharactersCsv: current.currentCharactersCsv,
+      lastPlayerPageVisitedAt: isInvalidDate ? undefined : lastVisited,
+      rank: current.currentRate != null
+        ? (rateToRankMap[current.season]?.[current.currentRate] ?? null)
+        : null,
+      rankFromTop200: top200Map[current.season] ?? null,
+      totalPlayerCount: countMap[current.season] ?? null,
+    };
+    return prev;
+  }, {} as Record<string, unknown>);
+
+  return Response.json(result);
 }

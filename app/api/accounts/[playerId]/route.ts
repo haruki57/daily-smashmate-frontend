@@ -1,22 +1,20 @@
-import prisma from "@/app/_lib/prisma";
+import { supabase } from "@/app/_lib/supabase";
+
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function GET(
-  request: Request, 
+  request: Request,
   { params }: { params: { playerId: string } }
 ) {
-  const ret = await getSmashmateAccount(Number(params.playerId));
-  if (!ret) {
-    return Response.json(null)
-  }
-  return Response.json({ ...ret })
-}
+  const { data } = await supabase
+    .from('smashmateAccountInfo')
+    .select('playerId, playerName')
+    .eq('playerId', Number(params.playerId))
+    .single();
 
-const getSmashmateAccount = async (playerId: number) => {
-  return await prisma.smashmateAccountInfo.findFirst({
-    where: { playerId },
-    select: {
-      playerName: true,
-      playerId: true,
-    }
-  });
+  if (!data) {
+    return Response.json(null);
+  }
+  return Response.json(data);
 }

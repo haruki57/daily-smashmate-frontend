@@ -1,3 +1,6 @@
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
+
 import Top200 from './_components/Top200';
 import VisitedPlayers from './_components/VisitedPlayers';
 import TopMatchCount from './_components/TopMatchCount';
