@@ -9,11 +9,8 @@ type Props = {
 export async function getRank({
   currentRate,
   season,
-  cache=true,
 }: Props): Promise<{ rank: number; } | null> {
-  return fetch(path(`/api/rank/${season}/${currentRate}`), {
-    cache: cache ? "force-cache" : "no-store",
-  })
+  return fetch(path(`/api/rank/${season}/${currentRate}`))
     .then(handleSucceed)
     .catch(handleFailed);
 }

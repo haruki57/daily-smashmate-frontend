@@ -7,11 +7,8 @@ type Props = {
 
 export async function getRateCumulativeCounts({
   season,
-  cache=true,
 }: Props): Promise<{ rate: number; cumulativeCount: number}[]> {
-  return fetch(path(`/api/rateCumulativeCounts/${season}`), {
-    cache: cache ? "force-cache" : "no-store",
-  })
+  return fetch(path(`/api/rateCumulativeCounts/${season}`))
     .then(handleSucceed)
     .catch(handleFailed);
 }

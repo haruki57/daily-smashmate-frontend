@@ -7,11 +7,8 @@ type Props = {
 
 export async function getTotalPlayers({
   season,
-  cache=true,
 }: Props): Promise<{ totalPlayers: number; }> {
-  return fetch(path(`/api/totalPlayers/${season}`), {
-    cache: cache ? "force-cache" : "no-store",
-  })
+  return fetch(path(`/api/totalPlayers/${season}`))
     .then(handleSucceed)
     .catch(handleFailed);
 }

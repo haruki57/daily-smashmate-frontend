@@ -8,11 +8,7 @@ type Props = {
 export async function getSmashmateAccount({
   playerId,
 }: Props): Promise<Account> {
-  return fetch(path(`/api/accounts/${playerId}`), {
-    next: {
-      revalidate: 60 * 60 * 24,
-    },
-  })
+  return fetch(path(`/api/accounts/${playerId}`))
     .then(handleSucceed)
     .catch(handleFailed);
 }

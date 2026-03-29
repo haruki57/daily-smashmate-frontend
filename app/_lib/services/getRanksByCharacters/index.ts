@@ -10,11 +10,8 @@ type Props = {
 export async function getRanksByCharacters({
   playerId,
   season,
-  cache=true,
 }: Props): Promise<RankByCharacter[]> {
-  return fetch(path(`/api/rankByCharacters/${playerId}/${season}`), {
-    cache: cache ? "force-cache" : "no-store",
-  })
+  return fetch(path(`/api/rankByCharacters/${playerId}/${season}`))
     .then(handleSucceed)
     .catch(handleFailed);
 }

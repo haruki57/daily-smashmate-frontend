@@ -12,11 +12,8 @@ export async function getResults({
   playerId,
   season,
   seasonForOpponentRates,
-  cache=true,
 }: Props): Promise<Result[]> {
-  return fetch(path(`/api/results/${playerId}/${season}?prevSeason=${seasonForOpponentRates}`), {
-    cache: cache ? "force-cache" : "no-store",
-  })
+  return fetch(path(`/api/results/${playerId}/${season}?prevSeason=${seasonForOpponentRates}`))
     .then(handleSucceed)
     .catch(handleFailed);
 }

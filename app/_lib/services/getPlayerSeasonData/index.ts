@@ -8,9 +8,7 @@ type Props = {
 export async function getPlayerSeasonData({
   playerId,
 }: Props): Promise<{ [key in string]?: PlayerDataBySeason }> {
-  return fetch(path(`/api/playerDataBySeason/${playerId}`), {
-    cache: "no-store",
-  })
+  return fetch(path(`/api/playerDataBySeason/${playerId}`))
     .then(handleSucceed)
     .catch(handleFailed);
 }
